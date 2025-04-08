@@ -1,0 +1,51 @@
+{
+	"name": "plugin/owc-mijn-services",
+	"description": "",
+	"version": "1.0.0",
+	"type": "wordpress-plugin",
+	"scripts": {
+		"phpcs": "./vendor/squizlabs/php_codesniffer/bin/phpcs",
+		"phpcbf": "phpcbf",
+		"post-install-cmd": [
+			"composer dump-autoload"
+		],
+		"post-update-cmd": [
+			"composer dump-autoload"
+		]
+	},
+	"autoload": {
+		"psr-4": {
+			"OWC\\MyServices\\": "src/"
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"composer/installers": true
+		}
+	},
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://wpackagist.org"
+		},
+		{
+			"type": "vcs",
+			"url": "git@github.com:OpenWebconcept/owc-zgw-api.git"
+		},
+		{
+			"type": "vcs",
+			"url": "git@github.com:OpenWebconcept/idp-userdata.git"
+		}
+	],
+	"require": {
+		"php": "^8.1",
+		"php-di/php-di": "^6.0",
+		"owc/zgw-api": "dev-main",
+		"owc/idp-userdata": "^1.1"
+	},
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^3.7",
+		"wp-coding-standards/wpcs": "^3.0"
+	}
+}
