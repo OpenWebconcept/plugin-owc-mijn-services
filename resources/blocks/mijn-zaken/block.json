@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "owc-my-services/mijn-zaken",
+	"version": "1.0.0",
+	"title": "OWC Mijn Zaken",
+	"description": "Toont Mijn Zaken blok",
+	"attributes": {
+        "perPage": {
+            "type": "number",
+            "default": 10
+        }
+	},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "owc-my-services",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./editor.css",
+	"style": "file:./style-.css"
+}
