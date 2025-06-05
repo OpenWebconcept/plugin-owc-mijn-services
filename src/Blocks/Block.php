@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace OWC\My_Services\Blocks;
 
 use OWC\My_Services\ContainerResolver;
-use function OWC\ZGW\apiClientManager;
-
+use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
+
 use OWC\ZGW\Endpoints\Filter\ZaakinformatieobjectenFilter;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Support\Collection;
+use function OWC\ZGW\apiClientManager;
 
 abstract class Block
 {
+	use Supplier;
+
 	private Client $client;
 
 	protected ZakenFilter $zaken_filter;
@@ -35,7 +38,7 @@ abstract class Block
 		$this->zaken_filter = new ZakenFilter();
 		$this->zaken_filter->byBsn($this->bsn);
 
-		$client_name = $attributes['zaakClient'] ?? 'openzaak'; 
+		$client_name = $this->supplierKeyToName($attributes['zaakClient'] ?? 'openzaak');
 
 		try {
 			$this->client = apiClientManager()->getClient($client_name);
