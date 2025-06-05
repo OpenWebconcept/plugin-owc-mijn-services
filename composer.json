@@ -24,6 +24,8 @@
 			"composer/installers": true
 		}
 	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"repositories": [
 		{
 			"type": "composer",
@@ -41,7 +43,7 @@
 	"require": {
 		"php": "^8.1",
 		"php-di/php-di": "^6.0",
-		"owc/zgw-api": "dev-main",
+		"owc/zgw-api": "dev-chore/update-monolog@dev",
 		"owc/idp-userdata": "^1.1"
 	},
 	"require-dev": {
