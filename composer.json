@@ -15,7 +15,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"OWC\\MyServices\\": "src/"
+			"OWC\\My_Services\\": "src/"
 		}
 	},
 	"config": {
