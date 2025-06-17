@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-		"watch": "wp-scripts start --webpack-src-dir=resources/blocks --mode=development",
-		"build": "wp-scripts build --webpack-src-dir=resources/blocks --mode=production"
+    "watch": "wp-scripts start --webpack-src-dir=resources/blocks --mode=development",
+    "build": "wp-scripts build --webpack-src-dir=resources/blocks --mode=production"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,9 @@
     "url": "https://github.com/OpenWebconcept/plugin-owc-mijn-services/issues"
   },
   "homepage": "https://github.com/OpenWebconcept/plugin-owc-mijn-services#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@gemeente-denhaag/case-card-element": "^1.1.1"
+  },
   "devDependencies": {
     "@wordpress/scripts": "^30.14.1"
   }
