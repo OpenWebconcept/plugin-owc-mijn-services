@@ -20,13 +20,20 @@ class MijnZaken extends Block
 
 		$output = '';
 
+		$output .= '<div class="wp-block-owc-my-services-mijn-zaken-wrapper">';
 		/** @var Zaak */
 		foreach ($zaken->take(100) as $zaak) {
-			$output .= '<h2>' . $zaak->zaaktype->omschrijvingGeneriek . '</h2></p>';
-			$output .= '<p>' . $zaak->identificatie . '</p>';
-			$output .= '<p>' . $zaak->registratiedatum->format('Y-m-d') . '</p>';
-			$output .= '<p>' . home_url('/zaak/' . $zaak->identificatie) . '</p>'; //TODO: make path configurable
+			$date = $zaak->registratiedatum?->format('Y-m-d');
+			$link = home_url('/zaak/' . $zaak->identificatie); //TODO: make path configurable
+			$title = $zaak->zaaktype?->omschrijvingGeneriek;
+
+			$output .= '<denhaag-case-card datetime="' . esc_attr($date) . '" href="' . esc_url($link) . '" linkLabel="' . esc_attr($title) . '">';
+			$output .= '<span slot="heading">' . esc_html($title) . '</span>';
+			$output .= '<span slot="subtitle">' . esc_html($zaak->identificatie) . '</span>';
+			$output .= '</denhaag-case-card>';
 		}
+
+		$output .= '</div>';
 
 		return $output;
 	}
