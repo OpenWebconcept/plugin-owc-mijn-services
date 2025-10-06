@@ -6,6 +6,10 @@
   "title": "OWC Mijn Zaken",
   "description": "Toont Mijn Zaken blok",
   "attributes": {
+    "zaakClient": {
+      "type": "string",
+      "default": "openzaak"
+    },
     "perPage": {
       "type": "number",
       "default": 10

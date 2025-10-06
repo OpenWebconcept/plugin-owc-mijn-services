@@ -1,51 +1,84 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * Resolve entries from the DI-container.
- * @author  Yard | Digital Agency
  *
+ * @package owc-mijn-services
+ * @author  Yard | Digital Agency
  * @since   1.0.0
  */
 
 namespace OWC\My_Services\Auth;
 
+/**
+ * Exit when accessed directly.
+ */
+if ( ! defined( 'ABSPATH' )) {
+	exit;
+}
+
+/**
+ * Retrieve the social security number (BSN) by integrating with multiple DigiD authentication methods.
+ */
 class DigiD
 {
-    public static function make(): self
-    {
-        return new static();
-    }
+	/**
+	 * @since 1.0.0
+	 */
+	public static function make(): self
+	{
+		return new static();
+	}
 
-    public function bsn(): ?string
-    {
-        if ($bsn = $this->handle_digid_idp()) {
-            return $bsn;
-        }
+	/**
+	 * @since 1.0.0
+	 */
+	public function bsn(): string
+	{
+		if ($bsn = $this->handle_digid_idp()) {
+			return $bsn;
+		}
 
-        return null;
-        ;
-    }
+		if ($bsn = $this->handle_digid_saml()) {
+			return $bsn;
+		}
 
-    public function logged_in(): bool
-    {
-        if ($this->handle_digid_idp()) {
-            return true;
-        }
+		return '';
+	}
 
-        return false;
-    }
+	/**
+	 * @since 1.0.0
+	 */
+	private function handle_digid_idp(): string
+	{
+		if ( ! class_exists( '\OWC\IdpUserData\DigiDSession' )) {
+			return '';
+		}
 
-    private function handle_digid_idp(): ?string
-    {
-        if (! class_exists('\OWC\IdpUserData\DigiDSession')) {
-            return null;
-        }
+		if ( ! \OWC\IdpUserData\DigiDSession::isLoggedIn() || is_null( \OWC\IdpUserData\DigiDSession::getUserData() )) {
+			return '';
+		}
 
-        if (! \OWC\IdpUserData\DigiDSession::isLoggedIn()) {
-            return null;
-        }
+		return \OWC\IdpUserData\DigiDSession::getUserData()->getBsn();
+	}
 
-        return \OWC\IdpUserData\DigiDSession::getUserData()?->getBsn();
-    }
+	/**
+	 * @since 1.0.0
+	 */
+	private function handle_digid_saml(): string
+	{
+		if ( ! function_exists( '\\Yard\\DigiD\\Foundation\\Helpers\\resolve' )) {
+			return '';
+		}
+
+		if ( ! function_exists( '\\Yard\\DigiD\\Foundation\\Helpers\\decrypt' )) {
+			return '';
+		}
+
+		$bsn = \Yard\DigiD\Foundation\Helpers\resolve( 'session' )->getSegment( 'digid' )->get( 'bsn' );
+
+		return ! empty( $bsn ) && is_string( $bsn ) ? \Yard\DigiD\Foundation\Helpers\decrypt( $bsn ) : '';
+	}
 }

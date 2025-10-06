@@ -1,12 +1,23 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Register service provider.
  *
+ * @package owc-mijn-services
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
 
 namespace OWC\My_Services\Providers;
+
+/**
+ * Exit when accessed directly.
+ */
+if ( ! defined( 'ABSPATH' )) {
+	exit;
+}
 
 /**
  * Register service provider.
@@ -15,7 +26,7 @@ namespace OWC\My_Services\Providers;
  */
 class ServiceProvider
 {
-	protected array $services = [];
+	protected array $services = array();
 
 	/**
 	 * Registers the services.

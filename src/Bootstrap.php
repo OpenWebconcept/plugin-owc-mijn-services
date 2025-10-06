@@ -1,13 +1,12 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * Bootstrap providers and containers.
  *
- * @package OWC_GravityForms_ZGW
- *
+ * @package owc-mijn-services
  * @author  Yard | Digital Agency
- *
  * @since   1.0.0
  */
 
@@ -16,11 +15,12 @@ namespace OWC\My_Services;
 /**
  * Exit when accessed directly.
  */
-if (! defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' )) {
+	exit;
 }
 
 use DI\ContainerBuilder;
+use OWC\My_Services\Providers\BladeServiceProvider;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Providers\SettingsServiceProvider;
 use Psr\Container\ContainerInterface;
@@ -34,99 +34,100 @@ require_once __DIR__ . '/helpers.php';
  */
 final class Bootstrap
 {
-    /**
-     * Dependency Injection container.
-     *
-     * @since 1.0.0
-     */
-    private static ContainerInterface $container;
+	/**
+	 * Dependency Injection container.
+	 *
+	 * @since 1.0.0
+	 */
+	private static ContainerInterface $container;
 
-    /**
-     * Dependency providers.
-     *
-     * @since 1.0.0
-     */
-    private array $providers;
+	/**
+	 * Dependency providers.
+	 *
+	 * @since 1.0.0
+	 */
+	private array $providers;
 
-    /**
-     * Plugin constructor.
-     *
-     * @since 1.0.0
-     */
-    public function __construct()
-    {
-        self::$container = $this->build_container();
-        $this->providers = $this->get_providers();
-        $this->register_providers();
-        $this->boot_providers();
-    }
+	/**
+	 * Plugin constructor.
+	 *
+	 * @since 1.0.0
+	 */
+	public function __construct()
+	{
+		self::$container = $this->build_container();
+		$this->providers = $this->get_providers();
+		$this->register_providers();
+		$this->boot_providers();
+	}
 
-    /**
-     * Gets all providers
-     *
-     * @since 1.0.0
-     */
-    protected function get_providers(): array
-    {
-        $providers = [
-            BlockServiceProvider::class,
-            SettingsServiceProvider::class,
-        ];
+	/**
+	 * Gets all providers
+	 *
+	 * @since 1.0.0
+	 */
+	protected function get_providers(): array
+	{
+		$providers = array(
+			SettingsServiceProvider::class,
+			BladeServiceProvider::class,
+			BlockServiceProvider::class,
+		);
 
-        foreach ($providers as &$provider) {
-            $provider = self::$container->get($provider);
-        }
+		foreach ($providers as &$provider) {
+			$provider = self::$container->get( $provider );
+		}
 
-        return $providers;
-    }
+		return $providers;
+	}
 
-    /**
-     * Registers all providers.
-     *
-     * @since 1.0.0
-     */
-    protected function register_providers(): void
-    {
-        foreach ($this->providers as $provider) {
-            $provider->register();
-        }
-    }
+	/**
+	 * Registers all providers.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function register_providers(): void
+	{
+		foreach ($this->providers as $provider) {
+			$provider->register();
+		}
+	}
 
-    /**
-     * Boots all providers.
-     *
-     * @since 1.0.0
-     */
-    protected function boot_providers(): void
-    {
-        foreach ($this->providers as $provider) {
-            $provider->boot();
-        }
-    }
+	/**
+	 * Boots all providers.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function boot_providers(): void
+	{
+		foreach ($this->providers as $provider) {
+			$provider->boot();
+		}
+	}
 
-    /**
-     * Builds the container.
-     *
-     * @since 1.0.0
-     */
-    protected function build_container(): ContainerInterface
-    {
-        $builder = new ContainerBuilder();
+	/**
+	 * Builds the container.
+	 *
+	 * @since 1.0.0
+	 */
+	protected function build_container(): ContainerInterface
+	{
+		$builder = new ContainerBuilder();
 
-        // Use DIRECTORY_SEPARATOR to ensure the path works on both Windows and Unix-like systems.
-        $config_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'php-di.php';
+		// Use DIRECTORY_SEPARATOR to ensure the path works on both Windows and Unix-like systems.
+		$config_path = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'php-di.php';
 
-        // Add definitions using the correct path.
-        $builder->addDefinitions($config_path);
+		// Add definitions using the correct path.
+		$builder->addDefinitions( $config_path );
 
-        return $builder->build();
-    }
+		return $builder->build();
+	}
 
-    /**
-     * @since 1.0.0
-     */
-    public static function get_container(): ContainerInterface
-    {
-        return self::$container;
-    }
+	/**
+	 * @since 1.0.0
+	 */
+	public static function get_container(): ContainerInterface
+	{
+		return self::$container;
+	}
 }

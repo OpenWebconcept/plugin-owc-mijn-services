@@ -44,7 +44,8 @@
 		"php": "^8.1",
 		"php-di/php-di": "^7.0",
 		"owc/zgw-api": "^2.0",
-		"owc/idp-userdata": "^1.1"
+		"owc/idp-userdata": "^1.1",
+		"eftec/bladeone": "^4.19"
 	},
 	"require-dev": {
 		"squizlabs/php_codesniffer": "^3.7",

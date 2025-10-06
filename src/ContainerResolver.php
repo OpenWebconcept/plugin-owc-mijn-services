@@ -1,8 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Resolve entries from the DI-container.
  *
- * @package OWC_GravityForms_ZGW
+ * @package owc-mijn-services
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
@@ -46,5 +49,13 @@ class ContainerResolver
 	public function get(string $key )
 	{
 		return $this->container->get( $key ) ?? null;
+	}
+
+	/**
+	 * @since 1.0.0
+	 */
+	public function set(string $key, mixed $value ): void
+	{
+		$this->container->set( $key, $value );
 	}
 }

@@ -1,16 +1,12 @@
 <?php
 
-declare (strict_types=1);
-
-namespace OWC\My_Services;
+declare(strict_types=1);
 
 /**
  * OWC Mijn Services.
  *
  * @package OWC_My_Services
- *
  * @author  Yard | Digital Agency
- *
  * @since   1.0.0
  *
  * Plugin Name:       OWC | Mijn Services
@@ -31,29 +27,32 @@ namespace OWC\My_Services;
 /**
  * Exit when accessed directly.
  */
-if (! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
 const VERSION = '1.0.0';
-define('OWC_MY_SERVICES_FILE', __FILE__);
-define('OWC_MY_SERVICES_DIR_PATH', plugin_dir_path(OWC_MY_SERVICES_FILE));
-define('OWC_MY_SERVICES_PLUGIN_URL', plugins_url('/', OWC_MY_SERVICES_FILE));
-define('OWC_MY_SERVICES_SETTINGS_PREFIX', 'owc-my-services');
-define('OWC_MY_SERVICES_PLUGIN_SLUG', 'owc-mijn-services');
+define( 'OWC_MY_SERVICES_FILE', __FILE__ );
+define( 'OWC_MY_SERVICES_DIR_PATH', plugin_dir_path( OWC_MY_SERVICES_FILE ) );
+define( 'OWC_MY_SERVICES_PLUGIN_URL', plugins_url( '/', OWC_MY_SERVICES_FILE ) );
+define( 'OWC_MY_SERVICES_SETTINGS_PREFIX', 'owc-my-services' );
+define( 'OWC_MY_SERVICES_PLUGIN_SLUG', 'owc-mijn-services' );
+define( 'OWC_MY_SERVICES_LOGGER_DEFAULT_MAX_FILES', 7 );
+define( 'OWC_MY_SERVICES_ADD_ON_SETTINGS_PREFIX', 'owc-mijn-services-add-on' );
 
 $autoload = __DIR__ . '/vendor/autoload.php';
 
-if (file_exists($autoload)) {
+if (file_exists( $autoload )) {
 	require_once $autoload;
+} else {
+	require_once __DIR__ . '/src/autoload.php';
 }
 
-require_once __DIR__ . '/src/autoload.php';
-require_once __DIR__ . '/src/Bootstrap.php';
-
 add_action(
-	'plugins_loaded',
+	'after_setup_theme',
 	function () {
 		$init = new \OWC\My_Services\Bootstrap();
 	}
 );
+
+register_deactivation_hook( __FILE__, ( new \OWC\My_Services\PluginLifecycle() )->deactivate( ... ) );
