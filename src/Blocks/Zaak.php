@@ -4,64 +4,75 @@ declare(strict_types=1);
 
 namespace OWC\My_Services\Blocks;
 
+use DI\NotFoundException;
+use Exception;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\ZGW\Entities\Zaak as ZaakEntity;
+use WP_Block;
+
+use function OWC\ZGW\apiClientManager;
 
 class Zaak extends Block
 {
-	protected function renderBlock(array $attributes, string $block_content, \WP_Block $block): string
+	/**
+	 * @inheritDoc
+	 */
+	protected function render_block(array $attributes, string $block_content, WP_Block $block ): string
 	{
-		$zaaknummer = sanitize_text_field(get_query_var(BlockServiceProvider::QUERY_VAR_ZAAKNUMMER));
-
-		$this->zaken_filter->add('identificatie', $zaaknummer);
-		$zaken = $this->getZaken();
-		if ($zaken->isEmpty()) {
-			return '<p>' . __('Zaak niet gevonden.', 'owc-mijn-services') . '</p>';
+		if ($this->is_block_editor()) {
+			return owc_mijn_services_render_view(
+				'owc-block-editor-placeholder',
+				array(
+					'title'       => __( 'Detailpagina van een zaak', 'owc-mijn-services' ),
+					'description' => __( 'Toont de details van een specifieke zaak.', 'owc-mijn-services' ),
+				)
+			);
 		}
 
-		return $this->renderZaak($zaken->first());
+		$identification = sanitize_text_field( (string) get_query_var( BlockServiceProvider::QUERY_VAR_ZAAK_IDENTIFICATION ) );
+		$supplier       = sanitize_text_field( (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER ) );
+
+		if (empty( $identification ) || empty( $supplier )) {
+			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Er is geen zaaknummer of leverancier opgegeven om de zaak te kunnen tonen.', 'owc-mijn-services' ) ) );
+		}
+
+		try {
+			$this->client = apiClientManager()->getClient( $this->supplier_key_to_name( $supplier ) );
+		} catch (NotFoundException $e) {
+			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier client is niet geconfigureerd.', 'owc-mijn-services' ) ) );
+		}
+
+		$zaak = $this->retrieve_zaak( $identification );
+
+		if ( ! $zaak instanceof Zaak) {
+			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De opgevraagde zaak is niet gevonden.', 'owc-mijn-services' ) ) );
+		}
+
+		// Supplier is needed for generation of the correct permalinks in the views.
+		$zaak->setValue( 'supplier', $attributes['zaakClient'] ?? 'openzaak' );
+
+		return owc_mijn_services_render_view(
+			'owc-single-zaak',
+			array(
+				'zaak'                => $zaak,
+				'information_objects' => $zaak->informationObjects(),
+				'steps'               => $zaak->steps(),
+			)
+		);
 	}
 
-	protected function renderZaak(ZaakEntity $zaak): string
+	/**
+	 * @since 1.0.0
+	 */
+	protected function retrieve_zaak(string $identification ): ?ZaakEntity
 	{
-		//TODO: naar template
-		$output = '<h1>' . $zaak->identificatie . '</h1>';
-
-		$output .= '<h2>' . __('Details', 'owc-mijn-services') . '</h2>';
-		$output .= '<p>' . __('Datum aanvraag: ', 'owc-mijn-services') . $zaak->registratiedatum->format('Y-m-d') . '</p>';
-		$output .= '<hr>';
-		$output .= '<p>' . __('Startdatum: ', 'owc-mijn-services') . $zaak->startdatum->format('Y-m-d') . '</p>';
-		$output .= '<hr>';
-		if ($zaak->einddatum) {
-			$output .= '<p>' . __('Einddatum: ', 'owc-mijn-services') . $zaak->einddatum->format('Y-m-d') . '</p>';
-		} else {
-			$output .= '<p>' . __('Einddatum: ', 'owc-mijn-services') . __('Niet beschikbaar', 'owc-mijn-services') . '</p>';
-		}
-		$output .= '<hr>';
-		$output .= '<p>' . __('Zaaknummer: ', 'owc-mijn-services') . $zaak->identificatie . '</p>';
-		$output .= '<hr>';
-
-		$output .= '<h2>' . __('Documenten', 'owc-mijn-services') . '</h2>';
-
-		foreach ($this->getZaakInformatieObjecten($zaak) as $zaakInformatieObject) {
-			$output .= '<p>' . $zaakInformatieObject->informatieobject->bestandsnaam . '</p>';
-			$output .= '<p>' . size_format($zaakInformatieObject->informatieobject->bestandsomvang) . '</p>';
-			$output .= '<p>' . $zaakInformatieObject->informatieobject->creatiedatum->format('Y-m-d') . '</p>';
-			//TODO: link naar document
-			$output .= '<hr>';
+		try {
+			$this->zaken_filter->add( 'identificatie', $identification );
+			$zaak = $this->client->zaken()->filter( $this->zaken_filter )->first() ?: null;
+		} catch (Exception $e) {
+			$zaak = null;
 		}
 
-		$output .= '<h2>' . __('Status', 'owc-mijn-services') . '</h2>';
-		$output .= '<p>' . __('Geregistreerd', 'owc-mijn-services') .'</p>';
-		foreach ($zaak->statussen as $status) {
-			$output .= '<p>' . $status->statustype->statustekst . ' (' . $status->datumStatusGezet->format('Y-m-d') . ')' . '</p>';
-		}
-
-		$output .= '<h2>' . __('Originele aanvraag', 'owc-mijn-services') . '</h2>';
-		$output .= '<p>' . __('Datum aanvraag: ', 'owc-mijn-services') . $zaak->registratiedatum->format('Y-m-d') . '</p>';
-		$output .= '<hr>';
-		$output .= '<p>' . __('Zaaktype: ', 'owc-mijn-services') . $zaak->zaaktype->omschrijvingGeneriek . '</p>';
-
-		return $output;
+		return $zaak;
 	}
 }

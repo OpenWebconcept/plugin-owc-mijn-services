@@ -4,37 +4,41 @@ declare(strict_types=1);
 
 namespace OWC\My_Services\Blocks;
 
-use OWC\ZGW\Entities\Zaak;
+use WP_Block;
 
 class MijnZaken extends Block
 {
-	protected function renderBlock(array $attributes, string $block_content, \WP_Block $block): string
+	/**
+	 * @inheritDoc
+	 */
+	protected function render_block(array $attributes, string $block_content, WP_Block $block ): string
 	{
-		$this->zaken_filter->orderBy('registratiedatum');
-
-		$zaken = $this->getZaken();
-
-		if ($zaken->isEmpty()) {
-			return '<p>' . __('Er zijn geen zaken gevonden.', 'owc-mijn-services') . '</p>';
+		if ($this->is_block_editor()) {
+			return owc_mijn_services_render_view(
+				'owc-block-editor-placeholder',
+				array(
+					'title'       => __( 'Het persoonlijke zakenoverzicht', 'owc-mijn-services' ),
+					'description' => __( 'Toont een overzicht van de zaken voor de ingelogde gebruiker.', 'owc-mijn-services' ),
+				)
+			);
 		}
 
-		$output = '';
+		$this->zaken_filter->orderBy( 'registratiedatum' );
+		$zaken = $this->get_zaken();
+		$zaken->map(
+			function ($zaak ) use ($attributes ) {
+				// Supplier is needed for generation of the correct permalinks in the views.
+				$zaak->setValue( 'supplier', $attributes['zaakClient'] ?? 'openzaak' );
 
-		$output .= '<div class="wp-block-owc-my-services-mijn-zaken-wrapper">';
-		/** @var Zaak */
-		foreach ($zaken->take(100) as $zaak) {
-			$date = $zaak->registratiedatum?->format('Y-m-d');
-			$link = home_url('/zaak/' . $zaak->identificatie); //TODO: make path configurable
-			$title = $zaak->zaaktype?->omschrijvingGeneriek;
+				return $zaak;
+			}
+		);
 
-			$output .= '<denhaag-case-card datetime="' . esc_attr($date) . '" href="' . esc_url($link) . '" linkLabel="' . esc_attr($title) . '">';
-			$output .= '<span slot="heading">' . esc_html($title) . '</span>';
-			$output .= '<span slot="subtitle">' . esc_html($zaak->identificatie) . '</span>';
-			$output .= '</denhaag-case-card>';
-		}
-
-		$output .= '</div>';
-
-		return $output;
+		return owc_mijn_services_render_view(
+			'owc-overview-zaken',
+			array(
+				'zaken' => $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) ),
+			)
+		);
 	}
 }

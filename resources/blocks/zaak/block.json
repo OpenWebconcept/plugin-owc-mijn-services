@@ -4,7 +4,7 @@
 	"name": "owc-my-services/zaak",
 	"version": "1.0.0",
 	"title": "OWC Zaak",
-	"description": "Toont Zaak blok",
+	"description": "Toont Zaak blok.",
 	"attributes": {
 		"zaakClient": { "type": "string", "default": "openzaak" }
 	},
@@ -14,5 +14,5 @@
 	"textdomain": "owc-my-services",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./editor.css",
-	"style": "file:./style-.css"
+	"style": "file:./style.css"
 }

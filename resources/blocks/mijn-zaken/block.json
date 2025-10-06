@@ -4,8 +4,9 @@
 	"name": "owc-my-services/mijn-zaken",
 	"version": "1.0.0",
 	"title": "OWC Mijn Zaken",
-	"description": "Toont Mijn Zaken blok",
+	"description": "Toont Mijn Zaken blok.",
 	"attributes": {
+		"zaakClient": { "type": "string", "default": "openzaak" },
 		"perPage": {
 			"type": "number",
 			"default": 10

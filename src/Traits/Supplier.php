@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Supplier trait.
  *
@@ -32,9 +35,9 @@ trait Supplier
 	 *
 	 * @since 1.0.0
 	 */
-	public function supplierKeyToName(string $supplier_key): string
+	public function supplier_key_to_name(string $supplier_key ): string
 	{
-		$allowed  = ContainerResolver::make()->get( 'suppliers' );
+		$allowed = ContainerResolver::make()->get( 'suppliers' );
 
 		if ( ! is_array( $allowed ) || 1 > count( $allowed ) || 1 > strlen( $supplier_key )) {
 			return '';

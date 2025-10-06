@@ -1,26 +1,30 @@
 {
-  "name": "plugin-owc-mijn-services",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "watch": "wp-scripts start --webpack-src-dir=resources/blocks --mode=development",
-    "build": "wp-scripts build --webpack-src-dir=resources/blocks --mode=production"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/OpenWebconcept/plugin-owc-mijn-services.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/OpenWebconcept/plugin-owc-mijn-services/issues"
-  },
-  "homepage": "https://github.com/OpenWebconcept/plugin-owc-mijn-services#readme",
-  "dependencies": {
-    "@gemeente-denhaag/case-card-element": "^1.1.1"
-  },
-  "devDependencies": {
-    "@wordpress/scripts": "^30.14.1"
-  }
+	"name": "plugin-owc-mijn-services",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"wpbuild": "wp-scripts build --webpack-src-dir=resources/blocks",
+		"scss": "webpack --config webpack.scss.config.js --mode=production",
+		"build": "npm run wpbuild && npm run scss"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/OpenWebconcept/plugin-owc-mijn-services.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/OpenWebconcept/plugin-owc-mijn-services/issues"
+	},
+	"homepage": "https://github.com/OpenWebconcept/plugin-owc-mijn-services#readme",
+	"dependencies": {
+		"@gemeente-denhaag/case-card-element": "^1.1.1"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.25.0",
+		"bootstrap": "^5.3.7",
+		"mini-css-extract-plugin": "^2.9.4",
+		"sass": "^1.93.2"
+	}
 }
