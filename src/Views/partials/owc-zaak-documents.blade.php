@@ -2,7 +2,7 @@
 	/**
 	 * Exit when accessed directly.
 	 *
-	 * @package owc-mijn-services
+	 * @package OWC_Mijn_Services
 	 */
 	if (!defined('ABSPATH')) {
 	    exit();
@@ -16,12 +16,15 @@
 	@else
 		<ul>
 			@foreach ($documents as $document)
-				@if (!empty($document->informatieobject->downloadUrl($zaak->identification(), $zaak->getSupplier())))
+				@if (
+					$downloadUrl = $document->informatieobject->downloadUrl(
+						$zaak->getValue('identificatie', ''),
+						$zaak->getValue('supplier', '')))
 					<li>
-						<a href="{{ $document->informatieobject->downloadUrl($zaak->identification(), $zaak->getSupplier()) }}">
-							{{ $document->informatieobject->fileName() }}
-							@if ($document->informatieobject->formattedMetaData())
-								({{ $document->informatieobject->formattedMetaData() }})
+						<a href="{{ $downloadUrl }}">
+							{{ $document->informatieobject->getValue('bestandsnaam', '') }}
+							@if ($metaData = $document->informatieobject->formattedMetaData())
+								({{ $metaData }})
 							@endif
 						</a>
 					</li>

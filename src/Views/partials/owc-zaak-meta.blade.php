@@ -2,7 +2,7 @@
 	/**
 	 * Exit when accessed directly.
 	 *
-	 * @package owc-mijn-services
+	 * @package OWC_Mijn_Services
 	 */
 	if (!defined('ABSPATH')) {
 	    exit();
@@ -12,7 +12,7 @@
 <div class="zaak-meta">
 	@include('partials.owc-zaak-meta-item', [
 		'label' => 'Zaaknummer',
-		'value' => $zaak->identification(),
+		'value' => $zaak->getValue('identificatie', ''),
 		'icon' =>
 			'<svg class="zaak-meta-item__icon" viewBox="0 0 512 512"><path d="M464 32H48C21.5 32 0 53.5 0 80v64c0 8.8 7.2 16 16 16h16v272c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V160h16c8.8 0 16-7.2 16-16V80c0-26.5-21.5-48-48-48zm-16 400c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V160h384v272zm32-304H32V80c0-8.8 7.2-16 16-16h416c8.8 0 16 7.2 16 16v48zM204 256h104c6.6 0 12-5.4 12-12v-8c0-6.6-5.4-12-12-12H204c-6.6 0-12 5.4-12 12v8c0 6.6 5.4 12 12 12z"/></svg>',
 	])
@@ -28,15 +28,15 @@
 		'label' => 'Registratiedatum',
 		'value' => $zaak->registerDate('d-m-Y'),
 		'icon' => '<svg class="zaak-meta-item__icon" viewBox="0 0 448 512">
-																<path d="M400 64h-48V12c0-6.6-5.4-12-12-12h-8c-6.6 0-12 5.4-12 12v52H128V12c0-6.6-5.4-12-12-12h-8c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM48 96h352c8.8 0 16 7.2 16 16v48H32v-48c0-8.8 7.2-16 16-16zm352 384H48c-8.8 0-16-7.2-16-16V192h384v272c0 8.8-7.2 16-16 16zM255.7 269.7l34.6 34.6c2.1 2.1 2.1 5.4 0 7.4L159.1 442.9l-35.1 5c-6.9 1-12.9-4.9-11.9-11.9l5-35.1 131.2-131.2c2-2 5.4-2 7.4 0zm75.2 1.4l-19.2 19.2c-2.1 2.1-5.4 2.1-7.4 0l-34.6-34.6c-2.1-2.1-2.1-5.4 0-7.4l19.2-19.2c6.8-6.8 17.9-6.8 24.7 0l17.3 17.3c6.8 6.8 6.8 17.9 0 24.7z" /></svg>',
+																				<path d="M400 64h-48V12c0-6.6-5.4-12-12-12h-8c-6.6 0-12 5.4-12 12v52H128V12c0-6.6-5.4-12-12-12h-8c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM48 96h352c8.8 0 16 7.2 16 16v48H32v-48c0-8.8 7.2-16 16-16zm352 384H48c-8.8 0-16-7.2-16-16V192h384v272c0 8.8-7.2 16-16 16zM255.7 269.7l34.6 34.6c2.1 2.1 2.1 5.4 0 7.4L159.1 442.9l-35.1 5c-6.9 1-12.9-4.9-11.9-11.9l5-35.1 131.2-131.2c2-2 5.4-2 7.4 0zm75.2 1.4l-19.2 19.2c-2.1 2.1-5.4 2.1-7.4 0l-34.6-34.6c-2.1-2.1-2.1-5.4 0-7.4l19.2-19.2c6.8-6.8 17.9-6.8 24.7 0l17.3 17.3c6.8 6.8 6.8 17.9 0 24.7z" /></svg>',
 	])
 
 	@php
 		$label = 'Status';
-		$status = $zaak->statusExplanation() ?: false;
-		if ($zaak->result() && $zaak->resultExplanation()) {
+		$status = $zaak?->status?->statustype?->omschrijving ?: false;
+		if ($zaak?->resultaat && $zaak?->resultaat?->toelichting) {
 		    $label = 'Resultaat';
-		    $status = $zaak->resultExplanation();
+		    $status = $zaak?->resultaat?->toelichting;
 		}
 	@endphp
 

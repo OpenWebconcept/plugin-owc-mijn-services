@@ -2,7 +2,7 @@
 	/**
 	 * Exit when accessed directly.
 	 *
-	 * @package owc-mijn-services
+	 * @package OWC_Mijn_Services
 	 */
 	if (!defined('ABSPATH')) {
 	    exit();
@@ -18,8 +18,8 @@
 			@foreach ($steps as $step)
 				@php
 					$statusUpdate = null;
-					if (!empty($vars['status_history'])) {
-					    $statusUpdate = $vars['status_history']
+					if (!empty($statusHistory)) {
+					    $statusUpdate = $statusHistory
 					        ->filter(function ($status) use ($step) {
 					            return $status->statustype->url === $step->url;
 					        })

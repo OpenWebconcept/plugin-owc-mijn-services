@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Bootstrap providers and containers.
  *
- * @package owc-mijn-services
+ * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use DI\ContainerBuilder;
+use OWC\My_Services\Macros\ZgwApiMacros;
 use OWC\My_Services\Providers\BladeServiceProvider;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Providers\SettingsServiceProvider;
@@ -59,6 +60,7 @@ final class Bootstrap
 		$this->providers = $this->get_providers();
 		$this->register_providers();
 		$this->boot_providers();
+		ZgwApiMacros::register();
 	}
 
 	/**

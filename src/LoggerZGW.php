@@ -3,7 +3,7 @@
  * A wrapper class for the Monolog Logger.
  * This class integrates with the application's container to check if logging is enabled before processing log entries.
  *
- * @package owc-mijn-services
+ * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */

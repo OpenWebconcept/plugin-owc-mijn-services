@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Plugin lifecycle hooks for activation and deactivation.
  *
- * @package owc-mijn-services
+ * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
