@@ -2,7 +2,7 @@
 	/**
 	 * Exit when accessed directly.
 	 *
-	 * @package owc-mijn-services
+	 * @package OWC_Mijn_Services
 	 */
 	if (!defined('ABSPATH')) {
 		exit();

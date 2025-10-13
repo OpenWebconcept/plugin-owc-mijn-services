@@ -2,50 +2,50 @@
 	/**
 	 * Exit when accessed directly.
 	 *
-	 * @package owc-mijn-services
+	 * @package OWC_Mijn_Services
 	 */
 	if (!defined('ABSPATH')) {
 	    exit();
 	}
 @endphp
 
-@if (!empty($zaak))
-	<h1>{{ $zaak->title() }}</h1>
+@if (isset($zaak) && $zaak instanceof \OWC\ZGW\Entities\Zaak)
+	<h1>{{ $zaak->title }}</h1>
 	<div class="zaak-details">
 		<h2>Details</h2>
 		<table class="zaak-details-table">
-			@if (!empty($zaak->registerDate('j F Y')))
+			@if ($registerDate = $zaak->registerDate('j F Y'))
 				<tr>
 					<th>Datum aanvraag</th>
-					<td>{{ $zaak->registerDate('j F Y') }}</td>
+					<td>{{ $registerDate }}</td>
 				</tr>
 			@endif
 
-			@if (!empty($zaak->startDate('j F Y')))
+			@if ($startDate = $zaak->startDate('j F Y'))
 				<tr>
 					<th>Startdatum</th>
-					<td>{{ $zaak->startDate('j F Y') }}</td>
+					<td>{{ $startDate }}</td>
 				</tr>
 			@endif
 
-			@if (!empty($zaak->endDatePlanned()) && empty($zaak->endDate()))
+			@if (($endDatePlanned = $zaak->endDatePlanned()) && empty($zaak->endDate()))
 				<tr>
 					<th>Einddatum gepland</th>
-					<td>{{ $zaak->endDatePlanned() }}</td>
+					<td>{{ $endDatePlanned }}</td>
 				</tr>
 			@endif
 
-			@if (!empty($zaak->endDate()))
+			@if ($endDate = $zaak->endDate())
 				<tr>
 					<th>Einddatum</th>
-					<td>{{ $zaak->endDate() }}</td>
+					<td>{{ $endDate }}</td>
 				</tr>
 			@endif
 
-			@if (!empty($zaak->identification()))
+			@if ($identification = $zaak->getValue('identificatie', ''))
 				<tr>
 					<th>Zaaknummer</th>
-					<td>{{ $zaak->identification() }}</td>
+					<td>{{ $identification }}</td>
 				</tr>
 			@endif
 		</table>
@@ -56,8 +56,10 @@
 			<ul class="zaak-documents">
 				@foreach ($information_objects as $document)
 					@if (
-						$document->informatieobject->displayAllowedByConfidentialityDesignation() &&
-							!empty($document->informatieobject->downloadUrl($zaak->identification(), $zaak->getSupplier())))
+						$document->informatieobject->isDisplayAllowed() &&
+							($downloadUrl = $document->informatieobject->downloadUrl(
+								$zaak->getValue('identificatie', ''),
+								$zaak->getValue('supplier', ''))))
 						<li class="zaak-documents-item">
 							<svg class="zaak-documents-item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
 								width="24" height="24">
@@ -66,12 +68,11 @@
 								<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 2v7h7" />
 							</svg>
 
-							<a class="zaak-documents-item-link"
-								href="{{ $document->informatieobject->downloadUrl($zaak->identification(), $zaak->getSupplier()) }}">
+							<a class="zaak-documents-item-link" href="{{ $downloadUrl }}">
 								<span>
-									{{ $document->informatieobject->fileName() }}
-									@if ($document->informatieobject->formattedMetaData())
-										<div class="zaak-documents-item-download-size">({{ $document->informatieobject->formattedMetaData() }})</div>
+									{{ $document->informatieobject->getValue('bestandsnaam', '') }}
+									@if ($metaData = $document->informatieobject->formattedMetaData())
+										<div class="zaak-documents-item-download-size">({{ $metaData }})</div>
 									@endif
 								</span>
 								<div class="zaak-documents-item-download-button">
@@ -98,16 +99,15 @@
 
 	<div class="zaak-process">
 		<h2>Status</h2>
-		@if (empty($steps) || $zaak->hasNoStatus())
+		@if (empty($steps) || $zaak?->status?->statustype?->omschrijving === 'Niet Beschikbaar')
 			<p>Momenteel is er geen status beschikbaar.</p>
 		@else
 			<ol class="zaak-process-steps">
 				@foreach ($steps as $step)
 					@php
 						$statusUpdate = null;
-						if (!empty($zaak->statusHistory())) {
-						    $statusUpdate = $zaak
-						        ->statusHistory()
+						if (!empty($zaak->statussen)) {
+						    $statusUpdate = $zaak->statussen
 						        ->filter(function ($status) use ($step) {
 						            return $status->statustype->url === $step->url;
 						        })
@@ -126,9 +126,9 @@
 							{!! $step->isPast() ? $isPastIcon : $step->volgnummer !!}
 						</span>
 						<span class="zaak-process-steps__step-heading-label">
-							{{ $step->statusExplanation() }}
+							{{ $step->getValue('omschrijving', '') }}
 							@if (!empty($statusUpdate))
-								<small>({{ $statusUpdate->datumStatusGezet->format('d-m-Y') }})</small>
+								<small>({{ $statusUpdate?->datumStatusGezet?->format('d-m-Y') }})</small>
 							@endif
 						</span>
 					</li>
@@ -139,10 +139,10 @@
 
 	<div class="zaak-details">
 		<table class="zaak-details-table">
-			@if (!empty($zaak->resultExplanation()) && !empty($zaak->endDate()))
+			@if (($result = $zaak->getValue('resultaat')?->toelichting) && isset($endDate))
 				<tr>
 					<th>Zaak resultaat</th>
-					<td>{{ $zaak->resultExplanation() }}</td>
+					<td>{{ $result }}</td>
 				</tr>
 			@endif
 		</table>
@@ -151,22 +151,22 @@
 	<div class="zaak-process">
 		<h2>Originele aanvraag</h2>
 		<table class="zaak-details-table">
-			@if ($zaak->registerDate())
+			@if ($registerDate = $zaak->registerDate())
 				<tr>
 					<th>Datum aanvraag</th>
-					<td>{{ $zaak->registerDate() }}</td>
+					<td>{{ $registerDate }}</td>
 				</tr>
 			@endif
-			@if ($zaak->zaaktypeDescription())
+			@if ($zaaktypeDesc = $zaak?->zaaktype?->omschrijvingGeneriek)
 				<tr>
 					<th>Zaaktype</th>
-					<td>{{ $zaak->zaaktypeDescription() }}</td>
+					<td>{{ $zaaktypeDesc }}</td>
 				</tr>
 			@endif
-			@if ($zaak->clarification())
+			@if ($clarification = $zaak->getValue('toelichting', ''))
 				<tr>
 					<th>Aanvraag</th>
-					<td>{{ $zaak->clarification() }}</td>
+					<td>{{ $clarification }}</td>
 				</tr>
 			@endif
 		</table>
@@ -177,7 +177,9 @@
 			@foreach ($information_objects as $document)
 				@if (
 					$document->informatieobject->isConfidential() &&
-						!empty($document->informatieobject->downloadUrl($zaak->identification(), $zaak->getSupplier())))
+						($downloadUrl = $document->informatieobject->downloadUrl(
+							$zaak->getValue('identificatie', ''),
+							$zaak->getValue('supplier', ''))))
 					<li class="zaak-documents-item">
 						<svg class="zaak-documents-item-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
 							width="24" height="24">
@@ -186,12 +188,11 @@
 							<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 2v7h7" />
 						</svg>
 
-						<a class="zaak-documents-item-link"
-							href="{{ $document->informatieobject->downloadUrl($zaak->identification(), $zaak->getSupplier()) }}">
+						<a class="zaak-documents-item-link" href="{{ $downloadUrl }}">
 							<span>
-								{{ $document->informatieobject->fileName() }}
-								@if ($document->informatieobject->formattedMetaData())
-									<div class="zaak-documents-item-download-size">({{ $document->informatieobject->formattedMetaData() }})</div>
+								{{ $document->informatieobject->getValue('bestandsnaam', '') }}
+								@if ($metaData = $document->informatieobject->formattedMetaData())
+									<div class="zaak-documents-item-download-size">({{ $metaData }})</div>
 								@endif
 							</span>
 							<div class="zaak-documents-item-download-button">

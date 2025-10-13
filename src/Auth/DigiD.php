@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Resolve entries from the DI-container.
  *
- * @package owc-mijn-services
+ * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */

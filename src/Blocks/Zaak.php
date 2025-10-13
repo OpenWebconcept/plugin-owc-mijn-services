@@ -44,7 +44,7 @@ class Zaak extends Block
 
 		$zaak = $this->retrieve_zaak( $identification );
 
-		if ( ! $zaak instanceof Zaak) {
+		if ( ! $zaak instanceof ZaakEntity) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De opgevraagde zaak is niet gevonden.', 'owc-mijn-services' ) ) );
 		}
 
@@ -55,8 +55,8 @@ class Zaak extends Block
 			'owc-single-zaak',
 			array(
 				'zaak'                => $zaak,
-				'information_objects' => $zaak->informationObjects(),
-				'steps'               => $zaak->steps(),
+				'information_objects' => $zaak->zaakinformatieobjecten,
+				'steps'               => $zaak->steps,
 			)
 		);
 	}

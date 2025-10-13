@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * InformatieObject download service.
  *
- * @package owc-mijn-services
+ * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
  * @since   1.0.0
  */
@@ -27,7 +27,7 @@ use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 use OWC\ZGW\Entities\Zaak;
-use OWC\ZGW\Traits\ZaakIdentification;
+use OWC\ZGW\Support\ZaakIdEncoderDecoder;
 
 use function OWC\ZGW\apiClientManager;
 
@@ -39,7 +39,6 @@ use function OWC\ZGW\apiClientManager;
 class InformatieObjectDownloadService
 {
 	use Supplier;
-	use ZaakIdentification;
 
 	protected Client $client;
 	protected LoggerZGW $logger;
@@ -61,7 +60,7 @@ class InformatieObjectDownloadService
 
 		$this->client = apiClientManager()->getClient( $this->supplier_key_to_name( $supplier ) );
 
-		$identification = $this->decodeZaakIdentification( $identification );
+		$identification = ZaakIdEncoderDecoder::decode( $identification );
 		$zaak           = $this->validate_zaak( $identification );
 
 		if ( ! $zaak instanceof Zaak) {

@@ -2,7 +2,7 @@
 	/**
 	 * Exit when accessed directly.
 	 *
-	 * @package owc-mijn-services
+	 * @package OWC_Mijn_Services
 	 */
 	if (!defined('ABSPATH')) {
 	    exit();
@@ -19,9 +19,9 @@
 		{!! $isPast ? $isPastIcon : $step->volgnummer() !!}
 	</span>
 	<span class="zaak-process-steps__step-heading-label">
-		{{ $step->statusExplanation() }}
+		{{ $step->omschrijving }}
 		@if ($stepUpdate)
-			<small>({{ $stepUpdate->datumStatusGezet->format('d-m-Y') }})</small>
+			<small>({{ $stepUpdate?->datumStatusGezet?->format('d-m-Y') }})</small>
 		@endif
 	</span>
 </li>
