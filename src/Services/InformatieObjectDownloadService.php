@@ -23,6 +23,7 @@ use Exception;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\LoggerZGW;
 use OWC\My_Services\Providers\BlockServiceProvider;
+use OWC\My_Services\Services\LoggerService;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
@@ -48,6 +49,9 @@ class InformatieObjectDownloadService
 		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
 	}
 
+	/**
+	 * @since 1.0.0
+	 */
 	public function download_file_from_request(): string
 	{
 		$download_identification = (string) get_query_var( BlockServiceProvider::QUERY_VAR_ZAAK_DOWNLOAD_IDENTIFICATION );
@@ -70,12 +74,7 @@ class InformatieObjectDownloadService
 		try {
 			$response = $this->client->enkelvoudiginformatieobjecten()->download( $download_identification );
 		} catch (Exception $e) {
-			$this->logger->error(
-				sprintf(
-					'OWC\My_Services: %s',
-					$e->getMessage()
-				)
-			);
+			LoggerService::log_exception( $e );
 
 			return '';
 		}
@@ -108,6 +107,9 @@ class InformatieObjectDownloadService
 		return $download_identification;
 	}
 
+	/**
+	 * @since 1.0.0
+	 */
 	protected function validate_zaak(string $identification ): ?Zaak
 	{
 		try {

@@ -86,7 +86,7 @@ class LoggerZGW
 
 		$this->logger->addRecord(
 			$level,
-			$message,
+			sprintf( 'OWC\My_Services: %s', $message ),
 			$context
 		);
 	}

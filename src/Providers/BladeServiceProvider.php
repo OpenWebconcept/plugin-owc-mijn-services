@@ -40,7 +40,7 @@ class BladeServiceProvider extends ServiceProvider
 			'view',
 			function () {
 				$default_views = array( OWC_MY_SERVICES_DIR_PATH . 'src/Views' );
-				$views         = apply_filters( 'owcms::logger/template-paths', $default_views );
+				$views         = apply_filters( 'owcms::view/template-paths', $default_views );
 
 				if ( ! is_array( $views ) || array() === $views) {
 					$views = $default_views;
@@ -58,8 +58,7 @@ class BladeServiceProvider extends ServiceProvider
 				$blade = new BladeOne(
 					$views,
 					$cache_dir,
-					BladeOne::MODE_FAST,
-					0
+					BladeOne::MODE_FAST
 				);
 
 				if (defined( 'WP_DEBUG' ) && WP_DEBUG) {
