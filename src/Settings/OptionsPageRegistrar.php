@@ -19,8 +19,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use OWC\My_Services\ContainerResolver;
-use OWC\My_Services\LoggerZGW;
+use OWC\My_Services\Services\LoggerService;
 
 /**
  * Options page registrar for settings.
@@ -29,13 +28,6 @@ use OWC\My_Services\LoggerZGW;
  */
 class OptionsPageRegistrar
 {
-	protected LoggerZGW $logger;
-
-	public function __construct()
-	{
-		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
-	}
-
 	/**
 	 * Add settings fields.
 	 *
@@ -44,7 +36,7 @@ class OptionsPageRegistrar
 	public function addSettingsFields(): void
 	{
 		if ( ! function_exists( 'new_cmb2_box' )) {
-			$this->logger->error( 'CMB2 is not installed or activated. Settings fields cannot be added.' );
+			LoggerService::log( 'error', 'CMB2 is not installed or activated. Settings fields cannot be added.' );
 
 			return;
 		}

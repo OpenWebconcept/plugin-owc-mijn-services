@@ -30,12 +30,12 @@ Enable logging to keep track of errors during communication with the ZGW supplie
 
 ## Hooks
 
-### Customizing Logger Template Paths
+### Customizing Template Paths
 
 You can customize the logger template paths by using the following filter in your theme or another plugin:
 
 ```php
-add_filter('owcms::logger/template-paths', function ($paths) {
+add_filter('owcms::view/template-paths', function ($paths) {
     $paths[] = get_stylesheet_directory() . '/resources/views/owc-mijn-services';
 
     return $paths;
@@ -46,7 +46,7 @@ This will add your custom template directory to the logger's template search pat
 To prioritize your custom templates over the default ones, for example:
 
 ```php
-add_filter('owcms::logger/template-paths', function ($paths) {
+add_filter('owcms::view/template-paths', function ($paths) {
     $paths[] = get_stylesheet_directory() . '/resources/views/owc-mijn-services';
 
     return array_reverse($paths);
@@ -61,4 +61,12 @@ Use the following filter to alter the rotating file handler's max files setting:
 apply_filters('owcms::logger/rotating_filer_handler_max_files', OWC_MY_SERVICES_LOGGER_DEFAULT_MAX_FILES)
 ```
 
----
+### Intercept exceptions for custom handling
+
+You can intercept exceptions caught by the plugin for additional processing or custom logging using this filter:
+
+```php
+add_action('owcms::exception/intercept', $exception, $method)
+```
+
+The `$exception` parameter contains the caught exception object
