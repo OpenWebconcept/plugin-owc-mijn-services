@@ -10,6 +10,10 @@ import {
 } from '@wordpress/components';
 import ServerSideRender from '@wordpress/server-side-render';
 import { __ } from '@wordpress/i18n';
+
+/**
+ * Internal dependencies.
+ */
 import metadata from './block.json';
 import './editor.css';
 
@@ -27,27 +31,39 @@ export default function Edit( { attributes, setAttributes } ) {
 					initialOpen={ true }
 				>
 					<p>
-						Selecteer het zaaksysteem waaruit de zaken opgehaald
-						moeten worden. Leveranciers gekenmerkt met (x) zijn nog
-						niet volledig geïmplementeerd.
+                        {
+                            __(
+                                'Selecteer het zaaksysteem waaruit de zaken opgehaald moeten worden.',
+                                'owc-my-services'
+                            )
+                        }
 					</p>
 					<SelectControl
 						label="Zaaksysteem"
 						value={ zaakClient }
 						options={ [
+                            // Best kept in sync with:
+                            // https://github.com/OpenWebconcept/owc-zgw-api/blob/main/src/WordPress/SettingsProvider.php#L50
 							{
 								label: 'Decos JOIN',
-								value: 'decos-join',
+								value: 'decosjoin',
 							},
-							{ label: 'Mozart (x)', value: 'mozart' },
-							{ label: 'OpenWave (x)', value: 'openwave' },
-							{ label: 'OpenZaak', value: 'openzaak' },
+							{
+                                label: 'OpenZaak',
+                                value: 'openzaak'
+                            },
 							{
 								label: 'Rx.Mission',
-								value: 'rx-mission',
+								value: 'rxmission',
 							},
-							{ label: 'XXLLNC', value: 'xxllnc' },
-							{ label: 'Shift2', value: 'procura' },
+							{
+                                label: 'XXLLNC',
+                                value: 'xxllnc'
+                            },
+                            {
+                                label: __('Shift2 (voorheen Procura)', 'owc-my-services'),
+                                value: 'procura'
+                            },
 						] }
 						onChange={ ( newzaakClient ) =>
 							setAttributes( {

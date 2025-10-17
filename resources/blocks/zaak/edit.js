@@ -1,4 +1,3 @@
-
 /**
  * External dependencies.
  */
@@ -10,6 +9,10 @@ import {
 } from '@wordpress/components';
 import ServerSideRender from '@wordpress/server-side-render';
 import { __ } from '@wordpress/i18n';
+
+/**
+ * Internal dependencies.
+ */
 import metadata from './block.json';
 import './editor.css';
 
@@ -27,20 +30,29 @@ export default function Edit({ attributes, setAttributes }) {
 					label="Zaaksysteem"
 					value={ zaakClient }
 					options={ [
-							{
-								label: 'Decos JOIN',
-								value: 'decos-join',
-							},
-							{ label: 'Mozart (x)', value: 'mozart' },
-							{ label: 'OpenWave (x)', value: 'openwave' },
-							{ label: 'OpenZaak', value: 'openzaak' },
-							{
-								label: 'Rx.Mission',
-								value: 'rx-mission',
-							},
-							{ label: 'XXLLNC', value: 'xxllnc' },
-							{ label: 'Shift2', value: 'procura' },
-						] }
+                        // Best kept in sync with:
+                        // https://github.com/OpenWebconcept/owc-zgw-api/blob/main/src/WordPress/SettingsProvider.php#L50
+                        {
+                            label: 'Decos JOIN',
+                            value: 'decosjoin',
+                        },
+                        {
+                            label: 'OpenZaak',
+                            value: 'openzaak'
+                        },
+                        {
+                            label: 'Rx.Mission',
+                            value: 'rxmission',
+                        },
+                        {
+                            label: 'XXLLNC',
+                            value: 'xxllnc'
+                        },
+                        {
+                            label: __('Shift2 (voorheen Procura)', 'owc-my-services'),
+                            value: 'procura'
+                        },
+                    ] }
 					onChange={ ( newzaakClient ) =>
 						setAttributes( {
 							zaakClient: newzaakClient,
