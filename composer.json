@@ -1,6 +1,6 @@
 {
 	"name": "plugin/owc-mijn-services",
-	"description": "",
+    "description": "Retrieve information from ZGW to show in Mijn Services",
 	"version": "1.0.0",
 	"type": "wordpress-plugin",
 	"scripts": {

@@ -8,7 +8,7 @@ OWC Mijn Services is a WordPress plugin built around custom Gutenberg blocks tha
 
 1. Upload the 'owc-mijn-services' folder in to the `/wp-content/plugins/` directory.
 2. `cd /wp-content/plugins/owc-mijn-services`
-3. Run `composer install, NPM asset build is in version control already.
+3. Run composer install, NPM asset build is in version control already.
 4. Activate the plugin in via the WordPress admin.
 
 ### Composer installation
