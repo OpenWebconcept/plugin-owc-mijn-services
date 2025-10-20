@@ -1,6 +1,7 @@
 # OWC Mijn Services
 
-OWC Mijn Services is a WordPress plugin built around custom Gutenberg blocks that integrate with ZGW (Zaakgericht Werken) APIs. These blocks are the foundation of the plugin, allowing you to easily configure, and display data—directly within the WordPress block editor. This approach provides a seamless editing experience for site administrators and enables flexible management of service workflows on your website.
+OWC Mijn Services is a WordPress plugin built around custom Gutenberg blocks that integrate with ZGW (Zaakgericht Werken) APIs.
+These blocks are the foundation of the plugin, allowing you to easily configure, and display data—directly within the WordPress block editor.
 
 ## Installation
 
@@ -18,6 +19,25 @@ OWC Mijn Services is a WordPress plugin built around custom Gutenberg blocks tha
 3. `cd /wp-content/plugins/owc-mijn-services`
 4. Run `composer install`, NPM asset build is in version control already.
 
+### Configure your project
+
+To use this plugin, make sure the following pages exist in your WordPress installation:
+
+- A single page for a Zaak that contains the owc-my-services/zaak block.
+- A single page for a Zaak download, no blocks required.
+- A page (any type) that contains the owc-my-services/mijn-zaken block.
+
+## Gutenberg blocks
+
+### owc-my-services/zaak
+
+This block displays all data for a single Zaak.
+Selecting a ZGW API supplier is the only configuration required in the block settings.
+
+### owc-my-services/mijn-zaken
+
+This block displays an overview of all Zaken, filtered by the selected supplier and the social security number (BSN) of the currently logged-in citizen.
+
 #### Logging
 
 Enable logging to keep track of errors during communication with the ZGW supplier(s).
@@ -32,7 +52,7 @@ Enable logging to keep track of errors during communication with the ZGW supplie
 
 ### Customizing Template Paths
 
-You can customize the logger template paths by using the following filter in your theme or another plugin:
+You can customize the template paths by using the following filter in your theme or another plugin:
 
 ```php
 add_filter('owcms::view/template-paths', function ($paths) {
@@ -42,8 +62,7 @@ add_filter('owcms::view/template-paths', function ($paths) {
 });
 ```
 
-This will add your custom template directory to the logger's template search paths.
-To prioritize your custom templates over the default ones, for example:
+To prioritize your custom template path over the default ones, use this example:
 
 ```php
 add_filter('owcms::view/template-paths', function ($paths) {
