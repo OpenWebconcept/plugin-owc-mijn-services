@@ -55,4 +55,5 @@ add_action(
 	}
 );
 
+register_activation_hook( __FILE__, ( new \OWC\My_Services\PluginLifecycle() )->activate( ... ) );
 register_deactivation_hook( __FILE__, ( new \OWC\My_Services\PluginLifecycle() )->deactivate( ... ) );
