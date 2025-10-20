@@ -19,25 +19,22 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use OWC\My_Services\Services\LoggerService;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use StdClass;
 use WP_Filesystem_Direct;
+use WP_Post;
 
 class PluginLifecycle
 {
-	/**
-	 * @since 1.0.0
-	 */
 	public function activate(): void
 	{
-		// maybe for later use?
+		$this->insert_required_pages();
 	}
 
 	/**
 	 * Executes actions on plugin deactivation.
-	 *
-	 * @since 1.0.0
 	 */
 	public function deactivate(): void
 	{
@@ -45,9 +42,60 @@ class PluginLifecycle
 	}
 
 	/**
+	 * Inserts required pages into WordPress upon plugin activation.
+	 */
+	private function insert_required_pages(): void
+	{
+		$pages = array(
+			array(
+				'title'   => 'Zaak',
+				'slug'    => 'zaak',
+				'content' => '<!-- wp:owc-my-services/zaak /-->',
+			),
+			array(
+				'title'   => 'Zaak download',
+				'slug'    => 'zaak-download',
+				'content' => '',
+			),
+		);
+
+		foreach ($pages as $page) {
+			$this->insert_page( $page );
+		}
+	}
+
+	private function insert_page(array $pageData )
+	{
+		$page = get_page_by_path( $pageData['slug'] );
+
+		if ($page instanceof WP_Post || is_array( $page )) {
+			return; // Page already exists, do nothing.
+		}
+
+		$result = wp_insert_post(
+			array(
+				'post_title'   => $pageData['title'],
+				'post_name'    => $pageData['slug'],
+				'post_content' => $pageData['content'],
+				'post_status'  => 'publish',
+				'post_type'    => 'page',
+			)
+		);
+
+		if (is_wp_error( $result )) {
+			LoggerService::log(
+				'error',
+				sprintf(
+					'Failed to create required page \'%s\' on plugin activation: %s',
+					$pageData['title'],
+					$result->get_error_message()
+				)
+			);
+		}
+	}
+
+	/**
 	 * Removal of the Blade cache directory on plugin deactivation.
-	 *
-	 * @since 1.0.0
 	 */
 	private function remove_blade_cache_dir(): void
 	{
