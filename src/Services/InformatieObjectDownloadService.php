@@ -20,8 +20,6 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
-use OWC\My_Services\ContainerResolver;
-use OWC\My_Services\LoggerZGW;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Services\LoggerService;
 use OWC\My_Services\Traits\Supplier;
@@ -42,12 +40,6 @@ class InformatieObjectDownloadService
 	use Supplier;
 
 	protected Client $client;
-	protected LoggerZGW $logger;
-
-	public function __construct()
-	{
-		$this->logger = ContainerResolver::make()->get( 'logger.zgw' );
-	}
 
 	/**
 	 * @since 1.0.0
@@ -83,7 +75,8 @@ class InformatieObjectDownloadService
 
 		// Check if the file was written unsuccessfully.
 		if (false === $fileWriteResult || ! is_int( $fileWriteResult ) || 0 >= $fileWriteResult) {
-			$this->logger->error(
+			LoggerService::log(
+				'error',
 				sprintf(
 					'OWC\My_Services: %s',
 					'Informationobject download failed, could not write the file to disk.'
@@ -95,7 +88,8 @@ class InformatieObjectDownloadService
 
 		// Check if the file does not exist or is not readable.
 		if ( ! file_exists( $download_identification ) || ! is_readable( $download_identification )) {
-			$this->logger->error(
+			LoggerService::log(
+				'error',
 				sprintf(
 					'OWC\My_Services: %s',
 					'Informationobject download failed, the file does not exist or is not readable.'

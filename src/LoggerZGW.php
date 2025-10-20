@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' )) {
 
 use Monolog\Logger;
 use Monolog\Level;
-use OWCGravityFormsZGW\ContainerResolver;
+use OWC\My_Services\ContainerResolver;
 
 /**
  * A wrapper class for the Monolog Logger.
