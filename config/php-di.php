@@ -87,7 +87,7 @@ return array(
 	'message.logger.active'       => function (Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-enable-logging' ) );
 	},
-	'message.logger.path'         => sprintf( '%s/owc-my-services-log.json', wp_get_upload_dir()['basedir'] ),
+	'message.logger.path'         => sprintf( '%s/owc-my-services-log.json', dirname( ABSPATH ) ),
 	'message.logger'              => function (Container $container ) {
 		$logger   = new \Monolog\Logger( 'owc_my_services_log' );
 		$maxFiles = apply_filters( 'owcms::logger/rotating_filer_handler_max_files', OWC_MY_SERVICES_LOGGER_DEFAULT_MAX_FILES );
