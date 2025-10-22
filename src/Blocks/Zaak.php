@@ -12,6 +12,9 @@ use WP_Block;
 
 use function OWC\ZGW\apiClientManager;
 
+/**
+ * @since 0.1.0
+ */
 class Zaak extends Block
 {
 	/**
@@ -61,9 +64,6 @@ class Zaak extends Block
 		);
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	protected function retrieve_zaak(string $identification ): ?ZaakEntity
 	{
 		try {

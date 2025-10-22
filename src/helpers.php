@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author Yard | Digital Agency
- * @since 1.0.0
+ * @since 0.1.0
  */
 
 /**
@@ -21,10 +21,6 @@ use OWC\My_Services\ContainerResolver;
 
 /**
  * Add prefix for the given string.
- *
- * @package OWC_Mijn_Services
- * @author Yard | Digital Agency
- * @since 1.0.0
  */
 if ( ! function_exists( 'owc_mijn_services_prefix' )) {
 	function owc_mijn_services_prefix(string $name ): string
@@ -35,10 +31,6 @@ if ( ! function_exists( 'owc_mijn_services_prefix' )) {
 
 /**
  * Generates a full plugin URL by appending the given path to the base plugin URL.
- *
- * @package OWC_Mijn_Services
- * @author Yard | Digital Agency
- * @since   1.0.0
  */
 if ( ! function_exists( 'owc_mijn_services_url' )) {
 	function owc_mijn_services_url(string $path ): string
@@ -49,10 +41,6 @@ if ( ! function_exists( 'owc_mijn_services_url' )) {
 
 /**
  * Generates a full asset URL by appending the given path to the plugin's asset directory.
- *
- * @package OWC_Mijn_Services
- * @author Yard | Digital Agency
- * @since   1.0.0
  */
 if ( ! function_exists( 'owc_mijn_services_asset_url' )) {
 	function owc_mijn_services_asset_url(string $path ): string
@@ -63,10 +51,6 @@ if ( ! function_exists( 'owc_mijn_services_asset_url' )) {
 
 /**
  * Generates a full asset path by appending the given path to the plugin's asset directory.
- *
- * @package OWC_Mijn_Services
- * @author Yard | Digital Agency
- * @since   1.0.0
  */
 if ( ! function_exists( 'owc_mijn_services_asset_path' )) {
 	function owc_mijn_services_asset_path(string $path ): string
@@ -77,10 +61,6 @@ if ( ! function_exists( 'owc_mijn_services_asset_path' )) {
 
 /**
  * Render a view file.
- *
- * @package OWC_Mijn_Services
- * @author Yard | Digital Agency
- * @since 1.0.0
  */
 if ( ! function_exists( 'owc_mijn_services_render_view' )) {
 	function owc_mijn_services_render_view(string $file_path, $data = array() )

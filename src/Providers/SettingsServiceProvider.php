@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  */
 
 namespace OWC\My_Services\Providers;
@@ -27,7 +27,7 @@ use OWC\ZGW\WordPress\SettingsProvider;
 /**
  * Register settings service provider.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 class SettingsServiceProvider extends ServiceProvider
 {

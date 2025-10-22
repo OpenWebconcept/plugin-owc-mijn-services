@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  */
 
 namespace OWC\My_Services;
@@ -26,6 +26,11 @@ use StdClass;
 use WP_Filesystem_Direct;
 use WP_Post;
 
+/**
+ * Plugin lifecycle hooks for activation and deactivation.
+ *
+ * @since 0.1.0
+ */
 class PluginLifecycle
 {
 	public function activate(): void
@@ -64,7 +69,7 @@ class PluginLifecycle
 		}
 	}
 
-	private function insert_page(array $pageData )
+	private function insert_page(array $pageData ): void
 	{
 		$page = get_page_by_path( $pageData['slug'] );
 

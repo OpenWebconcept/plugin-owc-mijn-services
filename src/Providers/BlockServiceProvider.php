@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  */
 
 namespace OWC\My_Services\Providers;
@@ -26,7 +26,7 @@ use WP_Block_Editor_Context;
 /**
  * Register block service provider.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 class BlockServiceProvider extends ServiceProvider
 {
@@ -49,9 +49,6 @@ class BlockServiceProvider extends ServiceProvider
 		add_action( 'template_redirect', $this->maybe_handle_information_object_download( ... ) );
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function add_query_vars(array $vars ): array
 	{
 		$vars[] = static::QUERY_VAR_SUPPLIER;
@@ -61,9 +58,6 @@ class BlockServiceProvider extends ServiceProvider
 		return $vars;
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function register_rewrite_rules(): void
 	{
 		// TODO: make configurable
@@ -82,8 +76,6 @@ class BlockServiceProvider extends ServiceProvider
 
 	/**
 	 * Enqueue frontend scripts.
-	 *
-	 * @since 1.0.0
 	 */
 	public function enqueue_scripts(): void
 	{
@@ -96,8 +88,6 @@ class BlockServiceProvider extends ServiceProvider
 
 	/**
 	 * Enqueue block editor scripts.
-	 *
-	 * @since 1.0.0
 	 */
 	public function enqueue_block_editor_assets(): void
 	{
@@ -108,9 +98,6 @@ class BlockServiceProvider extends ServiceProvider
 		);
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function register_block_category(array $blockCategories, WP_Block_Editor_Context $blockEditorContext ): array
 	{
 		$blockCategories[] = array(
@@ -121,9 +108,6 @@ class BlockServiceProvider extends ServiceProvider
 		return $blockCategories;
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function register_blocks(): void
 	{
 		register_block_type(
@@ -159,9 +143,6 @@ class BlockServiceProvider extends ServiceProvider
 		);
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function maybe_handle_information_object_download(string $template ): string
 	{
 		if (get_query_var( 'pagename' ) === 'zaak-download') {

@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  */
 
 namespace OWC\My_Services\Auth;
@@ -21,20 +21,16 @@ if ( ! defined( 'ABSPATH' )) {
 
 /**
  * Retrieve the social security number (BSN) by integrating with multiple DigiD authentication methods.
+ *
+ * @since 0.1.0
  */
 class DigiD
 {
-	/**
-	 * @since 1.0.0
-	 */
 	public static function make(): self
 	{
 		return new static();
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function bsn(): string
 	{
 		if ($bsn = $this->handle_digid_idp()) {
@@ -48,9 +44,6 @@ class DigiD
 		return '';
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	private function handle_digid_idp(): string
 	{
 		if ( ! class_exists( '\OWC\IdpUserData\DigiDSession' )) {
@@ -64,9 +57,6 @@ class DigiD
 		return \OWC\IdpUserData\DigiDSession::getUserData()->getBsn();
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	private function handle_digid_saml(): string
 	{
 		if ( ! function_exists( '\\Yard\\DigiD\\Foundation\\Helpers\\resolve' )) {

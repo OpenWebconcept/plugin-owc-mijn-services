@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  */
 
 namespace OWC\My_Services;
@@ -31,28 +31,22 @@ require_once __DIR__ . '/helpers.php';
 /**
  * Bootstrap providers and containers.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 final class Bootstrap
 {
 	/**
 	 * Dependency Injection container.
-	 *
-	 * @since 1.0.0
 	 */
 	private static ContainerInterface $container;
 
 	/**
 	 * Dependency providers.
-	 *
-	 * @since 1.0.0
 	 */
 	private array $providers;
 
 	/**
 	 * Plugin constructor.
-	 *
-	 * @since 1.0.0
 	 */
 	public function __construct()
 	{
@@ -65,8 +59,6 @@ final class Bootstrap
 
 	/**
 	 * Gets all providers
-	 *
-	 * @since 1.0.0
 	 */
 	protected function get_providers(): array
 	{
@@ -85,8 +77,6 @@ final class Bootstrap
 
 	/**
 	 * Registers all providers.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function register_providers(): void
 	{
@@ -97,8 +87,6 @@ final class Bootstrap
 
 	/**
 	 * Boots all providers.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function boot_providers(): void
 	{
@@ -109,8 +97,6 @@ final class Bootstrap
 
 	/**
 	 * Builds the container.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function build_container(): ContainerInterface
 	{
@@ -125,9 +111,6 @@ final class Bootstrap
 		return $builder->build();
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	public static function get_container(): ContainerInterface
 	{
 		return self::$container;

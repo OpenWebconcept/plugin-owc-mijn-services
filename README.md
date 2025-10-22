@@ -42,7 +42,7 @@ This block displays an overview of all Zaken, filtered by the selected supplier 
 
 Enable logging to keep track of errors during communication with the ZGW supplier(s).
 
-- Logs are written daily to `owc-my-services-log{-date}.json` in the plugin root directory.
+- Logs are written daily to `owc-my-services-log{-date}.json` in the WordPress webroot directory.
 - A rotating file handler keeps up to 7 log files by default, deleting the oldest as needed.
 - You can change the maximum number of log files using the filter described below.
 

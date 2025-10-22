@@ -19,6 +19,9 @@ use WP_Screen;
 
 use function OWC\ZGW\apiClientManager;
 
+/**
+ * @since 0.1.0
+ */
 abstract class Block
 {
 	use Supplier;
@@ -27,9 +30,6 @@ abstract class Block
 	protected ZakenFilter $zaken_filter;
 	protected string $bsn;
 
-	/**
-	 * @since 1.0.0
-	 */
 	final public function render(array $attributes, string $block_content, WP_Block $block ): string
 	{
 		if ( ! isset( $attributes['zaakClient'] ) && $this->is_block_editor()) {
@@ -61,14 +61,8 @@ abstract class Block
 		return $this->render_block( $attributes, $block_content, $block );
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	abstract protected function render_block(array $attributes, string $block_content, WP_Block $block ): string;
 
-	/**
-	 * @since 1.0.0
-	 */
 	protected function is_block_editor(): bool
 	{
 		global $current_screen;
@@ -80,7 +74,7 @@ abstract class Block
 			return true;
 		}
 
-		if (defined( 'REST_REQUEST' ) && REST_REQUEST && isset( $_GET['context'] ) && $_GET['context'] === 'edit') {
+		if (defined( 'REST_REQUEST' ) && REST_REQUEST && isset( $_GET['context'] ) && 'edit' === $_GET['context']) {
 			return true;
 		}
 
@@ -89,8 +83,6 @@ abstract class Block
 
 	/**
 	 * The supplier is retrieved from the requested URL therefore making it vulnerable for unwanted changes.
-	 *
-	 * @since 1.0.0
 	 */
 	protected function check_supplier(string $supplier ): bool
 	{
@@ -99,18 +91,11 @@ abstract class Block
 		return in_array( $supplier, array_keys( $suppliers ) );
 	}
 
-
-	/**
-	 * @since 1.0.0
-	 */
 	final protected function get_zaken(): Collection
 	{
 		return $this->client->zaken()->filter( $this->zaken_filter );
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	final protected function get_zaak_informatie_objecten(Zaak $zaak ): Collection
 	{
 		$filter = new ZaakinformatieobjectenFilter();

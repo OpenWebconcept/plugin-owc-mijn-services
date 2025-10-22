@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_My_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  *
  * Plugin Name:       OWC | Mijn Services
  * Plugin URI:        https://github.com/OpenWebconcept/plugin-owc-mijn-services

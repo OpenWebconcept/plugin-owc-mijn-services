@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author Yard | Digital Agency
- * @since 1.0.0
+ * @since 0.1.0
  */
 
 namespace OWC\My_Services\Macros;
@@ -25,12 +25,15 @@ use OWC\ZGW\Entities\Statustype;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Support\ZaakIdEncoderDecoder;
 
+/**
+ * Plugin helpers.
+ *
+ * @since 0.1.0
+ */
 class ZgwApiMacros
 {
 	/**
 	 * Register macros.
-	 *
-	 * @since 1.0.0
 	 */
 	public static function register(): void
 	{

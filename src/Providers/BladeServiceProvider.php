@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  */
 
 namespace OWC\My_Services\Providers;
@@ -25,7 +25,7 @@ use eftec\bladeone\BladeOne;
 /**
  * Register blade service provider.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 class BladeServiceProvider extends ServiceProvider
 {

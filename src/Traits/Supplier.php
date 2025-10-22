@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_My_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  */
 
 namespace OWC\My_Services\Traits;
@@ -24,7 +24,7 @@ use OWC\My_Services\ContainerResolver;
 /**
  * Supplier trait.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 trait Supplier
 {
@@ -32,8 +32,6 @@ trait Supplier
 	 * Translates a supplier key to its corresponding name.
 	 * e.g. 'openzaak' to 'OpenZaak'.
 	 * The name is mainly used for matching the correct API client.
-	 *
-	 * @since 1.0.0
 	 */
 	public function supplier_key_to_name(string $supplier_key ): string
 	{

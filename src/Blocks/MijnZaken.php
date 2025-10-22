@@ -6,6 +6,9 @@ namespace OWC\My_Services\Blocks;
 
 use WP_Block;
 
+/**
+ * @since 0.1.0
+ */
 class MijnZaken extends Block
 {
 	/**

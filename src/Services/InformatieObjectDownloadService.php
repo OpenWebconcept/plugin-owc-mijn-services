@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   1.0.0
+ * @since   0.1.0
  */
 
 namespace OWC\My_Services\Services;
@@ -21,7 +21,6 @@ if ( ! defined( 'ABSPATH' )) {
 
 use Exception;
 use OWC\My_Services\Providers\BlockServiceProvider;
-use OWC\My_Services\Services\LoggerService;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
@@ -33,7 +32,7 @@ use function OWC\ZGW\apiClientManager;
 /**
  * InformatieObject download service.
  *
- * @since 1.0.0
+ * @since 0.1.0
  */
 class InformatieObjectDownloadService
 {
@@ -41,9 +40,6 @@ class InformatieObjectDownloadService
 
 	protected Client $client;
 
-	/**
-	 * @since 1.0.0
-	 */
 	public function download_file_from_request(): string
 	{
 		$download_identification = (string) get_query_var( BlockServiceProvider::QUERY_VAR_ZAAK_DOWNLOAD_IDENTIFICATION );
@@ -95,15 +91,13 @@ class InformatieObjectDownloadService
 					'Informationobject download failed, the file does not exist or is not readable.'
 				)
 			);
+
 			return '';
 		}
 
 		return $download_identification;
 	}
 
-	/**
-	 * @since 1.0.0
-	 */
 	protected function validate_zaak(string $identification ): ?Zaak
 	{
 		try {
