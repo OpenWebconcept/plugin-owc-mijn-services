@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d4d107d9b87972c77a88fe78a354cfb",
+    "content-hash": "1d28f21bb594856b41300a8450f67783",
     "packages": [
         {
             "name": "eftec/bladeone",
@@ -330,16 +330,16 @@
         },
         {
             "name": "owc/zgw-api",
-            "version": "2.1.0",
+            "version": "dev-fix/zaakinformatieobject-cast",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenWebconcept/owc-zgw-api.git",
-                "reference": "e50857f5e18598f21cc2fd6e932564232dd8387e"
+                "reference": "d4fe2a64afacaa0b8143c9d7b09888d4712325b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/e50857f5e18598f21cc2fd6e932564232dd8387e",
-                "reference": "e50857f5e18598f21cc2fd6e932564232dd8387e",
+                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/d4fe2a64afacaa0b8143c9d7b09888d4712325b9",
+                "reference": "d4fe2a64afacaa0b8143c9d7b09888d4712325b9",
                 "shasum": ""
             },
             "require": {
@@ -404,10 +404,10 @@
             ],
             "description": "PHP implementation of the ZGW API, with an optional WordPress integration.",
             "support": {
-                "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/2.1.0",
+                "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/fix/zaakinformatieobject-cast",
                 "issues": "https://github.com/OpenWebconcept/owc-zgw-api/issues"
             },
-            "time": "2025-10-15T13:25:33+00:00"
+            "time": "2025-10-27T14:06:37+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -1066,7 +1066,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "owc/zgw-api": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
