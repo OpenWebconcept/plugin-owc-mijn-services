@@ -1,1 +1,4 @@
-/* Block styles */
+
+@import '@gemeente-denhaag/card/index.css';
+@import '@gemeente-denhaag/card-group/index.css';
+@import '@nl-design-system-candidate/paragraph-css/paragraph.css';
