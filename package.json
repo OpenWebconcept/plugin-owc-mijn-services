@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"start": "wp-scripts start --webpack-src-dir=resources/blocks",
 		"wpbuild": "wp-scripts build --webpack-src-dir=resources/blocks",
 		"scss": "webpack --config webpack.scss.config.js --mode=production",
 		"build": "npm run wpbuild && npm run scss"
@@ -19,7 +20,10 @@
 	},
 	"homepage": "https://github.com/OpenWebconcept/plugin-owc-mijn-services#readme",
 	"dependencies": {
-		"@gemeente-denhaag/case-card-element": "^1.1.1"
+		"@gemeente-denhaag/card": "^5.0.1",
+		"@gemeente-denhaag/card-group": "^2.0.3",
+		"@gemeente-denhaag/case-card-element": "^1.1.1",
+		"@nl-design-system-candidate/paragraph-css": "^2.1.1"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^30.25.0",
