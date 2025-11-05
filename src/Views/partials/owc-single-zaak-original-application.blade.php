@@ -1,4 +1,13 @@
 @php
+	/**
+	 * Exit when accessed directly.
+	 *
+	 * @package OWC_Mijn_Services
+	 */
+	if (!defined('ABSPATH')) {
+	    exit();
+	}
+
 	$fields = [
 	    'Datum aanvraag' => $zaak->registerDate(),
 	    'Zaaktype' => $zaak?->zaaktype?->omschrijvingGeneriek,
@@ -14,7 +23,7 @@
 	}
 @endphp
 
-<h2 class="nl-heading nl-heading--level-2">Originele aanvraag</h2>
+<h2 class="nl-heading nl-heading--level-2">{{ __('Originele aanvraag', 'owc-mijn-services') }}</h2>
 
 @include('partials.nlds.denhaag.description-list', [
 	'items' => $origineleAanvraag,

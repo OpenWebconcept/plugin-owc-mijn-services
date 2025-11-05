@@ -10,7 +10,7 @@
 @endphp
 
 @if (isset($zaak) && $zaak instanceof \OWC\ZGW\Entities\Zaak)
-	<h1 class="nl-heading nl-heading--level-1">{{ $zaak->title }}</h1>
+	<h1 class="nl-heading nl-heading--level-1">{{ $zaak->title() }}</h1>
 
 	@include('partials.owc-single-zaak-details', ['zaak' => $zaak])
 
@@ -33,5 +33,5 @@
 		'zaak' => $zaak,
 	])
 @else
-	<p>{{ __('Zaak niet gevonden.', 'owc-mijn-services') }}</p>
+	<h1>{{ __('Zaak niet gevonden.', 'owc-mijn-services') }}</h1>
 @endif

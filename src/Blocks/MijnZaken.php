@@ -27,7 +27,6 @@ class MijnZaken extends Block
 		}
 
 		$this->zaken_filter->orderBy( 'registratiedatum' );
-		// $this->zaken_filter->test();
 
 		$zaken = $this->get_zaken();
 		$zaken->map(

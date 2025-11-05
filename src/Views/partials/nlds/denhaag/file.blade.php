@@ -1,4 +1,13 @@
 @php
+	/**
+	 * Exit when accessed directly.
+	 *
+	 * @package OWC_Mijn_Services
+	 */
+	if (!defined('ABSPATH')) {
+	    exit();
+	}
+
 	$name ??= null;
 	$href ??= null;
 	$size ??= null;

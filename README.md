@@ -38,7 +38,14 @@ Selecting a ZGW API supplier is the only configuration required in the block set
 
 This block displays an overview of all Zaken, filtered by the selected supplier and the social security number (BSN) of the currently logged-in citizen.
 
-#### Logging
+### NLDS Components
+
+Both `owc-my-services/zaak` and `owc-my-services/mijn-zaken` blocks use components from the **NLDS (Nederlandse Design System)**.  
+
+- The NLDS React components and CSS are automatically loaded when a block is placed on the page.  
+- The project should have NLDS design tokens available to ensure styling.  
+
+## Logging
 
 Enable logging to keep track of errors during communication with the ZGW supplier(s).
 
