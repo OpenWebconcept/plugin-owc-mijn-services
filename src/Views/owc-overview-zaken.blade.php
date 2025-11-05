@@ -12,13 +12,7 @@
 @if (is_array($zaken ?? false) && count($zaken) > 0)
 	<section class="denhaag-card-group">
 		@foreach ($zaken as $zaak)
-			@include('partials.nlds.denhaag.card', [
-				'title' => $zaak->title(),
-				'contextIsDate' => true,
-				'context' => $zaak->startDate('j F Y'),
-				'datetime' => $zaak->startDate('Y-m-d'),
-				'href' => $zaak->permalink(),
-			])
+			@include('partials.nlds.denhaag.card', ['zaak' => $zaak])
 		@endforeach
 	</section>
 @endif

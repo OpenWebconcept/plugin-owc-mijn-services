@@ -1,0 +1,166 @@
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./node_modules/@gemeente-denhaag/descriptionlist/dist/index.css ***!
+  \*******************************************************************************************************************************************************************************************************************/
+.denhaag-description-list {
+  color: var(--denhaag-description-list-color);
+  display: block;
+  font-family: var(--denhaag-description-list-font-family);
+  font-size: var(--denhaag-description-list-font-size);
+  font-weight: var(--denhaag-description-list-font-weight);
+  line-height: var(--denhaag-description-list-line-height);
+  margin-block-end: var(--denhaag-description-list-margin-block-end);
+  margin-block-start: var(--denhaag-description-list-margin-block-start);
+  overflow-wrap: var(--denhaag-description-list-overflow-wrap, break-word);
+}
+
+@container description-list (width >= 480px) {
+  .denhaag-description-list {
+    --denhaag-description-list-detail-padding-block-end: var(--denhaag-description-list-lg-detail-padding-block-end);
+    --denhaag-description-list-detail-padding-block-start: var(
+      --denhaag-description-list-lg-detail-padding-block-start
+    );
+    --denhaag-description-list-title-padding-block-end: var(--denhaag-description-list-lg-title-padding-block-end);
+    --denhaag-description-list-title-padding-block-start: var(--denhaag-description-list-lg-title-padding-block-start);
+    --denhaag-description-list-padding-inline-end: var(--denhaag-description-list-lg-padding-inline-end);
+    --denhaag-description-list-padding-inline-start: var(--denhaag-description-list-lg-padding-inline-start);
+    display: grid;
+    grid-template-columns: var(--denhaag-description-list-item-first-column-width, 240px) 1fr auto;
+    grid-auto-rows: auto;
+    grid-auto-flow: row;
+  }
+}
+.denhaag-description-list__caption {
+  color: var(--denhaag-description-list-caption-color);
+  font-family: var(--denhaag-description-list-caption-font-family, var(--denhaag-description-list-font-family));
+  font-size: var(--denhaag-description-list-caption-font-size, calc(var(--denhaag-description-list-font-size, 1em) * 1.33));
+  font-weight: var(--denhaag-description-list-caption-font-weight, --denhaag-typography-weight-bold);
+  line-height: var(--denhaag-description-list-caption-line-height, var(--denhaag-description-list-line-height));
+  margin-block-start: 0;
+  margin-block-end: var(--denhaag-description-list-caption-margin-block-end, 1em);
+}
+
+.denhaag-description-list-container {
+  container-name: description-list;
+  container-type: inline-size;
+}
+
+.denhaag-description-list__detail {
+  margin-inline-start: 0;
+  padding-block-end: var(--denhaag-description-list-detail-padding-block-end, var(--denhaag-description-list-padding));
+  padding-block-start: var(--denhaag-description-list-detail-padding-block-start, var(--denhaag-description-list-padding));
+  padding-inline-end: var(--denhaag-description-list-padding-inline-end, var(--denhaag-description-list-padding));
+  padding-inline-start: var(--denhaag-description-list-padding-inline-end, var(--denhaag-description-list-padding));
+}
+
+@container description-list (width >= 480px) {
+  .denhaag-description-list__detail {
+    border-bottom: 1px solid var(--denhaag-description-list-border-color, lightgrey);
+    grid-column: 2/4;
+  }
+  .denhaag-description-list__title:has(+ .denhaag-description-list__detail + .denhaag-description-list__detail) + .denhaag-description-list__detail {
+    grid-column: 2;
+  }
+  .denhaag-description-list__title:has(+ .denhaag-description-list__detail + .denhaag-description-list__detail) + .denhaag-description-list__detail + .denhaag-description-list__detail {
+    grid-column: 3;
+  }
+}
+.denhaag-description-list-item {
+  display: block;
+  border-bottom: 1px solid var(--denhaag-description-list-border-color, lightgrey);
+}
+
+@container description-list (width >= 480px) {
+  .denhaag-description-list-item {
+    display: contents;
+    border: none;
+  }
+}
+.denhaag-description-list__title {
+  color: var(--denhaag-description-list-title-color);
+  font-weight: var(--denhaag-description-list-title-font-weight, bold);
+  padding-block-end: var(--denhaag-description-list-title-padding-block-end, var(--denhaag-description-list-padding));
+  padding-block-start: var(--denhaag-description-list-title-padding-block-start, var(--denhaag-description-list-padding));
+  padding-inline-end: var(--denhaag-description-list-padding-inline-end, var(--denhaag-description-list-padding));
+  padding-inline-start: var(--denhaag-description-list-padding-inline-start, var(--denhaag-description-list-padding));
+}
+@container description-list (width >= 480px) {
+  .denhaag-description-list__title {
+    border-bottom: 1px solid var(--denhaag-description-list-border-color, lightgrey);
+    grid-column: 1;
+  }
+}
+/*!********************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./node_modules/@gemeente-denhaag/file/dist/index.css ***!
+  \********************************************************************************************************************************************************************************************************/
+.denhaag-file {
+  width: 100%;
+  display: flex;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  text-decoration: inherit;
+  text-align: inherit;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+  align-items: normal;
+  line-height: inherit;
+  box-sizing: border-box;
+  border-width: var(--denhaag-file-border-width);
+  border-color: var(--denhaag-file-border-color);
+  border-style: var(--denhaag-file-border-style);
+}
+.denhaag-file + .denhaag-file {
+  border-top: none;
+}
+.denhaag-file--focus, .denhaag-file:focus {
+  outline-color: var(--denhaag-file-focus-outline-color);
+  outline-width: var(--denhaag-file-focus-outline-width);
+  outline-style: var(--denhaag-file-focus-outline-style);
+}
+.denhaag-file__link {
+  display: flex;
+  align-items: center;
+  color: var(--denhaag-file-link-color);
+  gap: var(--denhaag-file-link-gap);
+  word-break: initial;
+  --utrecht-link-text-decoration: none;
+}
+.denhaag-file__link .denhaag-file__link__icon {
+  width: var(--denhaag-file-link-icon-width);
+}
+.denhaag-file--hover .utrecht-link, .denhaag-file:hover .utrecht-link {
+  --utrecht-link-color: var(--denhaag-file-hover-color, --utrecht-link-hover-color);
+}
+.denhaag-file--hover .denhaag-file__link, .denhaag-file:hover .denhaag-file__link {
+  color: var(--denhaag-file-hover-color);
+}
+.denhaag-file__left {
+  display: flex;
+  align-items: center;
+  padding-inline-start: var(--denhaag-file-left-padding-inline-start);
+  padding-inline-end: var(--denhaag-file-left-padding-inline-end);
+  background-color: var(--denhaag-file-left-background-color, --denhaag-color-warmgrey-1);
+}
+.denhaag-file__left .denhaag-file__icon {
+  fill: none;
+}
+.denhaag-file__right {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--denhaag-file-right-gap);
+  padding-block-start: var(--denhaag-file-right-padding-block-start);
+  padding-block-end: var(--denhaag-file-right-padding-block-end);
+  padding-inline-start: var(--denhaag-file-right-padding-inline-start);
+  padding-inline-end: var(--denhaag-file-right-padding-inline-end);
+}
+@media (width >= 620px) {
+  .denhaag-file__right {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+.denhaag-file__label {
+  flex-grow: 1;
+}
