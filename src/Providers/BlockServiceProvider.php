@@ -79,7 +79,7 @@ class BlockServiceProvider extends ServiceProvider
 	 * If the option is set to true on plugin activation, flush rewrite rules
 	 * so the custom rewrite rules are registered.
 	 *
-	 * @since NEXT
+	 * @since 0.2.0
 	 */
 	public function flush_rewrite_rules(): void
 	{

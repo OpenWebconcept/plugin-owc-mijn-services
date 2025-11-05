@@ -53,7 +53,7 @@ class PluginLifecycle
 	 * Used after registering custom rewrite rules (in the BlockServiceProvider),
 	 * since this plugin's custom rewrite rules must exist before they can be flushed.
 	 *
-	 * @since NEXT
+	 * @since 0.2.0
 	 */
 	private function schedule_rewrite_rules_flush(): void
 	{
