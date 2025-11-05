@@ -13,7 +13,7 @@
 
 @if (isset($message))
 	<div class="owc-error">
-		<h2>Er is een fout opgetreden</h2>
+		<h2>{{ __('Er is een fout opgetreden', 'owc-mijn-services') }}</h2>
 		<p>{{ $message }}</p>
 	</div>
 @endif
