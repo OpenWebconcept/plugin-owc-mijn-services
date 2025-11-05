@@ -23,6 +23,9 @@
 		"@gemeente-denhaag/card": "^5.0.1",
 		"@gemeente-denhaag/card-group": "^2.0.3",
 		"@gemeente-denhaag/case-card-element": "^1.1.1",
+		"@gemeente-denhaag/descriptionlist": "^4.0.2",
+		"@gemeente-denhaag/file": "^2.1.1",
+		"@nl-design-system-candidate/heading-css": "^1.1.1",
 		"@nl-design-system-candidate/paragraph-css": "^2.1.1"
 	},
 	"devDependencies": {

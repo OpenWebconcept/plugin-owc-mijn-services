@@ -1,12 +1,4 @@
-@php
-	$appearance ??= null;
-	$title ??= null;
-	$subTitle ??= null;
-	$context ??= null;
-	$contextIsDate ??= false;
-	$datetime ??= null;
-	$href ??= null;
-@endphp
-
-<div class="js-nlds-denhaag-case-card-component" data-appearance="{{ $appearance }}" data-title="{{ $title }}"
-	data-sub-title="{{ $subTitle }}" data-context="{{ $context }}" data-href="{{ $href }}"></div>
+<div class="js-nlds-denhaag-case-card-component" data-appearance="{{ $appearance ?? '' }}"
+	data-title="{{ $zaak->title() ?? '' }}" data-sub-title="{{ $subTitle ?? '' }}"
+	data-context="{{ $zaak->startDate('j F Y') ?? '' }}" data-href="{{ $zaak->permalink() ?? '' }}"
+	@if (!empty($zaak->startDate())) data-datetime="{{ $zaak->startDate('Y-m-d') }}" @endif></div>

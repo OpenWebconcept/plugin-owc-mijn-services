@@ -1,1 +1,1 @@
-{"version":3,"file":"zaak/style-index.css","mappings":";;;AAAA,iBAAiB","sources":["webpack://plugin-owc-mijn-services/./resources/blocks/zaak/style.css"],"sourcesContent":["/* Block styles */\n"],"names":[],"sourceRoot":""}
+{"version":3,"file":"zaak/style-index.css","mappings":";;;AAAA,iBAAiB","sources":["webpack://plugin-owc-mijn-services/./resources/blocks/zaak/style.css"],"sourcesContent":["/* Block styles */\n@import '@nl-design-system-candidate/heading-css/heading.css';\n"],"names":[],"sourceRoot":""}

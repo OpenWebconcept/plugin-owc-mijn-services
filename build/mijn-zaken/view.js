@@ -1798,11 +1798,16 @@ __webpack_require__.r(__webpack_exports__);
  */
 const datasetToProps = dataset => {
   const props = {};
-  for (const [key, value] of Object.entries(dataset)) {
-    // Convert kebab-case or snake_case to camelCase
-    const camelKey = key.replace(/[-_]([a-z])/g, (_, char) => char.toUpperCase());
-    props[camelKey] = value;
-  }
+  Object.entries(dataset).forEach(([key, value]) => {
+    let parsed = value;
+    try {
+      parsed = JSON.parse(value);
+    } catch {
+      // leave as string
+    }
+    const propName = key.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+    props[propName] = parsed;
+  });
   return props;
 };
 
