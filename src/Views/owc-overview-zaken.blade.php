@@ -7,12 +7,28 @@
 	if (!defined('ABSPATH')) {
 	    exit();
 	}
+
+	$tabs = [
+	    [
+	        'label' => 'Lopende zaken',
+	        // Uses partials/nlds/denhaag/card to render each card.
+	        'cards' => collect($zaken)->map(
+	            fn($zaak) => [
+	                'appearance' => '',
+	                'title' => $zaak->title(),
+	                'subTitle' => '',
+	                'context' => $zaak->startDate('j F Y'),
+	                'datetime' => $zaak->startDate('Y-m-d'),
+	                'href' => $zaak->permalink(),
+	            ],
+	        ),
+	    ],
+	    [
+	        'label' => 'Afgeronde zaken',
+	        // Todo
+	        'html' => '',
+	    ],
+	];
 @endphp
 
-@if (is_array($zaken ?? false) && count($zaken) > 0)
-	<section class="denhaag-card-group">
-		@foreach ($zaken as $zaak)
-			@include('partials.nlds.denhaag.card', ['zaak' => $zaak])
-		@endforeach
-	</section>
-@endif
+<div class="js-nlds-denhaag-tab-component" data-tabs='@json($tabs)'></div>

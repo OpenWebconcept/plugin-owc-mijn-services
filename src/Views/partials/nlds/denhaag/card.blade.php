@@ -8,15 +8,17 @@
 	    exit();
 	}
 
-	$zaak ??= null;
 	$appearance ??= '';
+	$title ??= '';
 	$subTitle ??= '';
+	$href ??= '';
+	$context ??= '';
+	$datetime ??= '';
 @endphp
 
 @if ($zaak)
-	<div class="js-nlds-denhaag-case-card-component" data-appearance="{{ $appearance }}"
-		data-title="{{ $zaak->title() ?? '' }}" data-sub-title="{{ $subTitle }}"
-		data-context="{{ $zaak->startDate('j F Y') ?? '' }}" data-href="{{ $zaak->permalink() ?? '' }}"
-		@if ($zaak->startDate()) data-datetime="{{ $zaak->startDate('Y-m-d') }}" @endif>
+	<div class="js-nlds-denhaag-case-card-component" data-appearance="{{ $appearance }}" data-title="{{ $title }}"
+		data-sub-title="{{ $subTitle }}" data-context="{{ $context }}" data-href="{{ $href }}"
+		@if ($datetime) data-datetime="{{ $datetime }}" @endif>
 	</div>
 @endif
