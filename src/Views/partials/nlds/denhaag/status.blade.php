@@ -9,7 +9,7 @@
 	}
 
 	$steps ??= [];
-	$collapsible ??= false;
+	$collapsible ??= true;
 
 	// Example steps data structure with sub steps.
 	// $steps = [
