@@ -35,6 +35,7 @@ class PluginLifecycle
 {
 	public function activate(): void
 	{
+		$this->schedule_rewrite_rules_flush();
 		$this->insert_required_pages();
 	}
 
@@ -44,6 +45,19 @@ class PluginLifecycle
 	public function deactivate(): void
 	{
 		$this->remove_blade_cache_dir();
+	}
+
+	/**
+	 * Flags that rewrite rules should be flushed on the next 'init' action.
+	 *
+	 * Used after registering custom rewrite rules (in the BlockServiceProvider),
+	 * since this plugin's custom rewrite rules must exist before they can be flushed.
+	 *
+	 * @since NEXT
+	 */
+	private function schedule_rewrite_rules_flush(): void
+	{
+		update_option( 'owc_my_services_flush_rewrite_rules', true );
 	}
 
 	/**

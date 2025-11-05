@@ -42,6 +42,7 @@ class BlockServiceProvider extends ServiceProvider
 	{
 		add_filter( 'query_vars', $this->add_query_vars( ... ) );
 		add_action( 'init', $this->register_rewrite_rules( ... ) );
+		add_action( 'init', $this->flush_rewrite_rules( ... ) );
 		add_action( 'wp_enqueue_scripts', $this->enqueue_scripts( ... ) );
 		add_action( 'enqueue_block_editor_assets', $this->enqueue_block_editor_assets( ... ) );
 		add_filter( 'block_categories_all', $this->register_block_category( ... ), 10, 2 );
@@ -72,6 +73,22 @@ class BlockServiceProvider extends ServiceProvider
 			'index.php?pagename=zaak-download&' . self::QUERY_VAR_ZAAK_DOWNLOAD_IDENTIFICATION . '=$matches[1]&' . self::QUERY_VAR_ZAAK_IDENTIFICATION . '=$matches[2]&' . self::QUERY_VAR_SUPPLIER . '=$matches[3]',
 			'top'
 		);
+	}
+
+	/**
+	 * If the option is set to true on plugin activation, flush rewrite rules
+	 * so the custom rewrite rules are registered.
+	 *
+	 * @since NEXT
+	 */
+	public function flush_rewrite_rules(): void
+	{
+		if ( ! get_option( 'owc_my_services_flush_rewrite_rules' )) {
+			return;
+		}
+
+		flush_rewrite_rules();
+		delete_option( 'owc_my_services_flush_rewrite_rules' );
 	}
 
 	/**
