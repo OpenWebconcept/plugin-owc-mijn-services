@@ -1,32 +1,20 @@
 import { createRoot } from '@wordpress/element';
-import { CaseCard } from '@gemeente-denhaag/card';
+import { datasetToProps } from './../../js/utils/dataset-to-props';
 
-import '@gemeente-denhaag/card/index.css';
-import '@gemeente-denhaag/card-group/index.css';
-import '@nl-design-system-candidate/paragraph-css/paragraph.css';
+import { CaseCard } from './components/CaseCard';
+
+const components = {
+	'.js-nlds-denhaag-case-card-component': CaseCard,
+};
 
 document.addEventListener( 'DOMContentLoaded', () => {
-	const elements = document.querySelectorAll(
-		'.js-nlds-denhaag-case-card-component'
-	);
+	Object.entries( components ).forEach( ( [ selector, Component ] ) => {
+		const elements = document.querySelectorAll( selector );
 
-	elements.forEach( ( el ) => {
-		const appearance = el.dataset.appearance || 'default';
-		const title = el.dataset.title || '';
-		const subTitle = el.dataset.subtitle || '';
-		const context = el.dataset.context || '';
-		const href = el.dataset.href || '';
-
-		const root = createRoot( el );
-
-		root.render(
-			<CaseCard
-				title={ title }
-				subTitle={ subTitle }
-				context={ context }
-				href={ href }
-				appearance={ appearance }
-			/>
-		);
+		elements.forEach( ( el ) => {
+			const props = datasetToProps( el.dataset );
+			const root = createRoot( el );
+			root.render( <Component { ...props } /> );
+		} );
 	} );
 } );
