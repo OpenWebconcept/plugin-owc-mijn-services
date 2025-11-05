@@ -24,45 +24,11 @@
 
 	<h2 class="nl-heading nl-heading--level-2">Status</h2>
 
-	<div class="zaak-process">
-
-		@if (empty($steps) || $zaak?->status?->statustype?->omschrijving === 'Niet Beschikbaar')
-			<p>Momenteel is er geen status beschikbaar.</p>
-		@else
-			<ol class="zaak-process-steps">
-				@foreach ($steps as $step)
-					@php
-						$statusUpdate = null;
-						if (!empty($zaak->statussen)) {
-						    $statusUpdate = $zaak->statussen
-						        ->filter(function ($status) use ($step) {
-						            return $status->statustype->url === $step->url;
-						        })
-						        ->first();
-						}
-						$isPastIcon = '<svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-							<path d="M17.2203 4.37701C17.5643 4.68277 17.5953 5.2095 17.2895 5.55348L8.40063 15.5535C8.24249 15.7314 8.01582 15.8332 7.77779 15.8332C7.53975 15.8332 7.31309 15.7314 7.15495 15.5535L2.7105 10.5535C2.40474 10.2095 2.43572 9.68277 2.77971 9.37701C3.12369 9.07124 3.65042 9.10222 3.95618 9.44621L7.77779 13.7455L16.0438 4.44621C16.3496 4.10222 16.8763 4.07124 17.2203 4.37701Z" fill="currentColor"/>
-							<path d="M17.2203 4.37701C17.5643 4.68277 17.5953 5.2095 17.2895 5.55348L8.40063 15.5535C8.24249 15.7314 8.01582 15.8332 7.77779 15.8332C7.53975 15.8332 7.31309 15.7314 7.15495 15.5535L2.7105 10.5535C2.40474 10.2095 2.43572 9.68277 2.77971 9.37701C3.12369 9.07124 3.65042 9.10222 3.95618 9.44621L7.77779 13.7455L16.0438 4.44621C16.3496 4.10222 16.8763 4.07124 17.2203 4.37701Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-						</svg>';
-					@endphp
-
-					<li
-						class="zaak-process-steps__step {{ $step->isCurrent() ? 'zaak-process-steps__step--current' : '' }} {{ $step->isPast() ? 'zaak-process-steps__step--past' : '' }}"
-						aria-current="">
-						<span class="zaak-process-steps__step-marker">
-							{!! $step->isPast() ? $isPastIcon : $step->volgnummer !!}
-						</span>
-						<span class="zaak-process-steps__step-heading-label">
-							{{ $step->getValue('omschrijving', '') }}
-							@if (!empty($statusUpdate))
-								<small>({{ $statusUpdate?->datumStatusGezet?->format('d-m-Y') }})</small>
-							@endif
-						</span>
-					</li>
-				@endforeach
-			</ol>
-		@endif
-	</div>
+	@if (empty($steps) || $zaak?->status?->statustype?->omschrijving === 'Niet Beschikbaar')
+		<p>Momenteel is er geen status beschikbaar.</p>
+	@else
+		@include('partials.nlds.denhaag.status', ['steps' => $steps, 'zaak' => $zaak])
+	@endif
 
 	<div class="zaak-details">
 		<table class="zaak-details-table">
