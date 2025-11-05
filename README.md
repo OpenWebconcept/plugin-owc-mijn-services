@@ -92,7 +92,7 @@ apply_filters('owcms::logger/rotating_filer_handler_max_files', OWC_MY_SERVICES_
 You can intercept exceptions caught by the plugin for additional processing or custom logging using this filter:
 
 ```php
-add_action('owcms::exception/intercept', $exception, $method)
+do_action('owcms::exception/intercept', $exception, $method)
 ```
 
 The `$exception` parameter contains the caught exception object
