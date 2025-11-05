@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.3.0] - 2025-11-05
+
+- Added: implement frontend components using NLDS Den Haag design system
+
 ## [v0.2.0] - 2025-11-05
 
 - Added: flush rewrite rules after custom rules are registered
