@@ -12,58 +12,67 @@
 @if (isset($zaak) && $zaak instanceof \OWC\ZGW\Entities\Zaak)
 	<h1 class="nl-heading nl-heading--level-1">{{ $zaak->title }}</h1>
 
-	@include('partials.nlds.denhaag.description-list', ['zaak' => $zaak])
+	@php
+		$fields = [
+		    'Datum aanvraag' => $zaak->registerDate('j F Y'),
+		    'Startdatum' => $zaak->startDate('j F Y'),
+		    'Einddatum gepland' => $zaak->endDatePlanned() && empty($zaak->endDate()) ? $zaak->endDatePlanned() : null,
+		    'Einddatum' => $zaak->endDate(),
+		    'Zaaknummer' => $zaak->getValue('identificatie', ''),
+		];
 
-	<h2 class="nl-heading nl-heading--level-2">Documenten</h2>
+		$zaakMeta = [];
+
+		foreach ($fields as $title => $detail) {
+		    if (!empty($detail)) {
+		        $zaakMeta[] = compact('title', 'detail');
+		    }
+		}
+	@endphp
+
+	<h2 class="nl-heading nl-heading--level-2">Details</h2>
+	@include('partials.nlds.denhaag.description-list', ['items' => $zaakMeta])
 
 	@if (isset($information_objects) && $information_objects->count() > 0)
+		<h2 class="nl-heading nl-heading--level-2">Documenten</h2>
+
 		@foreach ($information_objects as $document)
 			@include('partials.nlds.denhaag.file', ['document' => $document, 'zaak' => $zaak])
 		@endforeach
 	@endif
 
-	<h2 class="nl-heading nl-heading--level-2">Status</h2>
-
 	@if (empty($steps) || $zaak?->status?->statustype?->omschrijving === 'Niet Beschikbaar')
 		<p>Momenteel is er geen status beschikbaar.</p>
 	@else
+		<h2 class="nl-heading nl-heading--level-2">Status</h2>
 		@include('partials.nlds.denhaag.status', ['steps' => $steps, 'zaak' => $zaak])
 	@endif
 
-	<div class="zaak-details">
-		<table class="zaak-details-table">
-			@if (($result = $zaak->getValue('resultaat')?->toelichting) && isset($endDate))
-				<tr>
-					<th>Zaak resultaat</th>
-					<td>{{ $result }}</td>
-				</tr>
-			@endif
-		</table>
-	</div>
+	@if (($result = $zaak->getValue('resultaat')?->toelichting) && isset($endDate))
+		<h2 class="nl-heading nl-heading--level-2">Zaak resultaat</h2>
+		<p class="nl-paragraph">{{ $result }}</p>
+	@endif
 
-	<div class="zaak-process">
-		<h2>Originele aanvraag</h2>
-		<table class="zaak-details-table">
-			@if ($registerDate = $zaak->registerDate())
-				<tr>
-					<th>Datum aanvraag</th>
-					<td>{{ $registerDate }}</td>
-				</tr>
-			@endif
-			@if ($zaaktypeDesc = $zaak?->zaaktype?->omschrijvingGeneriek)
-				<tr>
-					<th>Zaaktype</th>
-					<td>{{ $zaaktypeDesc }}</td>
-				</tr>
-			@endif
-			@if ($clarification = $zaak->getValue('toelichting', ''))
-				<tr>
-					<th>Aanvraag</th>
-					<td>{{ $clarification }}</td>
-				</tr>
-			@endif
-		</table>
-	</div>
+	@php
+		$fields = [
+		    'Datum aanvraag' => $zaak->registerDate(),
+		    'Zaaktype' => $zaak?->zaaktype?->omschrijvingGeneriek,
+		    'Aanvraag' => $zaak->getValue('toelichting', ''),
+		];
+
+		$origineleAanvraag = [];
+
+		foreach ($fields as $title => $detail) {
+		    if (!empty($detail)) {
+		        $origineleAanvraag[] = compact('title', 'detail');
+		    }
+		}
+	@endphp
+
+	<h2 class="nl-heading nl-heading--level-2">Originele aanvraag</h2>
+	@include('partials.nlds.denhaag.description-list', [
+		'items' => $origineleAanvraag,
+	])
 
 	@if ($information_objects && $information_objects->count() > 0)
 		<ul class="zaak-documents">
