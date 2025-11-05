@@ -58,7 +58,7 @@ class BladeServiceProvider extends ServiceProvider
 				$blade = new BladeOne(
 					$views,
 					$cache_dir,
-					BladeOne::MODE_FAST
+					BladeOne::MODE_AUTO
 				);
 
 				if (defined( 'WP_DEBUG' ) && WP_DEBUG) {
