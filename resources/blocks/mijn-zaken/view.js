@@ -1,20 +1,29 @@
 import { createRoot } from '@wordpress/element';
-import { datasetToProps } from './../../js/utils/dataset-to-props';
-
+import { Tabs } from './components/Tabs';
 import { CaseCard } from './components/CaseCard';
 
-const components = {
-	'.js-nlds-denhaag-case-card-component': CaseCard,
-};
-
 document.addEventListener( 'DOMContentLoaded', () => {
-	Object.entries( components ).forEach( ( [ selector, Component ] ) => {
-		const elements = document.querySelectorAll( selector );
+	const mounts = document.querySelectorAll(
+		'.js-nlds-denhaag-tab-component'
+	);
 
-		elements.forEach( ( el ) => {
-			const props = datasetToProps( el.dataset );
-			const root = createRoot( el );
-			root.render( <Component { ...props } /> );
-		} );
+	mounts.forEach( ( el ) => {
+		const tabsData = JSON.parse( el.dataset.tabs );
+
+		const tabData = tabsData.map( ( tab ) => ( {
+			label: tab.label,
+			panelContent: tab.cards ? (
+				<div className="denhaag-card-group">
+					{ tab.cards.map( ( card, index ) => (
+						<CaseCard key={ index } { ...card } />
+					) ) }
+				</div>
+			) : (
+				<div dangerouslySetInnerHTML={ { __html: tab.html || '' } } />
+			),
+		} ) );
+
+		const root = createRoot( el );
+		root.render( <Tabs tabData={ tabData } /> );
 	} );
 } );
