@@ -3,10 +3,12 @@ import { datasetToProps } from './../../js/utils/dataset-to-props';
 
 import { DescriptionList } from './components/DescriptionList';
 import { File } from './components/File';
+import { Status } from './components/Status';
 
 const components = {
 	'.js-nlds-denhaag-description-list-component': DescriptionList,
 	'.js-nlds-denhaag-file-component': File,
+	'.js-nlds-denhaag-status-component': Status,
 };
 
 document.addEventListener( 'DOMContentLoaded', () => {
