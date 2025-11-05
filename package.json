@@ -5,9 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "wp-scripts start --webpack-src-dir=resources/blocks",
-		"wpbuild": "wp-scripts build --webpack-src-dir=resources/blocks",
-		"scss": "webpack --config webpack.scss.config.js --mode=production",
-		"build": "npm run wpbuild && npm run scss"
+		"build": "wp-scripts build --webpack-src-dir=resources/blocks"
 	},
 	"repository": {
 		"type": "git",
@@ -30,9 +28,6 @@
 		"@nl-design-system-candidate/paragraph-css": "^2.1.1"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^30.25.0",
-		"bootstrap": "^5.3.7",
-		"mini-css-extract-plugin": "^2.9.4",
-		"sass": "^1.93.2"
+		"@wordpress/scripts": "^30.25.0"
 	}
 }
