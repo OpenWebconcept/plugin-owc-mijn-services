@@ -2,12 +2,31 @@
 
 declare(strict_types=1);
 
+/**
+ * Information object download controller.
+ *
+ * @package OWC_Mijn_Services
+ * @author  Yard | Digital Agency
+ * @since   NEXT
+ */
+
 namespace OWC\My_Services\Controllers;
 
-use OWC\My_Services\Services\InformatieObjectDownloadService;
+/**
+ * Exit when accessed directly.
+ */
+if ( ! defined( 'ABSPATH' )) {
+	exit;
+}
 
+use OWC\My_Services\Services\InformatieObjectDownloadService;
 use function OWC\ZGW\container;
 
+/**
+ * Information object download controller.
+ *
+ * @since NEXT
+ */
 class InformationObjectDownloadController
 {
 	public function handle(): void
