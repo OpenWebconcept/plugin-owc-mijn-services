@@ -1,0 +1,37 @@
+$primary-color: #007cba;
+
+.owcms-field-group {
+	padding: 12px 0;
+
+	.owcms-label {
+		display: block;
+		margin-bottom: 6px;
+		font-weight: 600;
+	}
+
+	.owcms-input,
+	.owcms-select {
+		width: 100%;
+		max-width: 100%;
+		padding: 6px 8px;
+		font-size: 14px;
+		border: 1px solid #ccd0d4;
+		border-radius: 3px;
+		background: #fff;
+		box-sizing: border-box;
+
+		&:focus {
+			border-color: $primary-color;
+			box-shadow: 0 0 0 1px $primary-color;
+			outline: 0;
+		}
+	}
+
+	.owcms-description {
+		display: block;
+		margin-top: 6px;
+		color: #666;
+		font-size: 12px;
+		line-height: 1.4;
+	}
+}

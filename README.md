@@ -89,10 +89,31 @@ apply_filters('owcms::logger/rotating_filer_handler_max_files', OWC_MY_SERVICES_
 
 ### Intercept exceptions for custom handling
 
-You can intercept exceptions caught by the plugin for additional processing or custom logging using this filter:
+Intercept exceptions caught by the plugin for additional processing or custom logging using this action:
 
 ```php
 do_action('owcms::exception/intercept', $exception, $method)
 ```
 
 The `$exception` parameter contains the caught exception object
+
+### Restricting page access based on authentication requirements
+
+Pages can be protected by enforcing specific authentication methods, such as **DigiD** and/or **eHerkenning**.
+These access rules are configured through the **Security** metabox in the page editor.
+
+By default, only the `page` post type supports access restrictions.
+This can be customized using the following filter:
+
+```php
+apply_filters( 'owcms::gatekeeper/metabox_post_types', array( 'page' ) )
+```
+
+### Configure number of redirection posts as option
+
+Defaults to fetching all posts for the configured post types.
+Increase or limit this value when the query becomes too heavy by applying the filter below:
+
+```php
+apply_filters( 'owcms::gatekeeper/metabox_number_of_redirect_options', -1 )
+```

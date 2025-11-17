@@ -43,8 +43,6 @@ class BlockServiceProvider extends ServiceProvider
 		add_filter( 'query_vars', $this->add_query_vars( ... ) );
 		add_action( 'init', $this->register_rewrite_rules( ... ) );
 		add_action( 'init', $this->flush_rewrite_rules( ... ) );
-		add_action( 'wp_enqueue_scripts', $this->enqueue_scripts( ... ) );
-		add_action( 'enqueue_block_editor_assets', $this->enqueue_block_editor_assets( ... ) );
 		add_filter( 'block_categories_all', $this->register_block_category( ... ), 10, 2 );
 		add_action( 'init', $this->register_blocks( ... ) );
 		add_action( 'template_redirect', $this->maybe_handle_information_object_download( ... ) );
@@ -89,30 +87,6 @@ class BlockServiceProvider extends ServiceProvider
 
 		flush_rewrite_rules();
 		delete_option( 'owc_my_services_flush_rewrite_rules' );
-	}
-
-	/**
-	 * Enqueue frontend scripts.
-	 */
-	public function enqueue_scripts(): void
-	{
-		wp_enqueue_style(
-			'owc-mijn-services-blocks-styles',
-			owc_mijn_services_asset_url( 'css/style.css' ),
-			array()
-		);
-	}
-
-	/**
-	 * Enqueue block editor scripts.
-	 */
-	public function enqueue_block_editor_assets(): void
-	{
-		wp_enqueue_style(
-			'owc-mijn-services-blocks-editor-styles',
-			owc_mijn_services_asset_url( 'css/editor.css' ),
-			array()
-		);
 	}
 
 	public function register_block_category(array $blockCategories, WP_Block_Editor_Context $blockEditorContext ): array
