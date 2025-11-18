@@ -23,6 +23,7 @@ use DI\ContainerBuilder;
 use OWC\My_Services\Macros\ZgwApiMacros;
 use OWC\My_Services\Providers\BladeServiceProvider;
 use OWC\My_Services\Providers\BlockServiceProvider;
+use OWC\My_Services\Providers\GatekeeperServiceProvider;
 use OWC\My_Services\Providers\SettingsServiceProvider;
 use Psr\Container\ContainerInterface;
 
@@ -66,6 +67,7 @@ final class Bootstrap
 			SettingsServiceProvider::class,
 			BladeServiceProvider::class,
 			BlockServiceProvider::class,
+			GatekeeperServiceProvider::class,
 		);
 
 		foreach ($providers as &$provider) {
