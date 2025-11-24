@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.4.0
  */
 
 namespace OWC\My_Services\Auth;
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' )) {
 /**
  * Retrieve the Chamber of Commerce number (KVK) by integrating with eHerkenning authentication.
  *
- * @since NEXT
+ * @since 0.4.0
  */
 class eHerkenning
 {

@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.4.0
  */
 
 namespace OWC\My_Services\Controllers;
@@ -25,7 +25,7 @@ use function OWC\ZGW\container;
 /**
  * Information object download controller.
  *
- * @since NEXT
+ * @since 0.4.0
  */
 class InformationObjectDownloadController
 {

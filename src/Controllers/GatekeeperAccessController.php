@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.4.0
  */
 
 namespace OWC\My_Services\Controllers;
@@ -26,7 +26,7 @@ use WP_Post;
 /**
  * Gatekeeper access controller.
  *
- * @since NEXT
+ * @since 0.4.0
  */
 class GatekeeperAccessController
 {

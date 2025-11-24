@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.4.0] - 2025-11-24
+
+- Added: gatekeeper page protection by enforcing specific authentication methods
+
 ## [v0.3.0] - 2025-11-05
 
 - Added: implement frontend components using NLDS Den Haag design system

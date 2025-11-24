@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.4.0
  */
 
 namespace OWC\My_Services\Providers;
@@ -25,7 +25,7 @@ use OWC\My_Services\Controllers\GatekeeperMetaboxController;
 /**
  * Register gatekeeper service provider.
  *
- * @since NEXT
+ * @since 0.4.0
  */
 class GatekeeperServiceProvider extends ServiceProvider
 {
