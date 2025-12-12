@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.4.1] - 2025-12-12
+
+- Change: use DigiD auth class instead of container defintion
+
 ## [v0.4.0] - 2025-11-24
 
 - Added: gatekeeper page protection by enforcing specific authentication methods
