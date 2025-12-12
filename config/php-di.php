@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use DI\Container;
-use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\Settings\Settings;
 
 return array(
@@ -79,7 +78,6 @@ return array(
 	'zgw.settings'                => function (Container $container, string $type, string $name ) {
 		return Settings::make( 'owc_mijn_services_settings' )->get( $name );
 	},
-	'digid.current_user_bsn'      => DigiD::make()->bsn(),
 
 	/**
 	 * ZGW error logging.

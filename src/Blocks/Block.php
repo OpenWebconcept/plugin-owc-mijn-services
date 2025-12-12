@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OWC\My_Services\Blocks;
 
 use DI\NotFoundException;
+use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Traits\Supplier;
@@ -37,13 +38,10 @@ abstract class Block
 		}
 
 		try {
-			$this->bsn = ContainerResolver::make()->get( 'digid.current_user_bsn' );
+			$this->bsn = DigiD::make()->bsn();
 		} catch (TypeError $e) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Je moet ingelogd zijn om deze informatie te kunnen zien.', 'owc-mijn-services' ) ) );
 		}
-
-		// DELETE ME LATER
-		$this->bsn = '900198424';
 
 		$this->zaken_filter = new ZakenFilter();
 		$this->zaken_filter->byBsn( $this->bsn );
