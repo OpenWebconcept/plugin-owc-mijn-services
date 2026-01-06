@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.4.3] - 2026-01-06
+
+- Fix: on change event when one client is configured as option in block settings
+
 ## [v0.4.2] - 2026-01-06
 
 - Added: use dynamic client options in block attributes and add order attributes
