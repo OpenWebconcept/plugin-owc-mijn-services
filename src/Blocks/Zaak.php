@@ -40,7 +40,7 @@ class Zaak extends Block
 		}
 
 		try {
-			$this->client = apiClientManager()->getClient( $this->supplier_key_to_name( $supplier ) );
+			$this->client = apiClientManager()->getClient( $supplier );
 		} catch (NotFoundException $e) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier client is niet geconfigureerd.', 'owc-mijn-services' ) ) );
 		}

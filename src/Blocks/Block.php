@@ -47,7 +47,7 @@ abstract class Block
 		$this->zaken_filter->byBsn( $this->bsn );
 
 		try {
-			$this->client = apiClientManager()->getClient( $this->supplier_key_to_name( $attributes['zaakClient'] ?? ( (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER ) ) ) );
+			$this->client = apiClientManager()->getClient( $attributes['zaakClient'] ?? ( (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER ) ) );
 		} catch (NotFoundException $e) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier client is niet geconfigureerd.', 'owc-mijn-services' ) ) );
 		}
@@ -72,21 +72,17 @@ abstract class Block
 			return true;
 		}
 
-		if (defined( 'REST_REQUEST' ) && REST_REQUEST && isset( $_GET['context'] ) && 'edit' === $_GET['context']) {
-			return true;
+		if (defined( 'REST_REQUEST' ) && REST_REQUEST) {
+			if ( 'edit' === ( $_GET['action'] ?? '' ) ) {
+				return true;
+			}
+
+			if ( 'user' === ( $_GET['_locale'] ?? '' ) ) {
+				return true;
+			}
 		}
 
 		return false;
-	}
-
-	/**
-	 * The supplier is retrieved from the requested URL therefore making it vulnerable for unwanted changes.
-	 */
-	protected function check_supplier(string $supplier ): bool
-	{
-		$suppliers = ContainerResolver::make()->get( 'suppliers' );
-
-		return in_array( $supplier, array_keys( $suppliers ) );
 	}
 
 	final protected function get_zaken(): Collection

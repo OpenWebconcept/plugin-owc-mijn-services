@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' )) {
 use OWC\My_Services\Blocks\MijnZaken;
 use OWC\My_Services\Blocks\Zaak;
 use WP_Block_Editor_Context;
+use WP_Block_Type;
 
 /**
  * Register block service provider.
@@ -34,6 +35,8 @@ class BlockServiceProvider extends ServiceProvider
 	public const QUERY_VAR_SUPPLIER                     = 'owc-leverancier';
 	public const QUERY_VAR_ZAAK_IDENTIFICATION          = 'owc-zaaknummer';
 	public const QUERY_VAR_ZAAK_DOWNLOAD_IDENTIFICATION = 'owc-zaak-download-nummer';
+
+	public bool $zaak_client_options_inline_script_added = false;
 
 	/**
 	 * @inheritDoc
@@ -89,37 +92,66 @@ class BlockServiceProvider extends ServiceProvider
 		delete_option( 'owc_my_services_flush_rewrite_rules' );
 	}
 
-	public function register_block_category(array $blockCategories, WP_Block_Editor_Context $blockEditorContext ): array
+	public function register_block_category(array $block_categories, WP_Block_Editor_Context $block_editor_context ): array
 	{
-		$blockCategories[] = array(
+		$block_categories[] = array(
 			'slug'  => self::BLOCK_CATEGORY,
 			'title' => 'OWC Mijn Services',
 		);
 
-		return $blockCategories;
+		return $block_categories;
 	}
 
 	public function register_blocks(): void
 	{
-		register_block_type(
+		$this->register_mijn_zaken_block();
+		$this->register_single_zaak_block();
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function register_mijn_zaken_block(): void
+	{
+		$block_type = register_block_type(
 			owc_mijn_services_asset_path( 'mijn-zaken' ),
 			array(
 				'render_callback' => array( new MijnZaken(), 'render' ),
 				'category'        => self::BLOCK_CATEGORY,
 				'attributes'      => array(
-					'zaakClient' => array(
+					'zaakClient'       => array(
 						'type'    => 'string',
 						'default' => 'openzaak',
 					),
-					'perPage'    => array(
+					'perPage'          => array(
 						'type'    => 'number',
 						'default' => 10,
+					),
+					'orderBy'          => array(
+						'type'    => 'string',
+						'default' => 'startdatum',
+					),
+					'orderByDirection' => array(
+						'type'    => 'string',
+						'default' => '-',
 					),
 				),
 			)
 		);
 
-		register_block_type(
+		if ( ! $block_type instanceof WP_Block_Type ) {
+			return;
+		}
+
+		$this->preprare_and_add_client_options( $block_type );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function register_single_zaak_block(): void
+	{
+		$block_type = register_block_type(
 			owc_mijn_services_asset_path( 'zaak' ),
 			array(
 				'render_callback' => array( new Zaak(), 'render' ),
@@ -132,6 +164,62 @@ class BlockServiceProvider extends ServiceProvider
 				),
 			)
 		);
+
+		if ( ! $block_type instanceof WP_Block_Type ) {
+			return;
+		}
+
+		$this->preprare_and_add_client_options( $block_type );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function preprare_and_add_client_options(WP_Block_Type $block_type ): void
+	{
+		if (true === $this->zaak_client_options_inline_script_added ) {
+			return;
+		}
+
+		$clients = (array) get_option( 'zgw_api_settings', array() );
+		$clients = $clients['zgw-api-configured-clients'] ?? array();
+		$clients = array_filter(
+			$clients,
+			function ( $client ) {
+				return isset( $client['name'] );
+			}
+		);
+
+		if (0 < count( $clients )) {
+			$options = array_map(
+				function ( $client ) {
+					return array(
+						'value' => $client['name'],
+						'label' => $client['name'],
+					);
+				},
+				$clients
+			);
+		} else {
+			$options = array(
+				array(
+					'value' => '',
+					'label' => 'Selecteer een leverancier',
+				),
+			);
+		}
+
+		$result_inline_script = wp_add_inline_script(
+			$block_type->editor_script,
+			'window.owcMyServices = window.owcMyServices || {}; window.owcMyServices.zaakClientOptions = ' . wp_json_encode( $options ) . ';',
+			'before'
+		);
+
+		if ( ! $result_inline_script ) {
+			return;
+		}
+
+		$this->zaak_client_options_inline_script_added = true;
 	}
 
 	public function maybe_handle_information_object_download(string $template ): string

@@ -18,10 +18,15 @@ import metadata from './block.json';
 import './editor.css';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { zaakClient, perPage } = attributes;
+	const { zaakClient, perPage, orderBy, orderByDirection } = attributes;
 
 	const min = 1;
 	const max = 25;
+
+	const clientOptions =
+	window?.owcMyServices?.zaakClientOptions ?? [
+		{ label: 'Selecteer een leverancier', value: '' },
+	];
 
 	return (
 		<>
@@ -41,30 +46,7 @@ export default function Edit( { attributes, setAttributes } ) {
 					<SelectControl
 						label="Zaaksysteem"
 						value={ zaakClient }
-						options={ [
-                            // Best kept in sync with:
-                            // https://github.com/OpenWebconcept/owc-zgw-api/blob/main/src/WordPress/SettingsProvider.php#L50
-							{
-								label: 'Decos JOIN',
-								value: 'decosjoin',
-							},
-							{
-                                label: 'OpenZaak',
-                                value: 'openzaak'
-                            },
-							{
-								label: 'Rx.Mission',
-								value: 'rxmission',
-							},
-							{
-                                label: 'XXLLNC',
-                                value: 'xxllnc'
-                            },
-                            {
-                                label: __('Shift2 (voorheen Procura)', 'owc-my-services'),
-                                value: 'procura'
-                            },
-						] }
+						options={ clientOptions }
 						onChange={ ( newzaakClient ) =>
 							setAttributes( {
 								zaakClient: newzaakClient,
@@ -78,6 +60,51 @@ export default function Edit( { attributes, setAttributes } ) {
 						max={ max }
 						onChange={ ( value ) =>
 							setAttributes( { perPage: value } )
+						}
+					/>
+					<SelectControl
+						label="Sorteer op"
+						value={ orderBy }
+						options={ [
+							{
+								label: 'Startdatum',
+								value: 'startdatum',
+							},
+							{ label: 'Einddatum', value: 'einddatum' },
+							{
+								label: 'Publicatiedatum',
+								value: 'publicatiedatum',
+							},
+							{
+								label: 'Archiefactiedatum',
+								value: 'archiefactiedatum',
+							},
+							{
+								label: 'Registratiedatum',
+								value: 'registratiedatum',
+							},
+							{
+								label: 'Identificatie',
+								value: 'identificatie',
+							},
+						] }
+						onChange={ ( neworderBy ) =>
+							setAttributes( {
+								orderBy: neworderBy,
+							} )
+						}
+					/>
+					<SelectControl
+						label="Sorteer volgorde"
+						value={ orderByDirection }
+						options={ [
+							{ label: 'Oplopend', value: '+' },
+							{ label: 'Aflopend', value: '-' },
+						] }
+						onChange={ ( neworderByDirection ) =>
+							setAttributes( {
+								orderByDirection: neworderByDirection,
+							} )
 						}
 					/>
 				</PanelBody>

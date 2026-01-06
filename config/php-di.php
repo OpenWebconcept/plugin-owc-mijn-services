@@ -7,20 +7,6 @@ use OWC\My_Services\Settings\Settings;
 
 return array(
 	/**
-	 * Suppliers
-	 *
-	 * Best kept in sync with:
-	 * https://github.com/OpenWebconcept/owc-zgw-api/blob/main/src/WordPress/SettingsProvider.php#L50
-	 */
-	'suppliers'                   => array(
-		'openzaak'  => 'OpenZaak',
-		'xxllnc'    => 'XXLLNC',
-		'rxmission' => 'RxMission',
-		'decosjoin' => 'Decos JOIN',
-		'procura'   => 'Procura',
-	),
-
-	/**
 	 * Specific client settings.
 	 */
 	'oz.enabled'                  => function (Container $container ) {

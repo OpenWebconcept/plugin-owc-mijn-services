@@ -19,6 +19,11 @@ import './editor.css';
 export default function Edit({ attributes, setAttributes }) {
 	const { zaakClient } = attributes;
 
+	const clientOptions =
+	window?.owcMyServices?.zaakClientOptions ?? [
+		{ label: 'Selecteer een leverancier', value: '' },
+	];
+
 	return (
 		<>
 			<InspectorControls>
@@ -29,30 +34,7 @@ export default function Edit({ attributes, setAttributes }) {
 				<SelectControl
 					label="Zaaksysteem"
 					value={ zaakClient }
-					options={ [
-                        // Best kept in sync with:
-                        // https://github.com/OpenWebconcept/owc-zgw-api/blob/main/src/WordPress/SettingsProvider.php#L50
-                        {
-                            label: 'Decos JOIN',
-                            value: 'decosjoin',
-                        },
-                        {
-                            label: 'OpenZaak',
-                            value: 'openzaak'
-                        },
-                        {
-                            label: 'Rx.Mission',
-                            value: 'rxmission',
-                        },
-                        {
-                            label: 'XXLLNC',
-                            value: 'xxllnc'
-                        },
-                        {
-                            label: __('Shift2 (voorheen Procura)', 'owc-my-services'),
-                            value: 'procura'
-                        },
-                    ] }
+					options={ clientOptions }
 					onChange={ ( newzaakClient ) =>
 						setAttributes( {
 							zaakClient: newzaakClient,

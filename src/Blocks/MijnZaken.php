@@ -26,7 +26,7 @@ class MijnZaken extends Block
 			);
 		}
 
-		$this->zaken_filter->orderBy( 'registratiedatum' );
+		$this->handle_filter_ordering( $attributes );
 
 		$zaken = $this->get_zaken();
 		$zaken->map(
@@ -44,5 +44,21 @@ class MijnZaken extends Block
 				'zaken' => $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) ),
 			)
 		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function handle_filter_ordering(array $attributes ): void
+	{
+		if ( ! is_string( $attributes['orderBy'] ?? null )) {
+			return;
+		}
+
+		if ( ! is_string( $attributes['orderByDirection'] ?? null )) {
+			$attributes['orderByDirection'] = '-';
+		}
+
+		$this->zaken_filter->orderBy( $attributes['orderBy'], $attributes['orderByDirection'] );
 	}
 }

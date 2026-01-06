@@ -13,6 +13,14 @@
     "perPage": {
       "type": "number",
       "default": 10
+    },
+    "orderBy": {
+      "type": "string",
+      "default": "startdatum"
+    },
+    "orderByDirection": {
+      "type": "string",
+      "default": "-"
     }
   },
   "supports": {
