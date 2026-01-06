@@ -47,7 +47,7 @@ class MijnZaken extends Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.4.2
 	 */
 	protected function handle_filter_ordering(array $attributes ): void
 	{

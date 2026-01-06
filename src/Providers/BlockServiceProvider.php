@@ -109,7 +109,7 @@ class BlockServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.4.2
 	 */
 	private function register_mijn_zaken_block(): void
 	{
@@ -147,7 +147,7 @@ class BlockServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.4.2
 	 */
 	private function register_single_zaak_block(): void
 	{
@@ -173,7 +173,7 @@ class BlockServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.4.2
 	 */
 	private function preprare_and_add_client_options(WP_Block_Type $block_type ): void
 	{

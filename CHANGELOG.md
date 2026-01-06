@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.4.2] - 2026-01-06
+
+- Added: use dynamic client options in block attributes and add order attributes
+
 ## [v0.4.1] - 2025-12-12
 
 - Change: use DigiD auth class instead of container defintion
