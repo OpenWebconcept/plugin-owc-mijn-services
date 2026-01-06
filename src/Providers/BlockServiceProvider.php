@@ -190,8 +190,15 @@ class BlockServiceProvider extends ServiceProvider
 			}
 		);
 
+		$options = array(
+			array(
+				'value' => '',
+				'label' => 'Selecteer een leverancier',
+			),
+		);
+
 		if (0 < count( $clients )) {
-			$options = array_map(
+			$prepared_client_options = array_map(
 				function ( $client ) {
 					return array(
 						'value' => $client['name'],
@@ -200,13 +207,8 @@ class BlockServiceProvider extends ServiceProvider
 				},
 				$clients
 			);
-		} else {
-			$options = array(
-				array(
-					'value' => '',
-					'label' => 'Selecteer een leverancier',
-				),
-			);
+
+			$options = array_merge( $options, $prepared_client_options );
 		}
 
 		$result_inline_script = wp_add_inline_script(
