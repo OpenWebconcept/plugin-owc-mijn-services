@@ -12,7 +12,7 @@
 		<option value="" @selected($session_type === '')>{{ __('Maak een keuze', 'owc-my-services') }}</option>
 		<option value="digid" @selected($session_type === 'digid')>{{ __('DigiD', 'owc-my-services') }}</option>
 		<option value="eherkenning" @selected($session_type === 'eherkenning')>{{ __('eHerkenning', 'owc-my-services') }}</option>
-		<option value="both" @selected($session_type === 'both')>{{ __('DigiD & eHerkenning', 'owc-my-services') }}</option>
+		<option value="both" @selected($session_type === 'both')>{{ __('DigiD of eHerkenning', 'owc-my-services') }}</option>
 		<option value="none" @selected($session_type === 'none')>{{ __('Geen sessie toegestaan', 'owc-my-services') }}</option>
 	</select>
 
