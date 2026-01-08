@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.4.4] - 2026-01-08
+
+- Fix: handle unhandled exception thrown after failing retrieving 'zaken'
+- Change: gatekeeper session type metabox option name
+
 ## [v0.4.3] - 2026-01-06
 
 - Fix: on change event when one client is configured as option in block settings
