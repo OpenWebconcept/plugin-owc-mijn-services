@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OWC\My_Services\Blocks;
 
+use Exception;
 use WP_Block;
 
 /**
@@ -28,7 +29,12 @@ class MijnZaken extends Block
 
 		$this->handle_filter_ordering( $attributes );
 
-		$zaken = $this->get_zaken();
+		try {
+			$zaken = $this->get_zaken();
+		} catch (Exception $e) {
+			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Er is een fout opgetreden bij het ophalen van de zaken.', 'owc-mijn-services' ) ) );
+		}
+
 		$zaken->map(
 			function ($zaak ) use ($attributes ) {
 				// Supplier is needed for generation of the correct permalinks in the views.
