@@ -10,6 +10,14 @@
       "type": "string",
       "default": "openzaak"
     },
+    "byBSN": {
+      "type": "boolean",
+      "default": true
+    },
+    "byKVK": {
+      "type": "boolean",
+      "default": false
+    },
     "perPage": {
       "type": "number",
       "default": 10

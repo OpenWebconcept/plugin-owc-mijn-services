@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace OWC\My_Services\Blocks;
 
 use DI\NotFoundException;
+use Exception;
 use OWC\My_Services\Auth\DigiD;
-use OWC\My_Services\ContainerResolver;
+use OWC\My_Services\Auth\eHerkenning;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
@@ -14,7 +15,7 @@ use OWC\ZGW\Endpoints\Filter\ZaakinformatieobjectenFilter;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Support\Collection;
-use TypeError;
+use Throwable;
 use WP_Block;
 use WP_Screen;
 
@@ -30,6 +31,7 @@ abstract class Block
 	protected Client $client;
 	protected ZakenFilter $zaken_filter;
 	protected string $bsn;
+	protected string $kvk;
 
 	final public function render(array $attributes, string $block_content, WP_Block $block ): string
 	{
@@ -39,14 +41,19 @@ abstract class Block
 
 		try {
 			$this->bsn = DigiD::make()->bsn();
-		} catch (TypeError $e) {
+			$this->kvk = eHerkenning::make()->kvk();
+
+			if ('' === $this->bsn && '' === $this->kvk) {
+				throw new Exception( 'No BSN or KVK found.' );
+			}
+		} catch (Throwable $e) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Je moet ingelogd zijn om deze informatie te kunnen zien.', 'owc-mijn-services' ) ) );
 		}
 
 		$this->zaken_filter = new ZakenFilter();
-		$this->zaken_filter->byBsn( $this->bsn );
 
 		try {
+			$this->add_zaken_filter_args_by_auth_method( $attributes );
 			$this->client = apiClientManager()->getClient( $attributes['zaakClient'] ?? ( (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER ) ) );
 		} catch (NotFoundException $e) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier client is niet geconfigureerd.', 'owc-mijn-services' ) ) );
@@ -60,6 +67,18 @@ abstract class Block
 	}
 
 	abstract protected function render_block(array $attributes, string $block_content, WP_Block $block ): string;
+
+	/**
+	 * @since NEXT
+	 */
+	private function add_zaken_filter_args_by_auth_method(array $attributes ): void
+	{
+		if ( '' !== $this->bsn && ( $attributes['byBSN'] ?? true ) ) {
+			$this->zaken_filter->byBsn( $this->bsn );
+		} elseif ( '' !== $this->kvk && ( $attributes['byKVK'] ?? false ) ) {
+			$this->zaken_filter->add( 'rol__betrokkeneIdentificatie__vestiging__kvkNummer', $this->kvk );
+		}
+	}
 
 	protected function is_block_editor(): bool
 	{

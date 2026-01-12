@@ -5,6 +5,7 @@ import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	Disabled,
+	CheckboxControl,
 	RangeControl,
 	SelectControl,
 } from '@wordpress/components';
@@ -18,7 +19,7 @@ import metadata from './block.json';
 import './editor.css';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { zaakClient, perPage, orderBy, orderByDirection } = attributes;
+	const { zaakClient, byBSN, byKVK, perPage, orderBy, orderByDirection } = attributes;
 
 	const min = 1;
 	const max = 25;
@@ -50,6 +51,28 @@ export default function Edit( { attributes, setAttributes } ) {
 						onChange={ ( newzaakClient ) =>
 							setAttributes( {
 								zaakClient: newzaakClient,
+							} )
+						}
+					/>
+					<CheckboxControl
+						label="Filter op BSN"
+						help="Filter zaken die aangemaakt zijn door de ingelogde gebruiker op basis van het BSN nummer."
+						checked={ byBSN }
+						onChange={ ( byBSN ) =>
+							setAttributes( {
+								byBSN,
+								byKVK: byBSN ? false : attributes.byKVK,
+							} )
+						}
+					/>
+					<CheckboxControl
+						label="Filter op KVK"
+						help="Filter zaken die aangemaakt zijn door de ingelogde gebruiker op basis van het KVK nummer."
+						checked={ byKVK }
+						onChange={ ( byKVK ) =>
+							setAttributes( {
+								byKVK,
+								byBSN: byKVK ? false : attributes.byBSN,
 							} )
 						}
 					/>
