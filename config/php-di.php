@@ -9,6 +9,12 @@ return array(
 	/**
 	 * Specific client settings.
 	 */
+	'ow.enabled'                  => function (Container $container ) {
+		return (bool) $container->make( 'zgw.get-configured-client', array( 'openwave' ) );
+	},
+	'ow.api-client-settings'      => function (Container $container ) {
+		return $container->make( 'zgw.get-configured-client', array( 'openwave' ) );
+	},
 	'oz.enabled'                  => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'openzaak' ) );
 	},
