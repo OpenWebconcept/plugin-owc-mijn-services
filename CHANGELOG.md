@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.5.1] - 2026-02-04
+
+- Change: show general message when retrieving 'zaken' failed
+
 ## [v0.5.0] - 2026-02-04
 
 - Added: implement kvk usage
