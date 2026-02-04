@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.5.0] - 2026-02-04
+
+- Added: implement kvk usage
+- Chore: chore: add OpenWave
+- Fix: custom error message when no 'zaken' found for current logged in user
+
 ## [v0.4.4] - 2026-01-08
 
 - Fix: handle unhandled exception thrown after failing retrieving 'zaken'

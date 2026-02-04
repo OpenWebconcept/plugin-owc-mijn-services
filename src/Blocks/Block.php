@@ -69,7 +69,7 @@ abstract class Block
 	abstract protected function render_block(array $attributes, string $block_content, WP_Block $block ): string;
 
 	/**
-	 * @since NEXT
+	 * @since 0.5.0
 	 */
 	private function add_zaken_filter_args_by_auth_method(array $attributes ): void
 	{
