@@ -32,7 +32,7 @@ class MijnZaken extends Block
 		try {
 			$zaken = $this->get_zaken();
 		} catch (Exception $e) {
-			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Er is een fout opgetreden bij het ophalen van de zaken.', 'owc-mijn-services' ) ) );
+			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Er zijn geen zaken gevonden.', 'owc-mijn-services' ) ) );
 		}
 
 		if ( $zaken->isEmpty() ) {
