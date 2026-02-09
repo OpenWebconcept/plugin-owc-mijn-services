@@ -12,16 +12,19 @@
 	    [
 	        'label' => 'Lopende zaken',
 	        // Uses partials/nlds/denhaag/card to render each card.
-	        'cards' => collect($zaken)->map(
-	            fn($zaak) => [
-	                'appearance' => '',
-	                'title' => $zaak->title(),
-	                'subTitle' => '',
-	                'context' => $zaak->startDate('j F Y'),
-	                'datetime' => $zaak->startDate('Y-m-d'),
-	                'href' => $zaak->permalink(),
-	            ],
-	        ),
+			'cards' => array_map(
+				function ($zaak) {
+					return [
+						'appearance' => '',
+						'title' => $zaak->title(),
+						'subTitle' => '',
+						'context' => $zaak->startDate('j F Y'),
+						'datetime' => $zaak->startDate('Y-m-d'),
+						'href' => $zaak->permalink(),
+					];
+				},
+				$zaken
+			),
 	    ],
 	    [
 	        'label' => 'Afgeronde zaken',
