@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.1] - 2026-02-09
+
+- Change: use native array_map instead of Illuminate collection map
+- Change: show general message when retrieving 'zaken' failed
+
 ## [v0.5.0] - 2026-02-04
 
 - Added: implement kvk usage
