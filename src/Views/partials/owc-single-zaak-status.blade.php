@@ -13,14 +13,21 @@
 	foreach ($steps as $step) {
 	    $statusUpdate = null;
 
-	    if (!empty($zaak->statussen)) {
+	    if ($zaak->statussen->isNotEmpty()) {
 	        $statusUpdate = $zaak->statussen->filter(fn($status) => $status->statustype->url === $step->url)->first();
+			$statusUpdate = $statusUpdate?->datumStatusGezet ? $statusUpdate : null;
+
+			if ($statusUpdate) {
+				$statusUpdate = date_i18n(get_option('date_format'), $statusUpdate->datumStatusGezet->getTimestamp());
+			}
 	    }
 
 	    // Determine step status
 	    if ($step->isPast()) {
 	        $status = 'checked';
 	    } elseif ($step->isCurrent()) {
+	        $status = 'checked';
+	    } elseif ($step->isNext()) {
 	        $status = 'current';
 	    } else {
 	        $status = 'not-checked';
@@ -30,8 +37,8 @@
 	        'id' => 'step-' . $step->volgnummer,
 	        'title' => $step->getValue('omschrijving', ''),
 	        'status' => $status,
-	        'date' => $statusUpdate?->datumStatusGezet?->format('j F Y') ?? null,
-	        'meta' => $step->isPast() ? 'Volgnummer: ' . $step->volgnummer : null,
+	        'date' => $statusUpdate ?? null,
+	        'meta' => $step->isPast() || $step->isCurrent() ? 'Volgnummer: ' . $step->volgnummer : null,
 	    ];
 
 	    $stepsData[] = $stepItem;
