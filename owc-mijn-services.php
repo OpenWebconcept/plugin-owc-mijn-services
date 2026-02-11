@@ -12,7 +12,7 @@ declare(strict_types=1);
  * Plugin Name:       OWC | Mijn Services
  * Plugin URI:        https://github.com/OpenWebconcept/plugin-owc-mijn-services
  * Description:       Toon mijn zaken
- * Version:           0.5.1
+ * Version:           0.5.2
  * Author:            Yard | Digital Agency
  * Author URI:        https://www.yard.nl
  * License:           EUPL
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-const VERSION = '0.5.1';
+const VERSION = '0.5.2';
 define( 'OWC_MY_SERVICES_FILE', __FILE__ );
 define( 'OWC_MY_SERVICES_DIR_PATH', plugin_dir_path( OWC_MY_SERVICES_FILE ) );
 define( 'OWC_MY_SERVICES_PLUGIN_URL', plugins_url( '/', OWC_MY_SERVICES_FILE ) );

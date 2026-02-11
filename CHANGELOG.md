@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.2] - 2026-02-11
+
+- Change: current zaak process step should be checked, next is current step
+- Chore: update deps
+
 ## [v0.5.1] - 2026-02-09
 
 - Change: use native array_map instead of Illuminate collection map
