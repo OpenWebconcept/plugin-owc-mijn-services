@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "31b647b73a4a1a44b8d1cb59419ec013",
+    "content-hash": "e146fabda8341b91b50c73ec0bff8ca7",
     "packages": [
         {
             "name": "eftec/bladeone",
@@ -130,27 +130,27 @@
         },
         {
             "name": "laravel/serializable-closure",
-            "version": "v2.0.7",
+            "version": "v2.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/serializable-closure.git",
-                "reference": "cb291e4c998ac50637c7eeb58189c14f5de5b9dd"
+                "reference": "8f631589ab07b7b52fead814965f5a800459cb3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/cb291e4c998ac50637c7eeb58189c14f5de5b9dd",
-                "reference": "cb291e4c998ac50637c7eeb58189c14f5de5b9dd",
+                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/8f631589ab07b7b52fead814965f5a800459cb3e",
+                "reference": "8f631589ab07b7b52fead814965f5a800459cb3e",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1"
             },
             "require-dev": {
-                "illuminate/support": "^10.0|^11.0|^12.0",
+                "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
                 "nesbot/carbon": "^2.67|^3.0",
                 "pestphp/pest": "^2.36|^3.0|^4.0",
                 "phpstan/phpstan": "^2.0",
-                "symfony/var-dumper": "^6.2.0|^7.0.0"
+                "symfony/var-dumper": "^6.2.0|^7.0.0|^8.0.0"
             },
             "type": "library",
             "extra": {
@@ -187,7 +187,7 @@
                 "issues": "https://github.com/laravel/serializable-closure/issues",
                 "source": "https://github.com/laravel/serializable-closure"
             },
-            "time": "2025-11-21T20:52:36+00:00"
+            "time": "2026-02-03T06:55:34+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -334,18 +334,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenWebconcept/owc-zgw-api.git",
-                "reference": "fa1e5d9d60e0388807907687ae2a3f13447c4400"
+                "reference": "17407b36e1b71aad9f3e05364912adb683d4047f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/fa1e5d9d60e0388807907687ae2a3f13447c4400",
-                "reference": "fa1e5d9d60e0388807907687ae2a3f13447c4400",
+                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/17407b36e1b71aad9f3e05364912adb683d4047f",
+                "reference": "17407b36e1b71aad9f3e05364912adb683d4047f",
                 "shasum": ""
             },
             "require": {
                 "firebase/php-jwt": "^6.1",
                 "monolog/monolog": "^3.0",
-                "php": "^8.1",
+                "php": "^8.2",
                 "php-di/php-di": "^7.0"
             },
             "require-dev": {
@@ -384,7 +384,7 @@
                     "./vendor/bin/phpstan analyse -c phpstan.neon --memory-limit 1g"
                 ],
                 "phpcompatibility": [
-                    "./vendor/bin/phpcs -p ./src/ --standard=PHPCompatibility --runtime-set testVersion 8.1-"
+                    "./vendor/bin/phpcs -p ./src/ --standard=PHPCompatibility --runtime-set testVersion 8.2-"
                 ]
             },
             "license": [
@@ -407,7 +407,7 @@
                 "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/dev",
                 "issues": "https://github.com/OpenWebconcept/owc-zgw-api/issues"
             },
-            "time": "2026-01-06T12:20:28+00:00"
+            "time": "2026-02-11T08:24:57+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -1070,5 +1070,5 @@
         "php": "^8.1"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
