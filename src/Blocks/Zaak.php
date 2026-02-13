@@ -58,7 +58,7 @@ class Zaak extends Block
 			'owc-single-zaak',
 			array(
 				'zaak'                => $zaak,
-				'information_objects' => $zaak->zaakinformatieobjecten,
+				'information_objects' => $this->get_zaak_informatie_objecten( $zaak ),
 				'steps'               => $zaak->steps,
 			)
 		);

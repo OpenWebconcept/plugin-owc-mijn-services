@@ -72,6 +72,13 @@ return array(
 	},
 
 	/**
+	 * Display settings.
+	 */
+	'display.exclude-doc-docx'    => function (Container $container ) {
+		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-exclude-doc-docx' ) );
+	},
+
+	/**
 	 * ZGW error logging.
 	 */
 	'message.logger.active'       => function (Container $container ) {

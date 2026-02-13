@@ -6,6 +6,7 @@ namespace OWC\My_Services\Blocks;
 
 use DI\NotFoundException;
 use Exception;
+use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\Auth\eHerkenning;
 use OWC\My_Services\Providers\BlockServiceProvider;
@@ -14,6 +15,8 @@ use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZaakinformatieobjectenFilter;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 use OWC\ZGW\Entities\Zaak;
+use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
+use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWC\ZGW\Support\Collection;
 use Throwable;
 use WP_Block;
@@ -111,9 +114,24 @@ abstract class Block
 
 	final protected function get_zaak_informatie_objecten(Zaak $zaak ): Collection
 	{
-		$filter = new ZaakinformatieobjectenFilter();
-		$filter->byZaak( $zaak );
+		$zaakinformatie_objecten = $zaak->zaakinformatieobjecten;
 
-		return $this->client->zaakinformatieobjecten()->filter( $filter );
+		if ($zaakinformatie_objecten->isEmpty()) {
+			return $zaakinformatie_objecten;
+		}
+
+		if ( ! ContainerResolver::make()->get( 'display.exclude-doc-docx' )) {
+			return $zaakinformatie_objecten;
+		}
+
+		return $zaakinformatie_objecten->filter(
+			function (Zaakinformatieobject $zaakinformatie_object ) {
+				if ( ! $zaakinformatie_object->informatieobject instanceof Enkelvoudiginformatieobject) {
+					return false;
+				}
+
+				return ! in_array( $zaakinformatie_object->informatieobject->formatType(), array( 'doc', 'docx' ), true );
+			}
+		);
 	}
 }

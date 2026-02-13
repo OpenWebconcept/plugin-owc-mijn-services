@@ -59,5 +59,14 @@ class OptionsPageRegistrar
 				'type' => 'checkbox',
 			)
 		);
+
+		$options->add_field(
+			array(
+				'name' => __( 'DOC- en DOCX-documenten uitsluiten', 'mijn-services' ),
+				'desc' => __( 'Schakel deze optie in om DOC- en DOCX-documenten niet op te halen bij het tonen van een zaak.', 'mijn-services' ),
+				'id'   => 'owc-mijn-services-exclude-doc-docx',
+				'type' => 'checkbox',
+			)
+		);
 	}
 }
