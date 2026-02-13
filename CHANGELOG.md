@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.5.3] - 2026-02-13
+
+- Added: exclude doc and docx files in single zaak block via setting
+
 ## [v0.5.2] - 2026-02-11
 
 - Change: current zaak process step should be checked, next is current step
