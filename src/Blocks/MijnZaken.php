@@ -53,10 +53,13 @@ class MijnZaken extends Block
 			}
 		);
 
+		$zaken = $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) );
+
 		return owc_mijn_services_render_view(
 			'owc-overview-zaken',
 			array(
-				'zaken' => $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) ),
+				'current_zaken'   => $this->get_current_zaken( $zaken ),
+				'completed_zaken' => $this->get_completed_zaken( $zaken ),
 			)
 		);
 	}
@@ -75,5 +78,55 @@ class MijnZaken extends Block
 		}
 
 		$this->zaken_filter->orderBy( $attributes['orderBy'], $attributes['orderByDirection'] );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function get_current_zaken(array $zaken ): array
+	{
+		return $this->filter_and_map_zaken(
+			$zaken,
+			fn($zaak ) => false === $zaak->hasEndDate()
+		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function get_completed_zaken(array $zaken ): array
+	{
+		return $this->filter_and_map_zaken(
+			$zaken,
+			fn($zaak ) => false !== $zaak->hasEndDate()
+		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function filter_and_map_zaken(array $zaken, callable $predicate ): array
+	{
+		return array_values(
+			array_map(
+				array( $this, 'map_zaak' ),
+				array_filter( $zaken, $predicate )
+			)
+		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function map_zaak($zaak ): array
+	{
+		return array(
+			'appearance' => '',
+			'title'      => $zaak->title(),
+			'subTitle'   => '',
+			'context'    => $zaak->startDate( 'j F Y' ),
+			'datetime'   => $zaak->startDate( 'Y-m-d' ),
+			'href'       => $zaak->permalink(),
+		);
 	}
 }
