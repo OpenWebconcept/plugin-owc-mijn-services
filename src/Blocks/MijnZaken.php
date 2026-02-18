@@ -81,7 +81,7 @@ class MijnZaken extends Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.5.4
 	 */
 	protected function get_current_zaken(array $zaken ): array
 	{
@@ -92,7 +92,7 @@ class MijnZaken extends Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.5.4
 	 */
 	protected function get_completed_zaken(array $zaken ): array
 	{
@@ -103,7 +103,7 @@ class MijnZaken extends Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.5.4
 	 */
 	private function filter_and_map_zaken(array $zaken, callable $predicate ): array
 	{
@@ -116,7 +116,7 @@ class MijnZaken extends Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.5.4
 	 */
 	private function map_zaak($zaak ): array
 	{

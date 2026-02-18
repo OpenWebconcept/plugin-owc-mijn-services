@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.5.4] - 2026-02-18
+
+- Change: overview zaken block with current and completed zaken
+
 ## [v0.5.3] - 2026-02-13
 
 - Added: exclude doc and docx files in single zaak block via setting
