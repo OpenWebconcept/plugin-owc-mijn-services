@@ -9,6 +9,12 @@ return array(
 	/**
 	 * Specific client settings.
 	 */
+	'mz.enabled'                  => function (Container $container ) {
+		return (bool) $container->make( 'zgw.get-configured-client', array( 'mozart' ) );
+	},
+	'mz.api-client-settings'      => function (Container $container ) {
+		return $container->make( 'zgw.get-configured-client', array( 'mozart' ) );
+	},
 	'ow.enabled'                  => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'openwave' ) );
 	},
