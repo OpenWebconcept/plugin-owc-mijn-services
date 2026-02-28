@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e146fabda8341b91b50c73ec0bff8ca7",
+    "content-hash": "720a00f2c8a96bc8af6a137962ddea35",
     "packages": [
         {
             "name": "eftec/bladeone",
@@ -67,16 +67,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.11.1",
+            "version": "v7.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66"
+                "reference": "28aa0694bcfdfa5e2959c394d5a1ee7a5083629e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
-                "reference": "d1e91ecf8c598d073d0995afa8cd5c75c6e19e66",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/28aa0694bcfdfa5e2959c394d5a1ee7a5083629e",
+                "reference": "28aa0694bcfdfa5e2959c394d5a1ee7a5083629e",
                 "shasum": ""
             },
             "require": {
@@ -124,22 +124,22 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.11.1"
+                "source": "https://github.com/firebase/php-jwt/tree/v7.0.3"
             },
-            "time": "2025-04-09T20:32:01+00:00"
+            "time": "2026-02-25T22:16:40+00:00"
         },
         {
             "name": "laravel/serializable-closure",
-            "version": "v2.0.9",
+            "version": "v2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/serializable-closure.git",
-                "reference": "8f631589ab07b7b52fead814965f5a800459cb3e"
+                "reference": "870fc81d2f879903dfc5b60bf8a0f94a1609e669"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/8f631589ab07b7b52fead814965f5a800459cb3e",
-                "reference": "8f631589ab07b7b52fead814965f5a800459cb3e",
+                "url": "https://api.github.com/repos/laravel/serializable-closure/zipball/870fc81d2f879903dfc5b60bf8a0f94a1609e669",
+                "reference": "870fc81d2f879903dfc5b60bf8a0f94a1609e669",
                 "shasum": ""
             },
             "require": {
@@ -187,7 +187,7 @@
                 "issues": "https://github.com/laravel/serializable-closure/issues",
                 "source": "https://github.com/laravel/serializable-closure"
             },
-            "time": "2026-02-03T06:55:34+00:00"
+            "time": "2026-02-20T19:59:49+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -330,20 +330,20 @@
         },
         {
             "name": "owc/zgw-api",
-            "version": "dev-dev",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenWebconcept/owc-zgw-api.git",
-                "reference": "17407b36e1b71aad9f3e05364912adb683d4047f"
+                "reference": "4dcc2174d52db7522b1aa12e31fa1aafbcf54452"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/17407b36e1b71aad9f3e05364912adb683d4047f",
-                "reference": "17407b36e1b71aad9f3e05364912adb683d4047f",
+                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/4dcc2174d52db7522b1aa12e31fa1aafbcf54452",
+                "reference": "4dcc2174d52db7522b1aa12e31fa1aafbcf54452",
                 "shasum": ""
             },
             "require": {
-                "firebase/php-jwt": "^6.1",
+                "firebase/php-jwt": "^7.0",
                 "monolog/monolog": "^3.0",
                 "php": "^8.2",
                 "php-di/php-di": "^7.0"
@@ -404,10 +404,10 @@
             ],
             "description": "PHP implementation of the ZGW API, with an optional WordPress integration.",
             "support": {
-                "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/dev",
+                "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/2.4.0",
                 "issues": "https://github.com/OpenWebconcept/owc-zgw-api/issues"
             },
-            "time": "2026-02-11T08:24:57+00:00"
+            "time": "2026-02-27T16:30:46+00:00"
         },
         {
             "name": "php-di/invoker",
@@ -1061,9 +1061,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "owc/zgw-api": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
