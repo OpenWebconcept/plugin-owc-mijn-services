@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.6.0] - 2026-02-28
+
+- Chore: use tagged version of zgw-api package + update deps
+- Chore: add supplier Mozart
+
 ## [v0.5.4] - 2026-02-18
 
 - Change: overview zaken block with current and completed zaken
