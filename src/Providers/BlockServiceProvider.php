@@ -123,6 +123,14 @@ class BlockServiceProvider extends ServiceProvider
 						'type'    => 'string',
 						'default' => 'openzaak',
 					),
+					'byBSN'            => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
+					'byKVK'            => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
 					'perPage'          => array(
 						'type'    => 'number',
 						'default' => 10,
