@@ -23,6 +23,7 @@ use OWC\My_Services\Blocks\MijnZaken;
 use OWC\My_Services\Blocks\Zaak;
 use WP_Block_Editor_Context;
 use WP_Block_Type;
+use OWC\My_Services\Traits\Supplier;
 
 /**
  * Register block service provider.
@@ -31,6 +32,8 @@ use WP_Block_Type;
  */
 class BlockServiceProvider extends ServiceProvider
 {
+	use Supplier;
+
 	public const BLOCK_CATEGORY                         = 'owc-mijn-services';
 	public const QUERY_VAR_SUPPLIER                     = 'owc-leverancier';
 	public const QUERY_VAR_ZAAK_IDENTIFICATION          = 'owc-zaaknummer';
@@ -189,14 +192,7 @@ class BlockServiceProvider extends ServiceProvider
 			return;
 		}
 
-		$clients = (array) get_option( 'zgw_api_settings', array() );
-		$clients = $clients['zgw-api-configured-clients'] ?? array();
-		$clients = array_filter(
-			$clients,
-			function ( $client ) {
-				return isset( $client['name'] );
-			}
-		);
+		$clients = $this->get_configured_suppliers();
 
 		$options = array(
 			array(

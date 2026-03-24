@@ -35,16 +35,30 @@ trait Supplier
 	 */
 	public function supplier_key_to_name(string $supplier_key ): string
 	{
-		$allowed = ContainerResolver::make()->get( 'suppliers' );
+		$allowed = $this->get_configured_suppliers();
 
-		if ( ! is_array( $allowed ) || 1 > count( $allowed ) || 1 > strlen( $supplier_key )) {
-			return '';
+		foreach ( $allowed as $supplier ) {
+			if ( strtolower( $supplier['name'] ) !== strtolower( $supplier_key ) ) {
+				continue;
+			}
+
+			return $supplier['name'];
 		}
 
-		if ( ! in_array( $supplier_key, array_keys( $allowed ), true )) {
-			return '';
-		}
+		return '';
+	}
 
-		return $allowed[ $supplier_key ] ?? '';
+	public function get_configured_suppliers(): array
+	{
+		$clients = (array) get_option( 'zgw_api_settings', array() );
+		$clients = $clients['zgw-api-configured-clients'] ?? array();
+		$clients = array_filter(
+			$clients,
+			function ( $client ) {
+				return isset( $client['name'] );
+			}
+		);
+
+		return array_values( $clients );
 	}
 }
