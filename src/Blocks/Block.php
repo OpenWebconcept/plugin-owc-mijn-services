@@ -12,7 +12,6 @@ use OWC\My_Services\Auth\eHerkenning;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
-use OWC\ZGW\Endpoints\Filter\ZaakinformatieobjectenFilter;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
@@ -32,13 +31,24 @@ abstract class Block
 	use Supplier;
 
 	protected Client $client;
+
+	/**
+	 * Map of supplier name to configured API client, used when multiple suppliers are selected.
+	 *
+	 * @since NEXT
+	 * @var array<string, Client>
+	 */
+	protected array $clients = array();
+
 	protected ZakenFilter $zaken_filter;
 	protected string $bsn;
 	protected string $kvk;
 
 	final public function render(array $attributes, string $block_content, WP_Block $block ): string
 	{
-		if ( ! isset( $attributes['zaakClient'] ) && $this->is_block_editor()) {
+		$has_supplier_config = $this->validate_zaak_clients( $attributes );
+
+		if ( ! $has_supplier_config && $this->is_block_editor()) {
 			return $this->render_block( $attributes, $block_content, $block );
 		}
 
@@ -54,19 +64,43 @@ abstract class Block
 		}
 
 		$this->zaken_filter = new ZakenFilter();
+		$this->add_zaken_filter_args_by_auth_method( $attributes );
 
-		try {
-			$this->add_zaken_filter_args_by_auth_method( $attributes );
-			$this->client = apiClientManager()->getClient( $attributes['zaakClient'] ?? ( (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER ) ) );
-		} catch (NotFoundException $e) {
-			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier client is niet geconfigureerd.', 'owc-mijn-services' ) ) );
-		}
+		if ( is_array( $attributes['zaakClients'] ?? null ) && 0 < count( $attributes['zaakClients'] )) {
+			$this->setup_clients( $attributes['zaakClients'] );
 
-		if ( ! $this->client->supports( 'zaken' )) {
-			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier ondersteunt geen zaken.', 'owc-mijn-services' ) ) );
+			if ( 0 === count( $this->clients )) {
+				return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of ondersteunt zaken.', 'owc-mijn-services' ) ) );
+			}
+		} else {
+			try {
+				$supplier     = is_string( $attributes['zaakClient'] ?? null ) && '' !== $attributes['zaakClient'] ? $attributes['zaakClient'] : (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER );
+				$this->client = apiClientManager()->getClient( $supplier );
+			} catch (NotFoundException $e) {
+				return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier client is niet geconfigureerd.', 'owc-mijn-services' ) ) );
+			}
+
+			if ( ! $this->client->supports( 'zaken' )) {
+				return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier ondersteunt geen zaken.', 'owc-mijn-services' ) ) );
+			}
 		}
 
 		return $this->render_block( $attributes, $block_content, $block );
+	}
+
+	/**
+	 * Returns true when at least one supplier is configured on the block,
+	 * checking the multi-supplier array first and falling back to the legacy string.
+	 *
+	 * @since NEXT
+	 */
+	protected function validate_zaak_clients( array $attributes ): bool
+	{
+		if ( is_array( $attributes['zaakClients'] ?? null ) && 0 < count( $attributes['zaakClients'] )) {
+			return true;
+		}
+
+		return '' !== trim( $attributes['zaakClient'] ?? '' );
 	}
 
 	abstract protected function render_block(array $attributes, string $block_content, WP_Block $block ): string;
@@ -110,6 +144,55 @@ abstract class Block
 	final protected function get_zaken(): Collection
 	{
 		return $this->client->zaken()->filter( $this->zaken_filter );
+	}
+
+	/**
+	 * Fetches and merges zaken from all configured clients.
+	 * Each zaak is tagged with its originating supplier name for correct permalink generation.
+	 *
+	 * @since NEXT
+	 */
+	final protected function get_zaken_from_clients(): Collection
+	{
+		$all_zaken = array();
+
+		foreach ( $this->clients as $supplier_name => $client ) {
+			try {
+				$zaken = $client->zaken()->filter( clone $this->zaken_filter );
+
+				foreach ( $zaken->all() as $zaak ) {
+					$zaak->setValue( 'supplier', $supplier_name );
+					$all_zaken[] = $zaak;
+				}
+			} catch (Exception $e) {
+				// Needs logging?
+				// Continue with remaining suppliers when one fails.
+			}
+		}
+
+		return Collection::collect( $all_zaken );
+	}
+
+	/**
+	 * Resolves a list of supplier names into API clients, skipping any that are not
+	 * configured or do not support zaken.
+	 *
+	 * @since NEXT
+	 * @param string[] $supplier_names
+	 */
+	private function setup_clients(array $supplier_names ): void
+	{
+		foreach ( $supplier_names as $supplier_name ) {
+			try {
+				$client = apiClientManager()->getClient( $supplier_name );
+
+				if ($client->supports( 'zaken' )) {
+					$this->clients[ $supplier_name ] = $client;
+				}
+			} catch (NotFoundException $e) {
+				// Skip suppliers that are not configured.
+			}
+		}
 	}
 
 	final protected function get_zaak_informatie_objecten(Zaak $zaak ): Collection

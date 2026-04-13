@@ -1,10 +1,12 @@
 /**
  * External dependencies.
  */
+import { useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	Disabled,
+	BaseControl,
 	CheckboxControl,
 	RangeControl,
 	SelectControl,
@@ -19,15 +21,21 @@ import metadata from './block.json';
 import './editor.css';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { zaakClient, byBSN, byKVK, perPage, orderBy, orderByDirection } = attributes;
+	const { zaakClient, zaakClients, byBSN, byKVK, perPage, orderBy, orderByDirection } = attributes;
 
 	const min = 1;
 	const max = 25;
 
-	const clientOptions =
-	window?.owcMyServices?.zaakClientOptions ?? [
-		{ label: 'Selecteer een leverancier', value: '' },
-	];
+	const suppliers = ( window?.owcMyServices?.zaakClientOptions ?? [] ).filter(
+		( opt ) => opt.value !== ''
+	);
+
+	// Migrate legacy single zaakClient string to zaakClients array.
+	useEffect( () => {
+		if ( zaakClient && zaakClients.length === 0 ) {
+			setAttributes( { zaakClients: [ zaakClient ], zaakClient: '' } );
+		}
+	}, [] );
 
 	return (
 		<>
@@ -36,24 +44,41 @@ export default function Edit( { attributes, setAttributes } ) {
 					title={ __( 'Instellingen', 'owc-my-services' ) }
 					initialOpen={ true }
 				>
-					<p>
-                        {
-                            __(
-                                'Selecteer het zaaksysteem waaruit de zaken opgehaald moeten worden.',
-                                'owc-my-services'
-                            )
-                        }
-					</p>
-					<SelectControl
-						label="Zaaksysteem"
-						value={ zaakClient }
-						options={ clientOptions }
-						onChange={ ( newzaakClient ) =>
-							setAttributes( {
-								zaakClient: newzaakClient,
-							} )
-						}
-					/>
+					{ suppliers.length > 0 ? (
+						<BaseControl
+							id="owc-my-services-zaak-clients-checkbox-selection"
+							label={ __( 'Zaaksystemen', 'owc-my-services' ) }
+							help={ __(
+								'Selecteer de zaaksystemen waaruit de zaken opgehaald moeten worden.',
+								'owc-my-services'
+							) }
+						>
+							{ suppliers.map( ( supplier ) => (
+								<CheckboxControl
+									key={ supplier.value }
+									label={ supplier.label }
+									checked={ zaakClients.includes(
+										supplier.value
+									) }
+									onChange={ ( checked ) => {
+										const next = checked
+											? [ ...zaakClients, supplier.value ]
+											: zaakClients.filter(
+													( v ) => v !== supplier.value
+											  );
+										setAttributes( { zaakClients: next } );
+									} }
+								/>
+							) ) }
+						</BaseControl>
+					) : (
+						<p>
+							{ __(
+								'Geen leveranciers geconfigureerd.',
+								'owc-my-services'
+							) }
+						</p>
+					) }
 					<CheckboxControl
 						label="Filter op BSN"
 						help="Filter zaken die aangemaakt zijn door de ingelogde gebruiker op basis van het BSN nummer."

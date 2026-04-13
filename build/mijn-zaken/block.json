@@ -8,7 +8,11 @@
   "attributes": {
     "zaakClient": {
       "type": "string",
-      "default": "openzaak"
+      "default": ""
+    },
+    "zaakClients": {
+      "type": "array",
+      "default": []
     },
     "byBSN": {
       "type": "boolean",

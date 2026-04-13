@@ -6,7 +6,8 @@
 	"title": "OWC Mijn Zaken",
 	"description": "Toont Mijn Zaken blok.",
 	"attributes": {
-		"zaakClient": { "type": "string", "default": "openzaak" },
+		"zaakClient": { "type": "string", "default": "" },
+		"zaakClients": { "type": "array", "default": [] },
 		"byBSN": { "type": "boolean", "default": true },
 		"byKVK": { "type": "boolean", "default": false },
 		"perPage": {

@@ -6,7 +6,8 @@
 	"title": "OWC Zaak",
 	"description": "Toont Zaak blok.",
 	"attributes": {
-		"zaakClient": { "type": "string", "default": "openzaak" }
+		"zaakClient": { "type": "string", "default": "" },
+		"zaakClients": { "type": "array", "default": [] }
 	},
 	"supports": {
 		"html": false

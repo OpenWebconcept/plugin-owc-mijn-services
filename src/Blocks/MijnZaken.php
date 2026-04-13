@@ -30,8 +30,20 @@ class MijnZaken extends Block
 		$this->handle_filter_ordering( $attributes );
 
 		try {
-			$zaken = $this->get_zaken();
-		} catch (Exception $e) {
+			if ( 0 < count( $this->clients )) {
+				$zaken = $this->get_zaken_from_clients();
+			} else {
+				$zaken = $this->get_zaken();
+				// Supplier is needed for generation of the correct permalinks in the views.
+				$zaken->map(
+					function ($zaak ) use ($attributes ) {
+						$zaak->setValue( 'supplier', $attributes['zaakClient'] ?? 'openzaak' );
+
+						return $zaak;
+					}
+				);
+			}
+		} catch (Exception) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Er zijn geen zaken gevonden.', 'owc-mijn-services' ) ) );
 		}
 
@@ -43,15 +55,6 @@ class MijnZaken extends Block
 				)
 			);
 		}
-
-		$zaken->map(
-			function ($zaak ) use ($attributes ) {
-				// Supplier is needed for generation of the correct permalinks in the views.
-				$zaak->setValue( 'supplier', $attributes['zaakClient'] ?? 'openzaak' );
-
-				return $zaak;
-			}
-		);
 
 		$zaken = $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) );
 

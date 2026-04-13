@@ -124,7 +124,11 @@ class BlockServiceProvider extends ServiceProvider
 				'attributes'      => array(
 					'zaakClient'       => array(
 						'type'    => 'string',
-						'default' => 'openzaak',
+						'default' => '',
+					),
+					'zaakClients'      => array(
+						'type'    => 'array',
+						'default' => array(),
 					),
 					'byBSN'            => array(
 						'type'    => 'boolean',
@@ -168,9 +172,13 @@ class BlockServiceProvider extends ServiceProvider
 				'render_callback' => array( new Zaak(), 'render' ),
 				'category'        => self::BLOCK_CATEGORY,
 				'attributes'      => array(
-					'zaakClient' => array(
+					'zaakClient'  => array(
 						'type'    => 'string',
-						'default' => 'openzaak',
+						'default' => '',
+					),
+					'zaakClients' => array(
+						'type'    => 'array',
+						'default' => array(),
 					),
 				),
 			)

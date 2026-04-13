@@ -35,7 +35,7 @@ class Zaak extends Block
 		$identification = sanitize_text_field( (string) get_query_var( BlockServiceProvider::QUERY_VAR_ZAAK_IDENTIFICATION ) );
 		$supplier       = sanitize_text_field( (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER ) );
 
-		if (empty( $identification ) || empty( $supplier )) {
+		if ( '' === $identification || '' === $supplier ) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Er is geen zaaknummer of leverancier opgegeven om de zaak te kunnen tonen.', 'owc-mijn-services' ) ) );
 		}
 
@@ -52,7 +52,7 @@ class Zaak extends Block
 		}
 
 		// Supplier is needed for generation of the correct permalinks in the views.
-		$zaak->setValue( 'supplier', $attributes['zaakClient'] ?? 'openzaak' );
+		$zaak->setValue( 'supplier', $supplier );
 
 		return owc_mijn_services_render_view(
 			'owc-single-zaak',
