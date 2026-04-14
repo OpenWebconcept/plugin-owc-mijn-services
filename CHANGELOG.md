@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.7.0] - 2026-04-14
+
+- Added: log exceptions using the LoggerService
+- Chore: update wordpress/scripts npm package
+- Added: multiple client selection
+
 ## [v0.6.2] - 2026-03-24
 
 - Fix: validation of ZGW suppliers
