@@ -20,6 +20,7 @@ use OWC\ZGW\Support\Collection;
 use Throwable;
 use WP_Block;
 use WP_Screen;
+use OWC\My_Services\Services\LoggerService;
 
 use function OWC\ZGW\apiClientManager;
 
@@ -165,8 +166,7 @@ abstract class Block
 					$all_zaken[] = $zaak;
 				}
 			} catch (Exception $e) {
-				// Needs logging?
-				// Continue with remaining suppliers when one fails.
+				LoggerService::log_exception( $e, array( 'context' => "Error fetching zaken from supplier '{$supplier_name}'" ) );
 			}
 		}
 

@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' )) {
 use Exception;
 use Monolog\Level;
 use OWC\My_Services\ContainerResolver;
+use Throwable;
 
 /**
  * Logger service.
@@ -63,7 +64,7 @@ class LoggerService
 		try {
 			$level  = Level::from( $exception->getCode() );
 			$method = $level->toPsrLogLevel();
-		} catch (Exception $e) {
+		} catch (Throwable $e) {
 			$method = 'error';
 		}
 

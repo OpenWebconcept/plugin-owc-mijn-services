@@ -62,7 +62,7 @@ class InformatieObjectDownloadService
 		try {
 			$response = $this->client->enkelvoudiginformatieobjecten()->download( $download_identification );
 		} catch (Exception $e) {
-			LoggerService::log_exception( $e );
+			LoggerService::log_exception( $e, array( 'context' => "Error downloading informatieobject with identification '{$download_identification}' for zaak '{$identification}' from supplier '{$supplier}'" ) );
 
 			return '';
 		}
@@ -105,7 +105,7 @@ class InformatieObjectDownloadService
 			$filter->add( 'identificatie', $identification );
 
 			return $this->client->zaken()->filter( $filter )->first() ?: null;
-		} catch (Exception) {
+		} catch (Exception $e) {
 			return null;
 		}
 	}
