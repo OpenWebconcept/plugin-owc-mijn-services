@@ -30,7 +30,7 @@
 		"@nl-design-system-candidate/paragraph-css": "^2.1.1"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^30.25.0",
+		"@wordpress/scripts": "^31.8.0",
 		"mini-css-extract-plugin": "^2.9.4",
 		"sass": "^1.93.2"
 	}
