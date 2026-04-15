@@ -6,22 +6,21 @@ namespace OWC\My_Services\Blocks;
 
 use DI\NotFoundException;
 use Exception;
-use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\Auth\eHerkenning;
+use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
+use OWC\My_Services\Services\LoggerService;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
-use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
+use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWC\ZGW\Support\Collection;
 use Throwable;
 use WP_Block;
 use WP_Screen;
-use OWC\My_Services\Services\LoggerService;
-
 use function OWC\ZGW\apiClientManager;
 
 /**
@@ -36,7 +35,7 @@ abstract class Block
 	/**
 	 * Map of supplier name to configured API client, used when multiple suppliers are selected.
 	 *
-	 * @since NEXT
+	 * @since 0.7.0
 	 * @var array<string, Client>
 	 */
 	protected array $clients = array();
@@ -93,7 +92,7 @@ abstract class Block
 	 * Returns true when at least one supplier is configured on the block,
 	 * checking the multi-supplier array first and falling back to the legacy string.
 	 *
-	 * @since NEXT
+	 * @since 0.7.0
 	 */
 	protected function validate_zaak_clients( array $attributes ): bool
 	{
@@ -151,7 +150,7 @@ abstract class Block
 	 * Fetches and merges zaken from all configured clients.
 	 * Each zaak is tagged with its originating supplier name for correct permalink generation.
 	 *
-	 * @since NEXT
+	 * @since 0.7.0
 	 */
 	final protected function get_zaken_from_clients(): Collection
 	{
@@ -177,7 +176,8 @@ abstract class Block
 	 * Resolves a list of supplier names into API clients, skipping any that are not
 	 * configured or do not support zaken.
 	 *
-	 * @since NEXT
+	 * @since 0.7.0
+	 *
 	 * @param string[] $supplier_names
 	 */
 	private function setup_clients(array $supplier_names ): void
@@ -198,6 +198,10 @@ abstract class Block
 	final protected function get_zaak_informatie_objecten(Zaak $zaak ): Collection
 	{
 		$zaakinformatie_objecten = $zaak->zaakinformatieobjecten;
+
+		if ( ! $zaakinformatie_objecten instanceof Collection) {
+			return Collection::collect( array() );
+		}
 
 		if ($zaakinformatie_objecten->isEmpty()) {
 			return $zaakinformatie_objecten;
