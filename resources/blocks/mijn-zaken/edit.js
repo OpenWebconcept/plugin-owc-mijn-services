@@ -21,7 +21,15 @@ import metadata from './block.json';
 import './editor.css';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { zaakClient, zaakClients, byBSN, byKVK, perPage, orderBy, orderByDirection } = attributes;
+	const {
+		zaakClient,
+		zaakClients,
+		byBSN,
+		byKVK,
+		perPage,
+		orderBy,
+		orderByDirection,
+	} = attributes;
 
 	const min = 1;
 	const max = 25;
@@ -64,7 +72,8 @@ export default function Edit( { attributes, setAttributes } ) {
 										const next = checked
 											? [ ...zaakClients, supplier.value ]
 											: zaakClients.filter(
-													( v ) => v !== supplier.value
+													( v ) =>
+														v !== supplier.value
 											  );
 										setAttributes( { zaakClients: next } );
 									} }
@@ -115,10 +124,16 @@ export default function Edit( { attributes, setAttributes } ) {
 						value={ orderBy }
 						options={ [
 							{
+								label: 'Selecteer een optie',
+								value: '',
+							},
+							{
 								label: 'Startdatum',
 								value: 'startdatum',
 							},
-							{ label: 'Einddatum', value: 'einddatum' },
+							{ 	label: 'Einddatum',
+								value: 'einddatum',
+							},
 							{
 								label: 'Publicatiedatum',
 								value: 'publicatiedatum',
@@ -142,19 +157,21 @@ export default function Edit( { attributes, setAttributes } ) {
 							} )
 						}
 					/>
-					<SelectControl
-						label="Sorteer volgorde"
-						value={ orderByDirection }
-						options={ [
-							{ label: 'Oplopend', value: '+' },
-							{ label: 'Aflopend', value: '-' },
-						] }
-						onChange={ ( neworderByDirection ) =>
-							setAttributes( {
-								orderByDirection: neworderByDirection,
-							} )
-						}
-					/>
+					{ orderBy && '' !== orderBy && (
+						<SelectControl
+							label="Sorteer volgorde"
+							value={ orderByDirection }
+							options={ [
+								{ label: 'Oplopend', value: '+' },
+								{ label: 'Aflopend', value: '-' },
+							] }
+							onChange={ ( neworderByDirection ) =>
+								setAttributes( {
+									orderByDirection: neworderByDirection,
+								} )
+							}
+						/>
+					) }
 				</PanelBody>
 			</InspectorControls>
 			<div { ...useBlockProps() }>

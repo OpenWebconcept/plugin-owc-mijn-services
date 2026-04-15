@@ -72,7 +72,7 @@ class MijnZaken extends Block
 	 */
 	protected function handle_filter_ordering(array $attributes ): void
 	{
-		if ( ! is_string( $attributes['orderBy'] ?? null )) {
+		if ( ! is_string( $attributes['orderBy'] ?? null ) || '' === $attributes['orderBy']) {
 			return;
 		}
 
@@ -90,7 +90,7 @@ class MijnZaken extends Block
 	{
 		return $this->filter_and_map_zaken(
 			$zaken,
-			fn($zaak ) => false === $zaak->hasEndDate()
+			fn ($zaak ) => false === $zaak->hasEndDate()
 		);
 	}
 
@@ -101,7 +101,7 @@ class MijnZaken extends Block
 	{
 		return $this->filter_and_map_zaken(
 			$zaken,
-			fn($zaak ) => false !== $zaak->hasEndDate()
+			fn ($zaak ) => false !== $zaak->hasEndDate()
 		);
 	}
 
