@@ -15,7 +15,7 @@
 
 	    if ($zaak->statussen->isNotEmpty()) {
 	        $statusUpdate = $zaak->statussen->filter(fn($status) => $status->statustype->url === $step->url)->first();
-			$statusUpdate = $statusUpdate?->datumStatusGezet ? $statusUpdate : null;
+			$statusUpdate = is_object($statusUpdate) && $statusUpdate->datumStatusGezet ? $statusUpdate : null;
 
 			if ($statusUpdate) {
 				$statusUpdate = date_i18n(get_option('date_format'), $statusUpdate->datumStatusGezet->getTimestamp());
