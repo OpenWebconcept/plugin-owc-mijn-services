@@ -66,13 +66,13 @@ class BlockServiceProvider extends ServiceProvider
 	public function register_rewrite_rules(): void
 	{
 		add_rewrite_rule(
-			'^zaak/([a-zA-Z0-9-]+)/([a-zA-Z0-9-]+)/?$',
+			'^zaak/([a-zA-Z0-9.-]+)/([a-zA-Z0-9-]+)/?$',
 			'index.php?pagename=zaak&' . self::QUERY_VAR_ZAAK_IDENTIFICATION . '=$matches[1]&' . self::QUERY_VAR_SUPPLIER . '=$matches[2]',
 			'top'
 		);
 
 		add_rewrite_rule(
-			'^zaak-download/([a-zA-Z0-9-]+)/([a-zA-Z0-9-\\.]+)/([a-zA-Z0-9-]+)/?$',
+			'^zaak-download/([a-zA-Z0-9.-]+)/([a-zA-Z0-9-\\.]+)/([a-zA-Z0-9-]+)/?$',
 			'index.php?pagename=zaak-download&' . self::QUERY_VAR_ZAAK_DOWNLOAD_IDENTIFICATION . '=$matches[1]&' . self::QUERY_VAR_ZAAK_IDENTIFICATION . '=$matches[2]&' . self::QUERY_VAR_SUPPLIER . '=$matches[3]',
 			'top'
 		);
