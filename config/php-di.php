@@ -9,53 +9,53 @@ return array(
 	/**
 	 * Specific client settings.
 	 */
-	'mz.enabled'                  => function (Container $container ) {
+	'mz.enabled'                        => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'mozart' ) );
 	},
-	'mz.api-client-settings'      => function (Container $container ) {
+	'mz.api-client-settings'            => function (Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'mozart' ) );
 	},
-	'ow.enabled'                  => function (Container $container ) {
+	'ow.enabled'                        => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'openwave' ) );
 	},
-	'ow.api-client-settings'      => function (Container $container ) {
+	'ow.api-client-settings'            => function (Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'openwave' ) );
 	},
-	'oz.enabled'                  => function (Container $container ) {
+	'oz.enabled'                        => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'openzaak' ) );
 	},
-	'oz.api-client-settings'      => function (Container $container ) {
+	'oz.api-client-settings'            => function (Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'openzaak' ) );
 	},
-	'xxllnc.enabled'              => function (Container $container ) {
+	'xxllnc.enabled'                    => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'xxllnc' ) );
 	},
-	'xxllnc.api-client-settings'  => function (Container $container ) {
+	'xxllnc.api-client-settings'        => function (Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'xxllnc' ) );
 	},
-	'dj.enabled'                  => function (Container $container ) {
+	'dj.enabled'                        => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'decosjoin' ) );
 	},
-	'dj.api-client-settings'      => function (Container $container ) {
+	'dj.api-client-settings'            => function (Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'decosjoin' ) );
 	},
-	'rx.enabled'                  => function (Container $container ) {
+	'rx.enabled'                        => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'rxmission' ) );
 	},
-	'rx.api-client-settings'      => function (Container $container ) {
+	'rx.api-client-settings'            => function (Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'rxmission' ) );
 	},
-	'procura.enabled'             => function (Container $container ) {
+	'procura.enabled'                   => function (Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'procura' ) );
 	},
-	'procura.api-client-settings' => function (Container $container ) {
+	'procura.api-client-settings'       => function (Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'procura' ) );
 	},
 
 	/**
 	 * Generic client settings.
 	 */
-	'zgw.get-configured-client'   => function (Container $container, string $type, string $name ) {
+	'zgw.get-configured-client'         => function (Container $container, string $type, string $name ) {
 		$clients = $container->make( 'zgw.api.settings', array( 'zgw-api-configured-clients' ) ) ?: array();
 		$clients = array_filter(
 			$clients,
@@ -67,31 +67,34 @@ return array(
 
 		return is_array( $client ) && 0 < count( $client ) ? $client : array();
 	},
-	'zgw.api-configured-clients'  => function (Container $container ) {
+	'zgw.api-configured-clients'        => function (Container $container ) {
 		return $container->make( 'zgw.api.settings', array( 'zgw-api-configured-clients' ) );
 	},
-	'zgw.api.settings'            => function (Container $container, string $type, string $name ) {
+	'zgw.api.settings'                  => function (Container $container, string $type, string $name ) {
 		return Settings::make( 'zgw_api_settings' )->get( $name );
 	},
-	'zgw.settings'                => function (Container $container, string $type, string $name ) {
+	'zgw.settings'                      => function (Container $container, string $type, string $name ) {
 		return Settings::make( 'owc_mijn_services_settings' )->get( $name );
 	},
 
 	/**
 	 * Display settings.
 	 */
-	'display.exclude-doc-docx'    => function (Container $container ) {
+	'display.exclude-doc-docx'          => function (Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-exclude-doc-docx' ) );
+	},
+	'display.disable-production-checks' => function (Container $container ) {
+		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-production-checks' ) );
 	},
 
 	/**
 	 * ZGW error logging.
 	 */
-	'message.logger.active'       => function (Container $container ) {
+	'message.logger.active'             => function (Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-enable-logging' ) );
 	},
-	'message.logger.path'         => sprintf( '%s/owc-my-services-log.json', dirname( ABSPATH ) ),
-	'message.logger'              => function (Container $container ) {
+	'message.logger.path'               => sprintf( '%s/owc-my-services-log.json', dirname( ABSPATH ) ),
+	'message.logger'                    => function (Container $container ) {
 		$logger   = new \Monolog\Logger( 'owc_my_services_log' );
 		$maxFiles = apply_filters( 'owcms::logger/rotating_filer_handler_max_files', OWC_MY_SERVICES_LOGGER_DEFAULT_MAX_FILES );
 
@@ -107,7 +110,7 @@ return array(
 		return $logger;
 	},
 
-	'logger.zgw'                  => function (Container $container ) {
+	'logger.zgw'                        => function (Container $container ) {
 		return new \OWC\My_Services\LoggerZGW( $container->get( 'message.logger' ) );
 	},
 );

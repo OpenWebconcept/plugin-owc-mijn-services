@@ -68,5 +68,14 @@ class OptionsPageRegistrar
 				'type' => 'checkbox',
 			)
 		);
+
+		$options->add_field(
+			array(
+				'name' => __( 'Productiecontroles uitschakelen', 'mijn-services' ),
+				'desc' => __( 'Schakel deze optie in om de verplichting van het gebruik van de blokattributen \'Filter op BSN\' of \'Filter op KVK\' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist.', 'mijn-services' ),
+				'id'   => 'owc-mijn-services-disable-production-checks',
+				'type' => 'checkbox',
+			)
+		);
 	}
 }

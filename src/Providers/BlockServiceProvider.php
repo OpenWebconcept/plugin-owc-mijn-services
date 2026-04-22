@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' )) {
 
 use OWC\My_Services\Blocks\MijnZaken;
 use OWC\My_Services\Blocks\Zaak;
+use OWC\My_Services\ContainerResolver;
 use WP_Block_Editor_Context;
 use WP_Block_Type;
 use OWC\My_Services\Traits\Supplier;
@@ -222,9 +223,11 @@ class BlockServiceProvider extends ServiceProvider
 			$options = array_merge( $options, $prepared_client_options );
 		}
 
+		$production_checks_enabled = ! ContainerResolver::make()->get( 'display.disable-production-checks' );
+
 		$result_inline_script = wp_add_inline_script(
 			$block_type->editor_script,
-			'window.owcMyServices = window.owcMyServices || {}; window.owcMyServices.zaakClientOptions = ' . wp_json_encode( $options ) . ';',
+			'window.owcMyServices = window.owcMyServices || {}; window.owcMyServices.zaakClientOptions = ' . wp_json_encode( $options ) . '; window.owcMyServices.productionChecksEnabled = ' . wp_json_encode( $production_checks_enabled ) . ';',
 			'before'
 		);
 

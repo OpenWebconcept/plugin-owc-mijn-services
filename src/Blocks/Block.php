@@ -63,6 +63,13 @@ abstract class Block
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Je moet ingelogd zijn om deze informatie te kunnen zien.', 'owc-mijn-services' ) ) );
 		}
 
+		if ( ! ContainerResolver::make()->get( 'display.disable-production-checks' )
+			&& ! ( $attributes['byBSN'] ?? true )
+			&& ! ( $attributes['byKVK'] ?? false )
+		) {
+			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Configureer minimaal één filteroptie: \'Filter op BSN\' of \'Filter op KVK\'.', 'owc-mijn-services' ) ) );
+		}
+
 		$this->zaken_filter = new ZakenFilter();
 		$this->add_zaken_filter_args_by_auth_method( $attributes );
 

@@ -8,6 +8,7 @@ import {
 	Disabled,
 	BaseControl,
 	CheckboxControl,
+	Notice,
 	RangeControl,
 	SelectControl,
 } from '@wordpress/components';
@@ -37,6 +38,9 @@ export default function Edit( { attributes, setAttributes } ) {
 	const suppliers = ( window?.owcMyServices?.zaakClientOptions ?? [] ).filter(
 		( opt ) => opt.value !== ''
 	);
+
+	const productionChecksEnabled = window?.owcMyServices?.productionChecksEnabled ?? true;
+	const bsnKvkMissing = productionChecksEnabled && ! byBSN && ! byKVK;
 
 	// Migrate legacy single zaakClient string to zaakClients array.
 	useEffect( () => {
@@ -87,6 +91,14 @@ export default function Edit( { attributes, setAttributes } ) {
 								'owc-my-services'
 							) }
 						</p>
+					) }
+					{ bsnKvkMissing && (
+						<Notice status="warning" isDismissible={ false }>
+							{ __(
+								'Selecteer minimaal één filteroptie: Filter op BSN of Filter op KVK.',
+								'owc-my-services'
+							) }
+						</Notice>
 					) }
 					<CheckboxControl
 						label="Filter op BSN"
