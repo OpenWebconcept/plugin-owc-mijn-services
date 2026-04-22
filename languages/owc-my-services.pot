@@ -1,0 +1,130 @@
+# Copyright (C) 2026 Yard | Digital Agency
+# This file is distributed under the same license as the OWC Mijn Services plugin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OWC Mijn Services 0.7.4\n"
+"Report-Msgid-Bugs-To: https://github.com/OpenWebconcept/plugin-owc-mijn-services/issues\n"
+"POT-Creation-Date: 2026-04-22 15:03+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: xgettext 0.26\n"
+"X-Domain: owc-my-services\n"
+
+#: src/Controllers/GatekeeperMetaboxController.php:35
+msgid "Beveiliging"
+msgstr ""
+
+#: src/Blocks/Block.php:70
+msgid "Configureer minimaal één filteroptie: 'Filter op BSN' of 'Filter op KVK'."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:65
+msgid "DOC- en DOCX-documenten uitsluiten"
+msgstr ""
+
+#: src/Blocks/Block.php:87 src/Blocks/Zaak.php:45
+msgid "De gekozen zaaksysteem leverancier client is niet geconfigureerd."
+msgstr ""
+
+#: src/Blocks/Block.php:91
+msgid "De gekozen zaaksysteem leverancier ondersteunt geen zaken."
+msgstr ""
+
+#: src/Blocks/Zaak.php:51
+msgid "De opgevraagde zaak is niet gevonden."
+msgstr ""
+
+#: src/Blocks/Zaak.php:29
+msgid "Detailpagina van een zaak"
+msgstr ""
+
+#: src/Blocks/Zaak.php:39
+msgid "Er is geen zaaknummer of leverancier opgegeven om de zaak te kunnen tonen."
+msgstr ""
+
+#: src/Blocks/MijnZaken.php:47 src/Blocks/MijnZaken.php:54
+msgid "Er zijn geen zaken gevonden."
+msgstr ""
+
+#: src/Blocks/Block.php:80
+msgid "Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of ondersteunt zaken."
+msgstr ""
+
+#: src/Controllers/InformationObjectDownloadController.php:39
+msgid "Het informatieobject kon niet worden gedownload."
+msgstr ""
+
+#: src/Blocks/MijnZaken.php:24
+msgid "Het persoonlijke zakenoverzicht"
+msgstr ""
+
+#: src/Blocks/Block.php:63
+msgid "Je moet ingelogd zijn om deze informatie te kunnen zien."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:56
+msgid "Logboekinstellingen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:45
+msgid "OWC Mijn Services"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:74
+msgid "Productiecontroles uitschakelen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:66
+msgid "Schakel deze optie in om DOC- en DOCX-documenten niet op te halen bij het tonen van een zaak."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:75
+msgid "Schakel deze optie in om de verplichting van het gebruik van de blokattributen 'Filter op BSN' of 'Filter op KVK' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:57
+msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
+msgstr ""
+
+#: src/Blocks/Zaak.php:30
+msgid "Toont de details van een specifieke zaak."
+msgstr ""
+
+#: src/Blocks/MijnZaken.php:25
+msgid "Toont een overzicht van de zaken voor de ingelogde gebruiker."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:56 resources/blocks/zaak/edit.js:39
+msgid "Instellingen"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:62 resources/blocks/zaak/edit.js:45
+msgid "Zaaksystemen"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:64
+msgid "Selecteer de zaaksystemen waaruit de zaken opgehaald moeten worden."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:90 resources/blocks/zaak/edit.js:72
+msgid "Geen leveranciers geconfigureerd."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:98
+msgid "Selecteer minimaal één filteroptie: Filter op BSN of Filter op KVK."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:126
+msgid "Aantal zaken"
+msgstr ""
+
+#: resources/blocks/zaak/edit.js:47
+msgid "Selecteer de zaaksystemen waarvan zaken op deze pagina getoond kunnen worden."
+msgstr ""
