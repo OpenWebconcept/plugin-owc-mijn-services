@@ -8,6 +8,7 @@ use DI\NotFoundException;
 use Exception;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\ZGW\Entities\Zaak as ZaakEntity;
+use OWC\ZGW\Support\ZaakIdEncoderDecoder;
 use WP_Block;
 
 use function OWC\ZGW\apiClientManager;
@@ -67,7 +68,7 @@ class Zaak extends Block
 	protected function retrieve_zaak(string $identification ): ?ZaakEntity
 	{
 		try {
-			$this->zaken_filter->add( 'identificatie', $identification );
+			$this->zaken_filter->add( 'identificatie', ZaakIdEncoderDecoder::decode( $identification ) );
 			$zaak = $this->client->zaken()->filter( $this->zaken_filter )->first() ?: null;
 		} catch (Exception $e) {
 			$zaak = null;
