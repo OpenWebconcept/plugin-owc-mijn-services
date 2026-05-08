@@ -1,9 +1,13 @@
 # Changelog
 
+## [v0.9.0] - 2026-05-08
+
+- Fix: block all zaken requests when no valid auth filter can be applied
+
 ## [v0.8.0] - 2026-04-23
 
--   decode encoded Zaak identification before requesting supplier
--   force BSN or KVK filter when retrieving Zaken by config
+-   Fix: decode encoded Zaak identification before requesting supplier
+-   Added: force BSN or KVK filter when retrieving Zaken by config
 
 ## [v0.7.4] - 2026-04-20
 
