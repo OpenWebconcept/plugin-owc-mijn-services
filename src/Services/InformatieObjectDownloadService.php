@@ -20,12 +20,16 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use Exception;
+use OWC\My_Services\ContainerResolver;
+use OWC\My_Services\Auth\DigiD;
+use OWC\My_Services\Auth\eHerkenning;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Support\ZaakIdEncoderDecoder;
+use OWC\My_Services\Services\LoggerService;
 
 use function OWC\ZGW\apiClientManager;
 
@@ -39,6 +43,8 @@ class InformatieObjectDownloadService
 	use Supplier;
 
 	protected Client $client;
+	protected string $bsn;
+	protected string $kvk;
 
 	public function download_file_from_request(): string
 	{
@@ -47,6 +53,19 @@ class InformatieObjectDownloadService
 		$supplier                = (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER );
 
 		if ( ! $download_identification || ! $identification || ! $supplier) {
+			return '';
+		}
+
+		try {
+			$this->bsn = DigiD::make()->bsn();
+			$this->kvk = eHerkenning::make()->kvk();
+
+			if ('' === $this->bsn && '' === $this->kvk) {
+				throw new Exception( 'No BSN or KVK found while attempting to download file.' );
+			}
+		} catch (Exception $e) {
+			LoggerService::log_exception( $e, array( 'context' => 'Error retrieving authentication details for file download.' ) );
+
 			return '';
 		}
 
@@ -103,9 +122,26 @@ class InformatieObjectDownloadService
 		try {
 			$filter = new ZakenFilter();
 			$filter->add( 'identificatie', $identification );
+			$authentication_filter_applied = false;
+
+			if ('' !== $this->bsn) {
+				$filter->byBsn( $this->bsn );
+				$authentication_filter_applied = true;
+			}
+
+			if ('' !== $this->kvk && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
+				$filter->add( 'rol__betrokkeneIdentificatie__vestiging__kvkNummer', $this->kvk );
+				$authentication_filter_applied = true;
+			}
+
+			if ( ! $authentication_filter_applied) {
+				throw new Exception( 'No valid authentication filter applied to zaken filter.' );
+			}
 
 			return $this->client->zaken()->filter( $filter )->first() ?: null;
 		} catch (Exception $e) {
+			LoggerService::log_exception( $e, array( 'context' => "Error validating zaak with identification '{$identification}' for informatieobject download." ) );
+
 			return null;
 		}
 	}

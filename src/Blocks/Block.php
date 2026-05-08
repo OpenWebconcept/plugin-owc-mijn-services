@@ -48,7 +48,7 @@ abstract class Block
 	{
 		$has_supplier_config = $this->validate_zaak_clients( $attributes );
 
-		if ( ! $has_supplier_config && $this->is_block_editor()) {
+		if ( ! $has_supplier_config || $this->is_block_editor()) {
 			return $this->render_block( $attributes, $block_content, $block );
 		}
 
@@ -64,19 +64,26 @@ abstract class Block
 		}
 
 		if ( ! ContainerResolver::make()->get( 'display.disable-production-checks' )
-			&& ! ( $attributes['byBSN'] ?? true )
-			&& ! ( $attributes['byKVK'] ?? false )
+			&& ! ( (bool) ( $attributes['byBSN'] ?? false ) )
+			&& ! ( (bool) ( $attributes['byKVK'] ?? false ) )
 		) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Configureer minimaal één filteroptie: \'Filter op BSN\' of \'Filter op KVK\'.', 'owc-mijn-services' ) ) );
 		}
 
 		$this->zaken_filter = new ZakenFilter();
-		$this->add_zaken_filter_args_by_auth_method( $attributes );
 
-		if ( is_array( $attributes['zaakClients'] ?? null ) && 0 < count( $attributes['zaakClients'] )) {
+		try {
+			$this->add_zaken_filter_args_by_auth_method( $attributes );
+		} catch (Exception $e) {
+			LoggerService::log_exception( $e, array( 'context' => 'Error applying authentication filters to zaken filter.' ) );
+
+			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De filterinstellingen van dit blok zijn niet compatibel met uw inlogmethode. Neem contact op met de beheerder van deze website.', 'owc-mijn-services' ) ) );
+		}
+
+		if (is_array( $attributes['zaakClients'] ?? null ) && 0 < count( $attributes['zaakClients'] )) {
 			$this->setup_clients( $attributes['zaakClients'] );
 
-			if ( 0 === count( $this->clients )) {
+			if (0 === count( $this->clients )) {
 				return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of ondersteunt zaken.', 'owc-mijn-services' ) ) );
 			}
 		} else {
@@ -117,10 +124,24 @@ abstract class Block
 	 */
 	private function add_zaken_filter_args_by_auth_method(array $attributes ): void
 	{
-		if ( '' !== $this->bsn && ( $attributes['byBSN'] ?? true ) ) {
+		$authentication_filter_applied = false;
+
+		if ('' === $this->bsn && '' === $this->kvk) {
+			throw new Exception( 'No BSN or KVK available for filtering zaken.' );
+		}
+
+		if ('' !== $this->bsn && isset( $attributes['byBSN'] ) && true === $attributes['byBSN']) {
 			$this->zaken_filter->byBsn( $this->bsn );
-		} elseif ( '' !== $this->kvk && ( $attributes['byKVK'] ?? false ) ) {
+			$authentication_filter_applied = true;
+		}
+
+		if ('' !== $this->kvk && isset( $attributes['byKVK'] ) && true === $attributes['byKVK'] && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
 			$this->zaken_filter->add( 'rol__betrokkeneIdentificatie__vestiging__kvkNummer', $this->kvk );
+			$authentication_filter_applied = true;
+		}
+
+		if ( ! $authentication_filter_applied) {
+			throw new Exception( 'No valid authentication filter applied to zaken filter.' );
 		}
 	}
 
@@ -136,11 +157,11 @@ abstract class Block
 		}
 
 		if (defined( 'REST_REQUEST' ) && REST_REQUEST) {
-			if ( 'edit' === ( $_GET['action'] ?? '' ) ) {
+			if ('edit' === ( $_GET['action'] ?? '' )) {
 				return true;
 			}
 
-			if ( 'user' === ( $_GET['_locale'] ?? '' ) ) {
+			if ('user' === ( $_GET['_locale'] ?? '' )) {
 				return true;
 			}
 		}
@@ -163,11 +184,11 @@ abstract class Block
 	{
 		$all_zaken = array();
 
-		foreach ( $this->clients as $supplier_name => $client ) {
+		foreach ($this->clients as $supplier_name => $client) {
 			try {
 				$zaken = $client->zaken()->filter( clone $this->zaken_filter );
 
-				foreach ( $zaken->all() as $zaak ) {
+				foreach ($zaken->all() as $zaak) {
 					$zaak->setValue( 'supplier', $supplier_name );
 					$all_zaken[] = $zaak;
 				}
@@ -189,7 +210,7 @@ abstract class Block
 	 */
 	private function setup_clients(array $supplier_names ): void
 	{
-		foreach ( $supplier_names as $supplier_name ) {
+		foreach ($supplier_names as $supplier_name) {
 			try {
 				$client = apiClientManager()->getClient( $supplier_name );
 

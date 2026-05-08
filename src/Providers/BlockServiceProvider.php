@@ -180,6 +180,14 @@ class BlockServiceProvider extends ServiceProvider
 						'type'    => 'array',
 						'default' => array(),
 					),
+					'byBSN'       => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
+					'byKVK'       => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
 				),
 			)
 		);
@@ -224,10 +232,11 @@ class BlockServiceProvider extends ServiceProvider
 		}
 
 		$production_checks_enabled = ! ContainerResolver::make()->get( 'display.disable-production-checks' );
+		$disable_kvk_filtering     = ContainerResolver::make()->get( 'display.disable-kvk-filtering' );
 
 		$result_inline_script = wp_add_inline_script(
 			$block_type->editor_script,
-			'window.owcMyServices = window.owcMyServices || {}; window.owcMyServices.zaakClientOptions = ' . wp_json_encode( $options ) . '; window.owcMyServices.productionChecksEnabled = ' . wp_json_encode( $production_checks_enabled ) . ';',
+			'window.owcMyServices = window.owcMyServices || {}; window.owcMyServices.zaakClientOptions = ' . wp_json_encode( $options ) . '; window.owcMyServices.productionChecksEnabled = ' . wp_json_encode( $production_checks_enabled ) . '; window.owcMyServices.disableKVKFiltering = ' . wp_json_encode( $disable_kvk_filtering ) . ';',
 			'before'
 		);
 

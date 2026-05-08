@@ -3,9 +3,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC Mijn Services 0.7.4\n"
+"Project-Id-Version: OWC Mijn Services 0.8.0\n"
 "Report-Msgid-Bugs-To: https://github.com/OpenWebconcept/plugin-owc-mijn-services/issues\n"
-"POT-Creation-Date: 2026-04-22 15:03+0200\n"
+"POT-Creation-Date: 2026-05-08 15:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,27 +25,31 @@ msgstr ""
 msgid "Configureer minimaal één filteroptie: 'Filter op BSN' of 'Filter op KVK'."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:65
+#: src/Settings/OptionsPageRegistrar.php:68
 msgid "DOC- en DOCX-documenten uitsluiten"
 msgstr ""
 
-#: src/Blocks/Block.php:87 src/Blocks/Zaak.php:45
+#: src/Blocks/Block.php:94 src/Blocks/Zaak.php:48
 msgid "De gekozen zaaksysteem leverancier client is niet geconfigureerd."
 msgstr ""
 
-#: src/Blocks/Block.php:91
+#: src/Blocks/Block.php:98
 msgid "De gekozen zaaksysteem leverancier ondersteunt geen zaken."
 msgstr ""
 
-#: src/Blocks/Zaak.php:51
+#: src/Blocks/Block.php:80
+msgid "De filterinstellingen van dit blok zijn niet compatibel met uw inlogmethode. Neem contact op met de beheerder van deze website."
+msgstr ""
+
+#: src/Blocks/Zaak.php:54
 msgid "De opgevraagde zaak is niet gevonden."
 msgstr ""
 
-#: src/Blocks/Zaak.php:29
+#: src/Blocks/Zaak.php:32
 msgid "Detailpagina van een zaak"
 msgstr ""
 
-#: src/Blocks/Zaak.php:39
+#: src/Blocks/Zaak.php:42
 msgid "Er is geen zaaknummer of leverancier opgegeven om de zaak te kunnen tonen."
 msgstr ""
 
@@ -53,7 +57,7 @@ msgstr ""
 msgid "Er zijn geen zaken gevonden."
 msgstr ""
 
-#: src/Blocks/Block.php:80
+#: src/Blocks/Block.php:87
 msgid "Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of ondersteunt zaken."
 msgstr ""
 
@@ -77,23 +81,31 @@ msgstr ""
 msgid "OWC Mijn Services"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:74
+#: src/Settings/OptionsPageRegistrar.php:80
 msgid "Productiecontroles uitschakelen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:66
+#: src/Settings/OptionsPageRegistrar.php:69
 msgid "Schakel deze optie in om DOC- en DOCX-documenten niet op te halen bij het tonen van een zaak."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:75
+#: src/Settings/OptionsPageRegistrar.php:81
 msgid "Schakel deze optie in om de verplichting van het gebruik van de blokattributen 'Filter op BSN' of 'Filter op KVK' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:93
+msgid "Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning) niet ondersteunt. Gebruikers die via eHerkenning zijn ingelogd kunnen dan geen zaken ophalen."
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:57
 msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
 msgstr ""
 
-#: src/Blocks/Zaak.php:30
+#: src/Settings/OptionsPageRegistrar.php:92
+msgid "Filtering op KVK uitschakelen"
+msgstr ""
+
+#: src/Blocks/Zaak.php:33
 msgid "Toont de details van een specifieke zaak."
 msgstr ""
 
@@ -101,30 +113,38 @@ msgstr ""
 msgid "Toont een overzicht van de zaken voor de ingelogde gebruiker."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:56 resources/blocks/zaak/edit.js:39
+#: resources/blocks/mijn-zaken/edit.js:57 resources/blocks/zaak/edit.js:44
 msgid "Instellingen"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:62 resources/blocks/zaak/edit.js:45
+#: resources/blocks/mijn-zaken/edit.js:63 resources/blocks/zaak/edit.js:50
 msgid "Zaaksystemen"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:64
+#: resources/blocks/mijn-zaken/edit.js:65
 msgid "Selecteer de zaaksystemen waaruit de zaken opgehaald moeten worden."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:90 resources/blocks/zaak/edit.js:72
+#: resources/blocks/mijn-zaken/edit.js:91 resources/blocks/zaak/edit.js:77
 msgid "Geen leveranciers geconfigureerd."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:98
+#: resources/blocks/mijn-zaken/edit.js:99 resources/blocks/zaak/edit.js:85
+msgid "Schakel de filteroptie Filter op BSN in."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:100 resources/blocks/zaak/edit.js:86
 msgid "Selecteer minimaal één filteroptie: Filter op BSN of Filter op KVK."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:126
+#: resources/blocks/mijn-zaken/edit.js:129 resources/blocks/zaak/edit.js:115
+msgid "Filteren op KVK is uitgeschakeld in de instellingen van de plugin."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:135
 msgid "Aantal zaken"
 msgstr ""
 
-#: resources/blocks/zaak/edit.js:47
+#: resources/blocks/zaak/edit.js:52
 msgid "Selecteer de zaaksystemen waarvan zaken op deze pagina getoond kunnen worden."
 msgstr ""

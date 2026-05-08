@@ -86,6 +86,9 @@ return array(
 	'display.disable-production-checks' => function (Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-production-checks' ) );
 	},
+	'display.disable-kvk-filtering'     => function (Container $container ) {
+		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-kvk-filtering' ) );
+	},
 
 	/**
 	 * ZGW error logging.

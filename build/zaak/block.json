@@ -13,6 +13,14 @@
     "zaakClients": {
       "type": "array",
       "default": []
+    },
+    "byBSN": {
+      "type": "boolean",
+      "default": true
+    },
+    "byKVK": {
+      "type": "boolean",
+      "default": false
     }
   },
   "supports": {

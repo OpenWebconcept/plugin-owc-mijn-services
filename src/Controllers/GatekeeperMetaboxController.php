@@ -32,7 +32,7 @@ class GatekeeperMetaboxController
 	{
 		add_meta_box(
 			'owcms_page_gatekeeper_access',
-			__( 'Beveiliging', 'owc-my-services' ),
+			__( 'Beveiliging', 'owc-mijn-services' ),
 			$this->render_access_metabox( ... ),
 			apply_filters( 'owcms::gatekeeper/metabox_post_types', array( 'page' ) ),
 			'side',

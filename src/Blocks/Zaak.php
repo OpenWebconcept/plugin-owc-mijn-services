@@ -6,7 +6,9 @@ namespace OWC\My_Services\Blocks;
 
 use DI\NotFoundException;
 use Exception;
+use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
+use OWC\My_Services\Services\LoggerService;
 use OWC\ZGW\Entities\Zaak as ZaakEntity;
 use OWC\ZGW\Support\ZaakIdEncoderDecoder;
 use WP_Block;
@@ -69,8 +71,26 @@ class Zaak extends Block
 	{
 		try {
 			$this->zaken_filter->add( 'identificatie', ZaakIdEncoderDecoder::decode( $identification ) );
+			$authentication_filter_applied = false;
+
+			if ('' !== $this->bsn) {
+				$this->zaken_filter->byBsn( $this->bsn );
+				$authentication_filter_applied = true;
+			}
+
+			if ('' !== $this->kvk && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
+				$this->zaken_filter->add( 'rol__betrokkeneIdentificatie__vestiging__kvkNummer', $this->kvk );
+				$authentication_filter_applied = true;
+			}
+
+			if ( ! $authentication_filter_applied) {
+				throw new Exception( 'No valid authentication filter applied to zaken filter.' );
+			}
+
 			$zaak = $this->client->zaken()->filter( $this->zaken_filter )->first() ?: null;
 		} catch (Exception $e) {
+			LoggerService::log_exception( $e, array( 'context' => "Error retrieving zaak with identification '{$identification}'." ) );
+
 			$zaak = null;
 		}
 

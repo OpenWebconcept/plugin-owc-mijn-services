@@ -19,8 +19,6 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use OWC\My_Services\ContainerResolver;
-
 /**
  * Supplier trait.
  *

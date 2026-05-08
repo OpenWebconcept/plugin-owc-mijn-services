@@ -17,7 +17,7 @@ declare(strict_types=1);
  * Author URI:        https://www.yard.nl
  * License:           EUPL
  * License URI:       https://github.com/OpenWebconcept/plugin-owc-mijn-services/LICENSE.txt
- * Text Domain:       owc-my-services
+ * Text Domain:       owc-mijn-services
  * Domain Path:       /languages
  * Requires at least: 6.7
  * Requires PHP:      8.1
@@ -35,7 +35,7 @@ const VERSION = '0.8.0';
 define( 'OWC_MY_SERVICES_FILE', __FILE__ );
 define( 'OWC_MY_SERVICES_DIR_PATH', plugin_dir_path( OWC_MY_SERVICES_FILE ) );
 define( 'OWC_MY_SERVICES_PLUGIN_URL', plugins_url( '/', OWC_MY_SERVICES_FILE ) );
-define( 'OWC_MY_SERVICES_SETTINGS_PREFIX', 'owc-my-services' );
+define( 'OWC_MY_SERVICES_SETTINGS_PREFIX', 'owc-mijn-services' );
 define( 'OWC_MY_SERVICES_PLUGIN_SLUG', 'owc-mijn-services' );
 define( 'OWC_MY_SERVICES_LOGGER_DEFAULT_MAX_FILES', 7 );
 define( 'OWC_MY_SERVICES_ADD_ON_SETTINGS_PREFIX', 'owc-mijn-services-add-on' );

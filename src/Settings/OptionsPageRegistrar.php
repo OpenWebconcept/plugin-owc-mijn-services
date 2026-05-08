@@ -42,7 +42,7 @@ class OptionsPageRegistrar
 		$options = new_cmb2_box(
 			array(
 				'id'           => 'owc-mijn-services-settings',
-				'title'        => __( 'OWC Mijn Services', 'mijn-services' ),
+				'title'        => __( 'OWC Mijn Services', 'owc-mijn-services' ),
 				'object_types' => array( 'options-page' ),
 
 				'option_key'   => 'owc_mijn_services_settings',
@@ -53,29 +53,59 @@ class OptionsPageRegistrar
 
 		$options->add_field(
 			array(
-				'name' => __( 'Logboekinstellingen', 'mijn-services' ),
-				'desc' => __( 'Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in.', 'mijn-services' ),
-				'id'   => 'owc-mijn-services-enable-logging',
-				'type' => 'checkbox',
+				'name'            => __( 'Logboekinstellingen', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in.', 'owc-mijn-services' ),
+				'id'              => 'owc-mijn-services-enable-logging',
+				'type'            => 'checkbox',
+				'sanitization_cb' => function ($value ) {
+					return $this->handle_unchecked_checkbox( $value );
+				},
 			)
 		);
 
 		$options->add_field(
 			array(
-				'name' => __( 'DOC- en DOCX-documenten uitsluiten', 'mijn-services' ),
-				'desc' => __( 'Schakel deze optie in om DOC- en DOCX-documenten niet op te halen bij het tonen van een zaak.', 'mijn-services' ),
-				'id'   => 'owc-mijn-services-exclude-doc-docx',
-				'type' => 'checkbox',
+				'name'            => __( 'DOC- en DOCX-documenten uitsluiten', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om DOC- en DOCX-documenten niet op te halen bij het tonen van een zaak.', 'owc-mijn-services' ),
+				'id'              => 'owc-mijn-services-exclude-doc-docx',
+				'type'            => 'checkbox',
+				'sanitization_cb' => function ($value ) {
+					return $this->handle_unchecked_checkbox( $value );
+				},
 			)
 		);
 
 		$options->add_field(
 			array(
-				'name' => __( 'Productiecontroles uitschakelen', 'mijn-services' ),
-				'desc' => __( 'Schakel deze optie in om de verplichting van het gebruik van de blokattributen \'Filter op BSN\' of \'Filter op KVK\' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist.', 'mijn-services' ),
-				'id'   => 'owc-mijn-services-disable-production-checks',
-				'type' => 'checkbox',
+				'name'            => __( 'Productiecontroles uitschakelen', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om de verplichting van het gebruik van de blokattributen \'Filter op BSN\' of \'Filter op KVK\' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist.', 'owc-mijn-services' ),
+				'id'              => 'owc-mijn-services-disable-production-checks',
+				'type'            => 'checkbox',
+				'sanitization_cb' => function ($value ) {
+					return $this->handle_unchecked_checkbox( $value );
+				},
 			)
 		);
+
+		$options->add_field(
+			array(
+				'name'            => __( 'Filtering op KVK uitschakelen', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning) niet ondersteunt. Gebruikers die via eHerkenning zijn ingelogd kunnen dan geen zaken ophalen.', 'owc-mijn-services' ),
+				'id'              => 'owc-mijn-services-disable-kvk-filtering',
+				'type'            => 'checkbox',
+				'sanitization_cb' => function ($value ) {
+					return $this->handle_unchecked_checkbox( $value );
+				},
+			)
+		);
+	}
+
+	private function handle_unchecked_checkbox(mixed $value ): ?string
+	{
+		if ( ! is_string( $value ) || 'on' !== $value) {
+			return '0';
+		}
+
+		return $value;
 	}
 }
