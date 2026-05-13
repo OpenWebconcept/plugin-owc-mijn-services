@@ -19,7 +19,9 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use Exception;
 use DateTimeImmutable;
+use OWC\My_Services\Services\LoggerService;
 use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
 use OWC\ZGW\Entities\Statustype;
 use OWC\ZGW\Entities\Zaak;
@@ -205,6 +207,19 @@ class ZgwApiMacros
 				$volgnummer = (string) $this->getValue( 'volgnummer', '' );
 
 				return ltrim( $volgnummer, '0' );
+			}
+		);
+
+		Zaak::macro(
+			'result',
+			function () {
+				try {
+					return $this->getValue( 'resultaat')?->toelichting ?? '';
+				} catch (Exception $e) {
+					LoggerService::log_exception( $e, array( 'context' => "Unable to get 'Zaak resultaat'" ) );
+
+					return __( 'Ophalen van het resultaat is mislukt', 'owc-mijn-services' );
+				}
 			}
 		);
 	}
