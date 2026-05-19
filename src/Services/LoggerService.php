@@ -31,7 +31,7 @@ use Throwable;
  */
 class LoggerService
 {
-	public static function log(string $level, string $message, array $context = array() ): void
+	public static function log( string $level, string $message, array $context = array() ): void
 	{
 		$logger = ContainerResolver::make()->get( 'logger.zgw' );
 
@@ -59,7 +59,7 @@ class LoggerService
 		}
 	}
 
-	public static function log_exception(Exception $exception, array $context = array() ): void
+	public static function log_exception( Exception $exception, array $context = array() ): void
 	{
 		try {
 			$level  = Level::from( $exception->getCode() );

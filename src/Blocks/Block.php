@@ -44,7 +44,7 @@ abstract class Block
 	protected string $bsn;
 	protected string $kvk;
 
-	final public function render(array $attributes, string $block_content, WP_Block $block ): string
+	final public function render( array $attributes, string $block_content, WP_Block $block ): string
 	{
 		$has_supplier_config = $this->validate_zaak_clients( $attributes );
 
@@ -117,12 +117,12 @@ abstract class Block
 		return '' !== trim( $attributes['zaakClient'] ?? '' );
 	}
 
-	abstract protected function render_block(array $attributes, string $block_content, WP_Block $block ): string;
+	abstract protected function render_block( array $attributes, string $block_content, WP_Block $block ): string;
 
 	/**
 	 * @since 0.5.0
 	 */
-	private function add_zaken_filter_args_by_auth_method(array $attributes ): void
+	private function add_zaken_filter_args_by_auth_method( array $attributes ): void
 	{
 		$authentication_filter_applied = false;
 
@@ -208,7 +208,7 @@ abstract class Block
 	 *
 	 * @param string[] $supplier_names
 	 */
-	private function setup_clients(array $supplier_names ): void
+	private function setup_clients( array $supplier_names ): void
 	{
 		foreach ($supplier_names as $supplier_name) {
 			try {
@@ -223,7 +223,7 @@ abstract class Block
 		}
 	}
 
-	final protected function get_zaak_informatie_objecten(Zaak $zaak ): Collection
+	final protected function get_zaak_informatie_objecten( Zaak $zaak ): Collection
 	{
 		$zaakinformatie_objecten = $zaak->zaakinformatieobjecten;
 
@@ -240,7 +240,7 @@ abstract class Block
 		}
 
 		return $zaakinformatie_objecten->filter(
-			function (Zaakinformatieobject $zaakinformatie_object ) {
+			function ( Zaakinformatieobject $zaakinformatie_object ) {
 				if ( ! $zaakinformatie_object->informatieobject instanceof Enkelvoudiginformatieobject) {
 					return false;
 				}

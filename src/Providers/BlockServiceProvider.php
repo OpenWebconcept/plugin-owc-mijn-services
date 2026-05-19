@@ -55,7 +55,7 @@ class BlockServiceProvider extends ServiceProvider
 		add_action( 'template_redirect', $this->maybe_handle_information_object_download( ... ) );
 	}
 
-	public function add_query_vars(array $vars ): array
+	public function add_query_vars( array $vars ): array
 	{
 		$vars[] = static::QUERY_VAR_SUPPLIER;
 		$vars[] = static::QUERY_VAR_ZAAK_IDENTIFICATION;
@@ -95,7 +95,7 @@ class BlockServiceProvider extends ServiceProvider
 		delete_option( 'owc_my_services_flush_rewrite_rules' );
 	}
 
-	public function register_block_category(array $block_categories, WP_Block_Editor_Context $block_editor_context ): array
+	public function register_block_category( array $block_categories, WP_Block_Editor_Context $block_editor_context ): array
 	{
 		$block_categories[] = array(
 			'slug'  => self::BLOCK_CATEGORY,
@@ -202,7 +202,7 @@ class BlockServiceProvider extends ServiceProvider
 	/**
 	 * @since 0.4.2
 	 */
-	private function preprare_and_add_client_options(WP_Block_Type $block_type ): void
+	private function preprare_and_add_client_options( WP_Block_Type $block_type ): void
 	{
 		if (true === $this->zaak_client_options_inline_script_added ) {
 			return;
@@ -247,7 +247,7 @@ class BlockServiceProvider extends ServiceProvider
 		$this->zaak_client_options_inline_script_added = true;
 	}
 
-	public function maybe_handle_information_object_download(string $template ): string
+	public function maybe_handle_information_object_download( string $template ): string
 	{
 		if (get_query_var( 'pagename' ) === 'zaak-download') {
 			( new \OWC\My_Services\Controllers\InformationObjectDownloadController() )->handle();

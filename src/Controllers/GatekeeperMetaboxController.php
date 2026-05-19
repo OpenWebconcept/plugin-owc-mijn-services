@@ -40,7 +40,7 @@ class GatekeeperMetaboxController
 		);
 	}
 
-	public function render_access_metabox(WP_Post $post ): void
+	public function render_access_metabox( WP_Post $post ): void
 	{
 		$session_type        = get_post_meta( $post->ID, 'owcms_protected_page_session_type', true );
 		$redirect_no_session = get_post_meta( $post->ID, 'owcms_protected_page_redirect_post_id', true );
@@ -72,7 +72,7 @@ class GatekeeperMetaboxController
 		return $posts;
 	}
 
-	public function save_metabox_data(int $post_id ): void
+	public function save_metabox_data( int $post_id ): void
 	{
 		$page_gatekeeper_nonce = (string) ( $_POST['owcms_page_gatekeeper_nonce'] ?? '' );
 

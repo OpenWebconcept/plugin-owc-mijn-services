@@ -47,7 +47,7 @@ class GatekeeperAccessController
 		$this->redirect_to_post( $redirect_post_id );
 	}
 
-	protected function validate_post_type(WP_Post $post ): bool
+	protected function validate_post_type( WP_Post $post ): bool
 	{
 		$allowed_post_types = apply_filters( 'owcms::gatekeeper/metabox_post_types', array( 'page' ) );
 
@@ -67,7 +67,7 @@ class GatekeeperAccessController
 		};
 	}
 
-	protected function redirect_to_post(int $post_id ): void
+	protected function redirect_to_post( int $post_id ): void
 	{
 		$redirect_url = $post_id ? get_permalink( $post_id ) : false;
 

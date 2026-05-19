@@ -45,7 +45,7 @@ class InformationObjectDownloadController
 	/**
 	 * Send headers, read file and finish with removing the file from temporary location.
 	 */
-	protected function initiate_file_download(string $file ): void
+	protected function initiate_file_download( string $file ): void
 	{
 		header( 'Content-Description: File Transfer' );
 		header( sprintf( 'Content-Disposition: attachment; filename="%s"', $this->format_file_name( basename( $file ) ) ) );
@@ -61,7 +61,7 @@ class InformationObjectDownloadController
 	/**
 	 * Adds an extension to the file name.
 	 */
-	protected function format_file_name(string $file ): string
+	protected function format_file_name( string $file ): string
 	{
 		$parts = array(
 			$file,
@@ -71,7 +71,7 @@ class InformationObjectDownloadController
 		return implode( '.', array_filter( $parts ) );
 	}
 
-	protected function get_file_extension(string $file ): string
+	protected function get_file_extension( string $file ): string
 	{
 		$finfo    = finfo_open( FILEINFO_MIME_TYPE );
 		$mimeType = finfo_file( $finfo, $file );

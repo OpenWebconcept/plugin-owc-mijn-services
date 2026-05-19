@@ -23,7 +23,7 @@ use OWC\My_Services\ContainerResolver;
  * Add prefix for the given string.
  */
 if ( ! function_exists( 'owc_mijn_services_prefix' )) {
-	function owc_mijn_services_prefix(string $name ): string
+	function owc_mijn_services_prefix( string $name ): string
 	{
 		return 'owc-mijn-services-' . $name;
 	}
@@ -33,7 +33,7 @@ if ( ! function_exists( 'owc_mijn_services_prefix' )) {
  * Generates a full plugin URL by appending the given path to the base plugin URL.
  */
 if ( ! function_exists( 'owc_mijn_services_url' )) {
-	function owc_mijn_services_url(string $path ): string
+	function owc_mijn_services_url( string $path ): string
 	{
 		return OWC_MY_SERVICES_PLUGIN_URL . $path;
 	}
@@ -43,7 +43,7 @@ if ( ! function_exists( 'owc_mijn_services_url' )) {
  * Generates a full asset URL by appending the given path to the plugin's asset directory.
  */
 if ( ! function_exists( 'owc_mijn_services_asset_url' )) {
-	function owc_mijn_services_asset_url(string $path ): string
+	function owc_mijn_services_asset_url( string $path ): string
 	{
 		return owc_mijn_services_url( 'build/' . $path );
 	}
@@ -53,7 +53,7 @@ if ( ! function_exists( 'owc_mijn_services_asset_url' )) {
  * Generates a full asset path by appending the given path to the plugin's asset directory.
  */
 if ( ! function_exists( 'owc_mijn_services_asset_path' )) {
-	function owc_mijn_services_asset_path(string $path ): string
+	function owc_mijn_services_asset_path( string $path ): string
 	{
 		return OWC_MY_SERVICES_DIR_PATH . 'build/' . $path;
 	}
@@ -63,7 +63,7 @@ if ( ! function_exists( 'owc_mijn_services_asset_path' )) {
  * Render a view file.
  */
 if ( ! function_exists( 'owc_mijn_services_render_view' )) {
-	function owc_mijn_services_render_view(string $file_path, $data = array() )
+	function owc_mijn_services_render_view( string $file_path, $data = array() )
 	{
 		$view = ContainerResolver::make()->get( 'view' );
 

@@ -23,7 +23,7 @@ class Zaak extends Block
 	/**
 	 * @inheritDoc
 	 */
-	protected function render_block(array $attributes, string $block_content, WP_Block $block ): string
+	protected function render_block( array $attributes, string $block_content, WP_Block $block ): string
 	{
 		if ($this->is_block_editor()) {
 			return owc_mijn_services_render_view(
@@ -67,7 +67,7 @@ class Zaak extends Block
 		);
 	}
 
-	protected function retrieve_zaak(string $identification ): ?ZaakEntity
+	protected function retrieve_zaak( string $identification ): ?ZaakEntity
 	{
 		try {
 			$this->zaken_filter->add( 'identificatie', ZaakIdEncoderDecoder::decode( $identification ) );

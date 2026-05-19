@@ -40,12 +40,12 @@ class ContainerResolver
 		return new static();
 	}
 
-	public function get(string $key )
+	public function get( string $key )
 	{
 		return $this->container->get( $key ) ?? null;
 	}
 
-	public function set(string $key, mixed $value ): void
+	public function set( string $key, mixed $value ): void
 	{
 		$this->container->set( $key, $value );
 	}

@@ -83,9 +83,9 @@ class PluginLifecycle
 		}
 	}
 
-	private function insert_page(array $pageData ): void
+	private function insert_page( array $page_data ): void
 	{
-		$page = get_page_by_path( $pageData['slug'] );
+		$page = get_page_by_path( $page_data['slug'] );
 
 		if ($page instanceof WP_Post || is_array( $page )) {
 			return; // Page already exists, do nothing.
@@ -93,9 +93,9 @@ class PluginLifecycle
 
 		$result = wp_insert_post(
 			array(
-				'post_title'   => $pageData['title'],
-				'post_name'    => $pageData['slug'],
-				'post_content' => $pageData['content'],
+				'post_title'   => $page_data['title'],
+				'post_name'    => $page_data['slug'],
+				'post_content' => $page_data['content'],
 				'post_status'  => 'publish',
 				'post_type'    => 'page',
 			)
@@ -106,7 +106,7 @@ class PluginLifecycle
 				'error',
 				sprintf(
 					'Failed to create required page \'%s\' on plugin activation: %s',
-					$pageData['title'],
+					$page_data['title'],
 					$result->get_error_message()
 				)
 			);

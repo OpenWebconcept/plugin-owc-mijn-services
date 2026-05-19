@@ -60,7 +60,7 @@ class ZgwApiMacros
 
 		Zaak::macro(
 			'startDate',
-			function (string $format = 'j F Y' ) {
+			function ( string $format = 'j F Y' ) {
 				$startDate = $this->getValue( 'startdatum', null );
 
 				if ( ! $startDate instanceof DateTimeImmutable) {
@@ -73,56 +73,56 @@ class ZgwApiMacros
 
 		Zaak::macro(
 			'registerDate',
-			function (string $format = 'j F Y' ) {
-				$registerDate = $this->getValue( 'registratiedatum', null );
+			function ( string $format = 'j F Y' ) {
+				$register_date = $this->getValue( 'registratiedatum', null );
 
-				if ( ! $registerDate instanceof DateTimeImmutable) {
+				if ( ! $register_date instanceof DateTimeImmutable) {
 					return '';
 				}
 
-				return date_i18n( $format, $registerDate->getTimestamp() );
+				return date_i18n( $format, $register_date->getTimestamp() );
 			}
 		);
 
 		Zaak::macro(
 			'endDate',
-			function (string $format = 'j F Y' ) {
-				$endDate = $this->getValue( 'einddatum', null );
+			function ( string $format = 'j F Y' ) {
+				$end_date = $this->getValue( 'einddatum', null );
 
-				if ( ! $endDate instanceof DateTimeImmutable) {
+				if ( ! $end_date instanceof DateTimeImmutable) {
 					return '';
 				}
 
-				return date_i18n( $format, $endDate->getTimestamp() );
+				return date_i18n( $format, $end_date->getTimestamp() );
 			}
 		);
 
 		Zaak::macro(
 			'endDatePlanned',
-			function (string $format = 'j F Y' ) {
-				$endDatePlanned = $this->getValue( 'einddatumGepland', null );
+			function ( string $format = 'j F Y' ) {
+				$end_date_planned = $this->getValue( 'einddatumGepland', null );
 
-				if ( ! $endDatePlanned instanceof DateTimeImmutable) {
+				if ( ! $end_date_planned instanceof DateTimeImmutable) {
 					return '';
 				}
 
-				return date_i18n( $format, $endDatePlanned->getTimestamp() );
+				return date_i18n( $format, $end_date_planned->getTimestamp() );
 			}
 		);
 
 		Enkelvoudiginformatieobject::macro(
 			'downloadUrl',
-			function (string $zaakIdentification, string $supplier ) {
+			function ( string $zaak_identification, string $supplier ) {
 				if ($this->isClassified() || ! $this->hasFinalStatus()) {
 					// return ''; // Is disabled for testing purposes.
 				}
 				$identification = $this->identification();
 
-				if ('' === $identification || '' === $zaakIdentification || '' === $supplier) {
+				if ('' === $identification || '' === $zaak_identification || '' === $supplier) {
 					return '';
 				}
 
-				return sprintf( '%s/zaak-download/%s/%s/%s', get_home_url(), $identification, ZaakIdEncoderDecoder::encode( $zaakIdentification ), $supplier );
+				return sprintf( '%s/zaak-download/%s/%s/%s', get_home_url(), $identification, ZaakIdEncoderDecoder::encode( $zaak_identification ), $supplier );
 			}
 		);
 
@@ -153,15 +153,15 @@ class ZgwApiMacros
 		Enkelvoudiginformatieobject::macro(
 			'formatType',
 			function () {
-				$mimeType = $this->getValue( 'formaat', '' );
+				$mime_type = $this->getValue( 'formaat', '' );
 
-				if ( ! is_string( $mimeType ) || 1 > strlen( $mimeType )) {
+				if ( ! is_string( $mime_type ) || 1 > strlen( $mime_type )) {
 					return '';
 				}
 
 				$mimeMap = $GLOBALS['zgwApiClientManager']->container()->get( 'mime.mapping' );
 
-				return is_array( $mimeMap ) ? ( $mimeMap[ $mimeType ] ?? '' ) : '';
+				return is_array( $mimeMap ) ? ( $mimeMap[ $mime_type ] ?? '' ) : '';
 			}
 		);
 
@@ -214,7 +214,7 @@ class ZgwApiMacros
 			'result',
 			function () {
 				try {
-					return $this->getValue( 'resultaat')?->toelichting ?? '';
+					return $this->getValue( 'resultaat' )?->toelichting ?? '';
 				} catch (Exception $e) {
 					LoggerService::log_exception( $e, array( 'context' => "Unable to get 'Zaak resultaat'" ) );
 

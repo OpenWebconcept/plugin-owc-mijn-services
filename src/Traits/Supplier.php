@@ -31,7 +31,7 @@ trait Supplier
 	 * e.g. 'openzaak' to 'OpenZaak'.
 	 * The name is mainly used for matching the correct API client.
 	 */
-	public function supplier_key_to_name(string $supplier_key ): string
+	public function supplier_key_to_name( string $supplier_key ): string
 	{
 		$allowed = $this->get_configured_suppliers();
 

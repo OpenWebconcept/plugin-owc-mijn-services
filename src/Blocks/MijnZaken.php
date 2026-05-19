@@ -15,7 +15,7 @@ class MijnZaken extends Block
 	/**
 	 * @inheritDoc
 	 */
-	protected function render_block(array $attributes, string $block_content, WP_Block $block ): string
+	protected function render_block( array $attributes, string $block_content, WP_Block $block ): string
 	{
 		if ($this->is_block_editor()) {
 			return owc_mijn_services_render_view(
@@ -36,7 +36,7 @@ class MijnZaken extends Block
 				$zaken = $this->get_zaken();
 				// Supplier is needed for generation of the correct permalinks in the views.
 				$zaken->map(
-					function ($zaak ) use ($attributes ) {
+					function ( $zaak ) use ( $attributes ) {
 						$zaak->setValue( 'supplier', $attributes['zaakClient'] ?? 'openzaak' );
 
 						return $zaak;
@@ -70,7 +70,7 @@ class MijnZaken extends Block
 	/**
 	 * @since 0.4.2
 	 */
-	protected function handle_filter_ordering(array $attributes ): void
+	protected function handle_filter_ordering( array $attributes ): void
 	{
 		if ( ! is_string( $attributes['orderBy'] ?? null ) || '' === $attributes['orderBy']) {
 			return;
@@ -86,29 +86,29 @@ class MijnZaken extends Block
 	/**
 	 * @since 0.5.4
 	 */
-	protected function get_current_zaken(array $zaken ): array
+	protected function get_current_zaken( array $zaken ): array
 	{
 		return $this->filter_and_map_zaken(
 			$zaken,
-			fn ($zaak ) => false === $zaak->hasEndDate()
+			fn ( $zaak ) => false === $zaak->hasEndDate()
 		);
 	}
 
 	/**
 	 * @since 0.5.4
 	 */
-	protected function get_completed_zaken(array $zaken ): array
+	protected function get_completed_zaken( array $zaken ): array
 	{
 		return $this->filter_and_map_zaken(
 			$zaken,
-			fn ($zaak ) => false !== $zaak->hasEndDate()
+			fn ( $zaak ) => false !== $zaak->hasEndDate()
 		);
 	}
 
 	/**
 	 * @since 0.5.4
 	 */
-	private function filter_and_map_zaken(array $zaken, callable $predicate ): array
+	private function filter_and_map_zaken( array $zaken, callable $predicate ): array
 	{
 		return array_values(
 			array_map(
@@ -121,7 +121,7 @@ class MijnZaken extends Block
 	/**
 	 * @since 0.5.4
 	 */
-	private function map_zaak($zaak ): array
+	private function map_zaak( $zaak ): array
 	{
 		return array(
 			'appearance' => '',

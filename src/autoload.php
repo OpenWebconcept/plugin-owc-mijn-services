@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 spl_autoload_register(
-	function (string $class ): void {
+	function ( string $candidate_autoload_class ): void {
 		// Namespace => base directory mapping.
 		$prefixes = array(
 			'OWC\\My_Services\\' => trailingslashit( OWC_MY_SERVICES_DIR_PATH ) . 'src/',
@@ -26,9 +26,9 @@ spl_autoload_register(
 
 		foreach ($prefixes as $prefix => $base_dir) {
 			// Check if class uses this namespace prefix.
-			if (str_starts_with( $class, $prefix )) {
+			if (str_starts_with( $candidate_autoload_class, $prefix )) {
 				// Relative class name (remove namespace prefix)
-				$relative_class = substr( $class, strlen( $prefix ) );
+				$relative_class = substr( $candidate_autoload_class, strlen( $prefix ) );
 
 				// Replace namespace separators with directory separators.
 				$relative_path = str_replace( '\\', DIRECTORY_SEPARATOR, $relative_class ) . '.php';

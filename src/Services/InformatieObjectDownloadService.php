@@ -117,7 +117,7 @@ class InformatieObjectDownloadService
 		return $download_identification;
 	}
 
-	protected function validate_zaak(string $identification ): ?Zaak
+	protected function validate_zaak( string $identification ): ?Zaak
 	{
 		try {
 			$filter = new ZakenFilter();
