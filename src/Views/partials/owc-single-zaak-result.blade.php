@@ -8,7 +8,7 @@
 	    exit();
 	}
 
-	$result = $zaak->getValue('resultaat')?->toelichting;
+	$result = $zaak->result();
 	$endDate = $endDate ?? null;
 @endphp
 
