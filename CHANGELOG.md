@@ -1,5 +1,10 @@
 # Changelog
 
+## [v.0.9.2] - 2026-05-22
+
+- Added: use macro for Zaak result in view
+- Style: remove FunctionDeclarationArgumentSpacing exclusion from PHPCS config + var casing
+
 ## [v.0.9.1] - 2026-05-13
 
 - Fix: handle failure of Zaak resultaat retrieval inside new macro
