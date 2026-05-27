@@ -30,7 +30,7 @@ abstract class Block
 {
 	use Supplier;
 
-	protected Client $client;
+	protected ?Client $client = null;
 
 	/**
 	 * Map of supplier name to configured API client, used when multiple suppliers are selected.
@@ -43,6 +43,11 @@ abstract class Block
 	protected ZakenFilter $zaken_filter;
 	protected string $bsn;
 	protected string $kvk;
+
+	public function __construct()
+	{
+		$this->zaken_filter = new ZakenFilter();
+	}
 
 	final public function render( array $attributes, string $block_content, WP_Block $block ): string
 	{
@@ -69,8 +74,6 @@ abstract class Block
 		) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Configureer minimaal één filteroptie: \'Filter op BSN\' of \'Filter op KVK\'.', 'owc-mijn-services' ) ) );
 		}
-
-		$this->zaken_filter = new ZakenFilter();
 
 		try {
 			$this->add_zaken_filter_args_by_auth_method( $attributes );
@@ -171,6 +174,10 @@ abstract class Block
 
 	final protected function get_zaken(): Collection
 	{
+		if (null === $this->client) {
+			return Collection::collect( array() );
+		}
+
 		return $this->client->zaken()->filter( $this->zaken_filter );
 	}
 
