@@ -1,5 +1,9 @@
 # Changelog
 
+## [v.0.9.3] - 2026-05-27
+
+- Fix: prevent uninitialized typed property errors in Block
+
 ## [v.0.9.2] - 2026-05-22
 
 - Added: use macro for Zaak result in view
