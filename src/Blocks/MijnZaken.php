@@ -78,9 +78,11 @@ class MijnZaken extends Block
 
 		if ( ! is_string( $attributes['orderByDirection'] ?? null )) {
 			$attributes['orderByDirection'] = '-';
+		} elseif ( $attributes['orderByDirection'] !== '-' ) {
+			$attributes['orderByDirection'] = '';
 		}
 
-		$this->zaken_filter->orderBy( $attributes['orderBy'], $attributes['orderByDirection'] );
+		$this->zaken_filter->orderBy( sprintf( '%s%s', $attributes['orderByDirection'], $attributes['orderBy'] ) );
 	}
 
 	/**
