@@ -1,15 +1,19 @@
 # Changelog
 
-## [v.0.9.3] - 2026-05-27
+## [v0.9.4] - 2026-06-03
+
+- Fix: use empty string prefix for ascending order direction
+
+## [v0.9.3] - 2026-05-27
 
 - Fix: prevent uninitialized typed property errors in Block
 
-## [v.0.9.2] - 2026-05-22
+## [v0.9.2] - 2026-05-22
 
 - Added: use macro for Zaak result in view
 - Style: remove FunctionDeclarationArgumentSpacing exclusion from PHPCS config + var casing
 
-## [v.0.9.1] - 2026-05-13
+## [v0.9.1] - 2026-05-13
 
 - Fix: handle failure of Zaak resultaat retrieval inside new macro
 
