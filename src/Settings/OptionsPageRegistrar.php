@@ -98,6 +98,18 @@ class OptionsPageRegistrar
 				},
 			)
 		);
+
+		$options->add_field(
+			array(
+				'name'            => __( 'Uitgebreide KVK-filtering inschakelen', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om bij het filteren op KVK (eHerkenning) ook te filteren op RSIN of vestigingsnummer, indien beschikbaar. Niet elke leverancier ondersteunt deze filterparameters.', 'owc-mijn-services' ),
+				'id'              => 'owc-mijn-services-enable-extended-kvk-filtering',
+				'type'            => 'checkbox',
+				'sanitization_cb' => function ( $value ) {
+					return $this->handle_unchecked_checkbox( $value );
+				},
+			)
+		);
 	}
 
 	private function handle_unchecked_checkbox( mixed $value ): ?string

@@ -11,6 +11,7 @@ use OWC\My_Services\Auth\eHerkenning;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Services\LoggerService;
+use OWC\My_Services\Traits\AuthenticationFilter;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
@@ -28,6 +29,7 @@ use function OWC\ZGW\apiClientManager;
  */
 abstract class Block
 {
+	use AuthenticationFilter;
 	use Supplier;
 
 	protected ?Client $client = null;
@@ -43,6 +45,8 @@ abstract class Block
 	protected ZakenFilter $zaken_filter;
 	protected string $bsn;
 	protected string $kvk;
+	protected string $vestigingsNummer;
+	protected string $rsin;
 
 	public function __construct()
 	{
@@ -58,8 +62,12 @@ abstract class Block
 		}
 
 		try {
-			$this->bsn = DigiD::make()->bsn();
-			$this->kvk = eHerkenning::make()->kvk();
+			$eHerkenning = eHerkenning::make();
+
+			$this->bsn              = DigiD::make()->bsn();
+			$this->kvk              = $eHerkenning->kvk();
+			$this->vestigingsNummer = $eHerkenning->vestigingsNummer();
+			$this->rsin             = $eHerkenning->rsin();
 
 			if ('' === $this->bsn && '' === $this->kvk) {
 				throw new Exception( 'No BSN or KVK found.' );
@@ -138,9 +146,10 @@ abstract class Block
 			$authentication_filter_applied = true;
 		}
 
-		if ('' !== $this->kvk && isset( $attributes['byKVK'] ) && true === $attributes['byKVK'] && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
-			$this->zaken_filter->add( 'rol__betrokkeneIdentificatie__vestiging__kvkNummer', $this->kvk );
-			$authentication_filter_applied = true;
+		$has_kvk_identification = '' !== $this->kvk || '' !== $this->vestigingsNummer || '' !== $this->rsin;
+
+		if ($has_kvk_identification && isset( $attributes['byKVK'] ) && true === $attributes['byKVK'] && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
+			$authentication_filter_applied = $this->add_kvk_filter( $this->zaken_filter, $this->rsin, $this->vestigingsNummer, $this->kvk ) || $authentication_filter_applied;
 		}
 
 		if ( ! $authentication_filter_applied) {

@@ -33,16 +33,41 @@ class eHerkenning
 
 	public function kvk(): string
 	{
+		$userData = $this->getUserData();
+
+		return ! is_null( $userData ) ? $userData->getKvk() : '';
+	}
+
+	public function vestigingsNummer(): string
+	{
+		$userData = $this->getUserData();
+
+		return ! is_null( $userData ) ? $userData->getVestigingsNummer() : '';
+	}
+
+	public function rsin(): string
+	{
+		$userData = $this->getUserData();
+
+		return ! is_null( $userData ) ? $userData->getRsin() : '';
+	}
+
+	private function getUserData(): mixed
+	{
 		if ( ! class_exists( '\OWC\IdpUserData\eHerkenningSession' )) {
-			return '';
+			return null;
 		}
 
-		if ( ! \OWC\IdpUserData\eHerkenningSession::isLoggedIn() || is_null( \OWC\IdpUserData\eHerkenningSession::getUserData() )) {
-			return '';
+		if ( ! \OWC\IdpUserData\eHerkenningSession::isLoggedIn() ) {
+			return null;
 		}
 
 		$userData = \OWC\IdpUserData\eHerkenningSession::getUserData();
 
-		return ! is_null( $userData ) ? $userData->getKvk() : '';
+		if ( ! $userData instanceof \OWC\IdpUserData\eHerkenningUserDataInterface ) {
+			return null;
+		}
+
+		return $userData;
 	}
 }

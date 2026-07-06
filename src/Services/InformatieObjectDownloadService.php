@@ -24,6 +24,7 @@ use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\Auth\eHerkenning;
 use OWC\My_Services\Providers\BlockServiceProvider;
+use OWC\My_Services\Traits\AuthenticationFilter;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
@@ -40,11 +41,14 @@ use function OWC\ZGW\apiClientManager;
  */
 class InformatieObjectDownloadService
 {
+	use AuthenticationFilter;
 	use Supplier;
 
 	protected Client $client;
 	protected string $bsn;
 	protected string $kvk;
+	protected string $vestigingsNummer;
+	protected string $rsin;
 
 	public function download_file_from_request(): string
 	{
@@ -57,8 +61,12 @@ class InformatieObjectDownloadService
 		}
 
 		try {
-			$this->bsn = DigiD::make()->bsn();
-			$this->kvk = eHerkenning::make()->kvk();
+			$eHerkenning = eHerkenning::make();
+
+			$this->bsn              = DigiD::make()->bsn();
+			$this->kvk              = $eHerkenning->kvk();
+			$this->vestigingsNummer = $eHerkenning->vestigingsNummer();
+			$this->rsin             = $eHerkenning->rsin();
 
 			if ('' === $this->bsn && '' === $this->kvk) {
 				throw new Exception( 'No BSN or KVK found while attempting to download file.' );
@@ -129,9 +137,10 @@ class InformatieObjectDownloadService
 				$authentication_filter_applied = true;
 			}
 
-			if ('' !== $this->kvk && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
-				$filter->add( 'rol__betrokkeneIdentificatie__vestiging__kvkNummer', $this->kvk );
-				$authentication_filter_applied = true;
+			$has_kvk_identification = '' !== $this->kvk || '' !== $this->vestigingsNummer || '' !== $this->rsin;
+
+			if ($has_kvk_identification && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
+				$authentication_filter_applied = $this->add_kvk_filter( $filter, $this->rsin, $this->vestigingsNummer, $this->kvk ) || $authentication_filter_applied;
 			}
 
 			if ( ! $authentication_filter_applied) {
