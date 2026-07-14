@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_My_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.10.0
  */
 
 namespace OWC\My_Services\Traits;
@@ -25,7 +25,7 @@ use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 /**
  * Authentication filter trait.
  *
- * @since NEXT
+ * @since 0.10.0
  */
 trait AuthenticationFilter
 {
