@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.10.0] - 2026-07-14
+
+- Change: kvk authentication filter params
+
 ## [v0.9.4] - 2026-06-03
 
 - Fix: use empty string prefix for ascending order direction

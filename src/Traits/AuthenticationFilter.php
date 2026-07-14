@@ -25,7 +25,7 @@ use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 /**
  * Authentication filter trait.
  *
- * @since NEXT
+ * @since 0.10.0
  */
 trait AuthenticationFilter
 {
