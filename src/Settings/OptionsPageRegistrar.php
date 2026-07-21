@@ -39,6 +39,17 @@ class OptionsPageRegistrar
 			return;
 		}
 
+		/**
+		 * Filters the capability required to manage the 'Toegestane informatieobjecttypen' setting.
+		 *
+		 * Defaults to 'manage_options', in which case only administrators can see or edit the
+		 * setting. Filtering this to a different capability additionally exposes the settings
+		 * page (and only this one field on it) to any user with that capability.
+		 *
+		 * @since NEXT
+		 */
+		$allowed_informatieobjecttypen_capability = apply_filters( 'owcms::settings/allowed_informatieobjecttypen_capability', 'manage_options' );
+
 		$options = new_cmb2_box(
 			array(
 				'id'           => 'owc-mijn-services-settings',
@@ -47,9 +58,13 @@ class OptionsPageRegistrar
 
 				'option_key'   => 'owc_mijn_services_settings',
 				'parent_slug'  => 'options-general.php',
-				'capability'   => 'manage_options',
+				'capability'   => 'manage_options' === $allowed_informatieobjecttypen_capability ? 'manage_options' : 'read',
 			)
 		);
+
+		$admin_only_show_on_cb = function () {
+			return current_user_can( 'manage_options' );
+		};
 
 		$options->add_field(
 			array(
@@ -60,6 +75,7 @@ class OptionsPageRegistrar
 				'sanitization_cb' => function ( $value ) {
 					return $this->handle_unchecked_checkbox( $value );
 				},
+				'show_on_cb'      => $admin_only_show_on_cb,
 			)
 		);
 
@@ -71,6 +87,26 @@ class OptionsPageRegistrar
 				'type'            => 'checkbox',
 				'sanitization_cb' => function ( $value ) {
 					return $this->handle_unchecked_checkbox( $value );
+				},
+				'show_on_cb'      => $admin_only_show_on_cb,
+			)
+		);
+
+		$options->add_field(
+			array(
+				'name'       => __( 'Toegestane informatieobjecttypen', 'owc-mijn-services' ),
+				'desc'       => __( 'Voer de URL\'s in van de informatieobjecttypen die mogen worden gebruikt voor het ophalen van informatieobjecten bij een zaak. Laat dit veld leeg om alle informatieobjecten te tonen.', 'owc-mijn-services' ),
+				'id'         => 'owc-mijn-services-allowed-informatieobjecttypen',
+				'type'       => 'text_url',
+				'repeatable' => true,
+				'attributes' => array(
+					'style' => 'width: 100%;',
+				),
+				'text'       => array(
+					'add_row_text' => __( 'Informatieobjecttype toevoegen', 'owc-mijn-services' ),
+				),
+				'show_on_cb' => function () use ( $allowed_informatieobjecttypen_capability ) {
+					return current_user_can( 'manage_options' ) || current_user_can( $allowed_informatieobjecttypen_capability );
 				},
 			)
 		);
@@ -84,6 +120,7 @@ class OptionsPageRegistrar
 				'sanitization_cb' => function ( $value ) {
 					return $this->handle_unchecked_checkbox( $value );
 				},
+				'show_on_cb'      => $admin_only_show_on_cb,
 			)
 		);
 
@@ -96,6 +133,7 @@ class OptionsPageRegistrar
 				'sanitization_cb' => function ( $value ) {
 					return $this->handle_unchecked_checkbox( $value );
 				},
+				'show_on_cb'      => $admin_only_show_on_cb,
 			)
 		);
 
@@ -108,6 +146,7 @@ class OptionsPageRegistrar
 				'sanitization_cb' => function ( $value ) {
 					return $this->handle_unchecked_checkbox( $value );
 				},
+				'show_on_cb'      => $admin_only_show_on_cb,
 			)
 		);
 	}

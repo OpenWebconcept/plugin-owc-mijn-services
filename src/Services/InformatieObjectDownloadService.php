@@ -28,7 +28,10 @@ use OWC\My_Services\Traits\AuthenticationFilter;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
+use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
 use OWC\ZGW\Entities\Zaak;
+use OWC\ZGW\Entities\Zaakinformatieobject;
+use OWC\ZGW\Support\Collection;
 use OWC\ZGW\Support\ZaakIdEncoderDecoder;
 use OWC\My_Services\Services\LoggerService;
 
@@ -86,6 +89,40 @@ class InformatieObjectDownloadService
 			return '';
 		}
 
+		$zaakinformatie_object = $this->find_zaak_informatieobject( $zaak, $download_identification );
+
+		if ( ! $zaakinformatie_object instanceof Zaakinformatieobject) {
+			LoggerService::log(
+				'error',
+				sprintf(
+					"OWC\My_Services: Download of informatieobject with identification '%s' blocked, document does not belong to zaak '%s'.",
+					$download_identification,
+					$identification
+				)
+			);
+
+			return '';
+		}
+
+		$allowed_informatieobjecttypen = (array) ContainerResolver::make()->get( 'display.allowed-informatieobjecttypen' );
+
+		if ( 0 < count( $allowed_informatieobjecttypen )) {
+			$informatieobject = $zaakinformatie_object->informatieobject;
+
+			if ( ! $informatieobject instanceof Enkelvoudiginformatieobject || ! in_array( $informatieobject->informatieobjecttype, $allowed_informatieobjecttypen, true )) {
+				LoggerService::log(
+					'error',
+					sprintf(
+						"OWC\My_Services: Download of informatieobject with identification '%s' for zaak '%s' blocked, informatieobjecttype is not allowed.",
+						$download_identification,
+						$identification
+					)
+				);
+
+				return '';
+			}
+		}
+
 		try {
 			$response = $this->client->enkelvoudiginformatieobjecten()->download( $download_identification );
 		} catch (Exception $e) {
@@ -94,10 +131,10 @@ class InformatieObjectDownloadService
 			return '';
 		}
 
-		$fileWriteResult = @file_put_contents( $download_identification, $response->getBody() );
+		$file_write_result = @file_put_contents( $download_identification, $response->getBody() );
 
 		// Check if the file was written unsuccessfully.
-		if (false === $fileWriteResult || ! is_int( $fileWriteResult ) || 0 >= $fileWriteResult) {
+		if (false === $file_write_result || ! is_int( $file_write_result ) || 0 >= $file_write_result) {
 			LoggerService::log(
 				'error',
 				sprintf(
@@ -153,5 +190,25 @@ class InformatieObjectDownloadService
 
 			return null;
 		}
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function find_zaak_informatieobject( Zaak $zaak, string $download_identification ): ?Zaakinformatieobject
+	{
+		$zaakinformatie_objecten = $zaak->zaakinformatieobjecten;
+
+		if ( ! $zaakinformatie_objecten instanceof Collection) {
+			return null;
+		}
+
+		return $zaakinformatie_objecten->first(
+			function ( $key, Zaakinformatieobject $zaakinformatie_object ) use ( $download_identification ) {
+				$matches = basename( (string) $zaakinformatie_object?->url ) === $download_identification;
+
+				return $matches ? $zaakinformatie_object : null;
+			}
+		);
 	}
 }
