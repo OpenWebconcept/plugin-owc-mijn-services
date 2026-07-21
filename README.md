@@ -117,3 +117,34 @@ Increase or limit this value when the query becomes too heavy by applying the fi
 ```php
 apply_filters( 'owcms::gatekeeper/metabox_number_of_redirect_options', -1 )
 ```
+
+### Grant access to the "Toegestane informatieobjecttypen" setting for other roles
+
+The "Toegestane informatieobjecttypen" setting (Settings > OWC Mijn Services) restricts which
+`informatieobjecttype` URLs are allowed when fetching and downloading a zaak's documents. By
+default, only administrators can see or edit this setting.
+
+Use this filter to grant access to users with a different capability instead:
+
+```php
+apply_filters( 'owcms::settings/allowed_informatieobjecttypen_capability', 'manage_options' )
+```
+
+When filtered to a capability other than `manage_options`, any user holding that capability can
+open the settings page, but will see only this one field — every other setting on the page
+remains restricted to administrators. Filtering the capability doesn't grant it to anyone; the
+target role still needs to actually hold it, for example:
+
+```php
+add_filter('owcms::settings/allowed_informatieobjecttypen_capability', function () {
+    return 'manage_informatieobjecttypen';
+});
+
+add_action('init', function () {
+    $role = get_role('editor');
+
+    if ($role && ! $role->has_cap('manage_informatieobjecttypen')) {
+        $role->add_cap('manage_informatieobjecttypen');
+    }
+});
+```

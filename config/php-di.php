@@ -83,6 +83,11 @@ return array(
 	'display.exclude-doc-docx'              => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-exclude-doc-docx' ) );
 	},
+	'display.allowed-informatieobjecttypen' => function ( Container $container ) {
+		$value = $container->make( 'zgw.settings', array( 'owc-mijn-services-allowed-informatieobjecttypen' ) );
+
+		return is_array( $value ) ? array_values( array_filter( $value ) ) : array();
+	},
 	'display.disable-production-checks'     => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-production-checks' ) );
 	},

@@ -251,17 +251,30 @@ abstract class Block
 			return $zaakinformatie_objecten;
 		}
 
-		if ( ! ContainerResolver::make()->get( 'display.exclude-doc-docx' )) {
+		$exclude_doc_docx              = (bool) ContainerResolver::make()->get( 'display.exclude-doc-docx' );
+		$allowed_informatieobjecttypen = (array) ContainerResolver::make()->get( 'display.allowed-informatieobjecttypen' );
+
+		if ( ! $exclude_doc_docx && empty( $allowed_informatieobjecttypen )) {
 			return $zaakinformatie_objecten;
 		}
 
 		return $zaakinformatie_objecten->filter(
-			function ( Zaakinformatieobject $zaakinformatie_object ) {
+			function ( Zaakinformatieobject $zaakinformatie_object ) use ( $exclude_doc_docx, $allowed_informatieobjecttypen ) {
 				if ( ! $zaakinformatie_object->informatieobject instanceof Enkelvoudiginformatieobject) {
 					return false;
 				}
 
-				return ! in_array( $zaakinformatie_object->informatieobject->formatType(), array( 'doc', 'docx' ), true );
+				$informatieobject = $zaakinformatie_object->informatieobject;
+
+				if ($exclude_doc_docx && in_array( $informatieobject->formatType(), array( 'doc', 'docx' ), true )) {
+					return false;
+				}
+
+				if ( 0 < count( $allowed_informatieobjecttypen ) && ! in_array( $informatieobject->informatieobjecttype, $allowed_informatieobjecttypen, true )) {
+					return false;
+				}
+
+				return true;
 			}
 		);
 	}
