@@ -35,6 +35,7 @@ use OWC\ZGW\Support\Collection;
 use OWC\ZGW\Support\ZaakIdEncoderDecoder;
 use OWC\My_Services\Services\LoggerService;
 use OWC\ZGW\Http\Response;
+use WP_Filesystem_Base;
 
 use function OWC\ZGW\apiClientManager;
 
@@ -217,10 +218,15 @@ class InformatieObjectDownloadService
 	 */
 	private function prepare_download( string $download_identification, Response $response ): bool
 	{
-		$file_write_result = @file_put_contents( $download_identification, $response->getBody() );
+		global $wp_filesystem;
+
+		if ( ! $wp_filesystem instanceof WP_Filesystem_Base) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem( false, false, true );
+		}
 
 		// Check if the file was written unsuccessfully.
-		if (false === $file_write_result || ! is_int( $file_write_result ) || 0 >= $file_write_result) {
+		if ( ! $wp_filesystem instanceof WP_Filesystem_Base || ! $wp_filesystem->put_contents( $download_identification, $response->getBody(), FS_CHMOD_FILE )) {
 			LoggerService::log(
 				'error',
 				sprintf(
