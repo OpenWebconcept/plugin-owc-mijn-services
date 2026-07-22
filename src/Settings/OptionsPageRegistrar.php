@@ -58,7 +58,7 @@ class OptionsPageRegistrar
 
 				'option_key'   => 'owc_mijn_services_settings',
 				'parent_slug'  => 'options-general.php',
-				'capability'   => 'manage_options' === $allowed_informatieobjecttypen_capability ? 'manage_options' : 'read',
+				'capability'   => $allowed_informatieobjecttypen_capability,
 			)
 		);
 
