@@ -2,65 +2,60 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | Mijn Services 0.9.0\n"
+"Project-Id-Version: OWC | Mijn Services 0.10.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-mijn-services\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-13T14:16:48+00:00\n"
+"POT-Creation-Date: 2026-07-22T07:38:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.12.0\n"
+"X-Generator: WP-CLI 2.13.0-alpha\n"
 "X-Domain: owc-mijn-services\n"
 
 #. Plugin Name of the plugin
-#: owc-mijn-services.php
 msgid "OWC | Mijn Services"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: owc-mijn-services.php
 msgid "https://github.com/OpenWebconcept/plugin-owc-mijn-services"
 msgstr ""
 
 #. Description of the plugin
-#: owc-mijn-services.php
 msgid "Toon mijn zaken"
 msgstr ""
 
 #. Author of the plugin
-#: owc-mijn-services.php
 msgid "Yard | Digital Agency"
 msgstr ""
 
 #. Author URI of the plugin
-#: owc-mijn-services.php
 msgid "https://www.yard.nl"
 msgstr ""
 
-#: src/Blocks/Block.php:63
+#: src/Blocks/Block.php:76
 msgid "Je moet ingelogd zijn om deze informatie te kunnen zien."
 msgstr ""
 
-#: src/Blocks/Block.php:70
+#: src/Blocks/Block.php:83
 msgid "Configureer minimaal één filteroptie: 'Filter op BSN' of 'Filter op KVK'."
 msgstr ""
 
-#: src/Blocks/Block.php:80
+#: src/Blocks/Block.php:91
 msgid "De filterinstellingen van dit blok zijn niet compatibel met uw inlogmethode. Neem contact op met de beheerder van deze website."
 msgstr ""
 
-#: src/Blocks/Block.php:87
+#: src/Blocks/Block.php:98
 msgid "Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of ondersteunt zaken."
 msgstr ""
 
-#: src/Blocks/Block.php:94
+#: src/Blocks/Block.php:105
 #: src/Blocks/Zaak.php:48
 msgid "De gekozen zaaksysteem leverancier client is niet geconfigureerd."
 msgstr ""
 
-#: src/Blocks/Block.php:98
+#: src/Blocks/Block.php:109
 msgid "De gekozen zaaksysteem leverancier ondersteunt geen zaken."
 msgstr ""
 
@@ -105,40 +100,60 @@ msgstr ""
 msgid "Ophalen van het resultaat is mislukt"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:45
+#: src/Settings/OptionsPageRegistrar.php:56
 msgid "OWC Mijn Services"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:56
+#: src/Settings/OptionsPageRegistrar.php:71
 msgid "Logboekinstellingen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:57
+#: src/Settings/OptionsPageRegistrar.php:72
 msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:68
+#: src/Settings/OptionsPageRegistrar.php:84
 msgid "DOC- en DOCX-documenten uitsluiten"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:69
+#: src/Settings/OptionsPageRegistrar.php:85
 msgid "Schakel deze optie in om DOC- en DOCX-documenten niet op te halen bij het tonen van een zaak."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:80
+#: src/Settings/OptionsPageRegistrar.php:97
+msgid "Toegestane informatieobjecttypen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:98
+msgid "Voer de URL's in van de informatieobjecttypen die mogen worden gebruikt voor het ophalen van informatieobjecten bij een zaak. Laat dit veld leeg om alle informatieobjecten te tonen."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:106
+msgid "Informatieobjecttype toevoegen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:116
 msgid "Productiecontroles uitschakelen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:81
+#: src/Settings/OptionsPageRegistrar.php:117
 msgid "Schakel deze optie in om de verplichting van het gebruik van de blokattributen 'Filter op BSN' of 'Filter op KVK' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:92
+#: src/Settings/OptionsPageRegistrar.php:129
 msgid "Filtering op KVK uitschakelen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:93
+#: src/Settings/OptionsPageRegistrar.php:130
 msgid "Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning) niet ondersteunt. Gebruikers die via eHerkenning zijn ingelogd kunnen dan geen zaken ophalen."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:142
+msgid "Uitgebreide KVK-filtering inschakelen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:143
+msgid "Schakel deze optie in om bij het filteren op KVK (eHerkenning) ook te filteren op RSIN of vestigingsnummer, indien beschikbaar. Niet elke leverancier ondersteunt deze filterparameters."
 msgstr ""
 
 #: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:8
@@ -169,15 +184,15 @@ msgstr ""
 msgid "Voorwaarde om toegang te krijgen tot deze pagina"
 msgstr ""
 
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:27
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:26
 msgid "Redirect naar pagina"
 msgstr ""
 
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:31
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:30
 msgid "Selecteer een pagina"
 msgstr ""
 
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:42
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:39
 msgid "Pagina waarheen gebruikers worden gestuurd als ze niet de vereiste authenticatie hebben."
 msgstr ""
 
