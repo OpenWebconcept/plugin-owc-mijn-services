@@ -34,6 +34,7 @@ use OWC\ZGW\Entities\Zaakinformatieobject;
 use OWC\ZGW\Support\Collection;
 use OWC\ZGW\Support\ZaakIdEncoderDecoder;
 use OWC\My_Services\Services\LoggerService;
+use OWC\ZGW\Http\Response;
 
 use function OWC\ZGW\apiClientManager;
 
@@ -107,18 +108,7 @@ class InformatieObjectDownloadService
 		$allowed_informatieobjecttypen = (array) ContainerResolver::make()->get( 'display.allowed-informatieobjecttypen' );
 
 		if ( 0 < count( $allowed_informatieobjecttypen )) {
-			$informatieobject = $zaakinformatie_object->informatieobject;
-
-			if ( ! $informatieobject instanceof Enkelvoudiginformatieobject || ! in_array( $informatieobject->informatieobjecttype, $allowed_informatieobjecttypen, true )) {
-				LoggerService::log(
-					'error',
-					sprintf(
-						"OWC\My_Services: Download of informatieobject with identification '%s' for zaak '%s' blocked, informatieobjecttype is not allowed.",
-						$download_identification,
-						$identification
-					)
-				);
-
+			if ( ! $this->validate_information_object_to_configured_types( $allowed_informatieobjecttypen, $zaakinformatie_object, $download_identification, $identification )) {
 				return '';
 			}
 		}
@@ -131,31 +121,11 @@ class InformatieObjectDownloadService
 			return '';
 		}
 
-		$file_write_result = @file_put_contents( $download_identification, $response->getBody() );
-
-		// Check if the file was written unsuccessfully.
-		if (false === $file_write_result || ! is_int( $file_write_result ) || 0 >= $file_write_result) {
-			LoggerService::log(
-				'error',
-				sprintf(
-					'OWC\My_Services: %s',
-					'Informationobject download failed, could not write the file to disk.'
-				)
-			);
-
+		if ( ! $this->prepare_download( $download_identification, $response )) {
 			return '';
 		}
 
-		// Check if the file does not exist or is not readable.
-		if ( ! file_exists( $download_identification ) || ! is_readable( $download_identification )) {
-			LoggerService::log(
-				'error',
-				sprintf(
-					'OWC\My_Services: %s',
-					'Informationobject download failed, the file does not exist or is not readable.'
-				)
-			);
-
+		if ( ! $this->download_is_valid( $download_identification )) {
 			return '';
 		}
 
@@ -193,6 +163,9 @@ class InformatieObjectDownloadService
 	}
 
 	/**
+	 * Find the Zaakinformatieobject for the given Zaak and download identification.
+	 * Object is used to validate that the download request is for a document that belongs to one of the configured allowed informatieobjecttypen.
+	 *
 	 * @since NEXT
 	 */
 	protected function find_zaak_informatieobject( Zaak $zaak, string $download_identification ): ?Zaakinformatieobject
@@ -210,5 +183,77 @@ class InformatieObjectDownloadService
 				return $matches ? $zaakinformatie_object : null;
 			}
 		);
+	}
+
+	/**
+	 * Validate that the informatieobjecttype of the given Zaakinformatieobject is in the list of allowed informatieobjecttypen.
+	 *
+	 * @since NEXT
+	 */
+	private function validate_information_object_to_configured_types( array $allowed_informatieobjecttypen, Zaakinformatieobject $zaakinformatie_object, string $download_identification, string $identification ): bool
+	{
+		$informatieobject = $zaakinformatie_object->informatieobject;
+
+		if ( ! $informatieobject instanceof Enkelvoudiginformatieobject || ! in_array( $informatieobject->informatieobjecttype, $allowed_informatieobjecttypen, true )) {
+			LoggerService::log(
+				'error',
+				sprintf(
+					"OWC\My_Services: Download of informatieobject with identification '%s' for zaak '%s' blocked, informatieobjecttype is not allowed.",
+					$download_identification,
+					$identification
+				)
+			);
+
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Prepare the download by writing the response body to a file.
+	 *
+	 * @since NEXT
+	 */
+	private function prepare_download( string $download_identification, Response $response ): bool
+	{
+		$file_write_result = @file_put_contents( $download_identification, $response->getBody() );
+
+		// Check if the file was written unsuccessfully.
+		if (false === $file_write_result || ! is_int( $file_write_result ) || 0 >= $file_write_result) {
+			LoggerService::log(
+				'error',
+				sprintf(
+					'OWC\My_Services: %s',
+					'Informationobject download failed, could not write the file to disk.'
+				)
+			);
+
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if the file does not exist or is not readable.
+	 *
+	 * @since NEXT
+	 */
+	private function download_is_valid( string $download_identification ): bool
+	{
+		if ( ! file_exists( $download_identification ) || ! is_readable( $download_identification )) {
+			LoggerService::log(
+				'error',
+				sprintf(
+					'OWC\My_Services: %s',
+					'Informationobject download failed, the file does not exist or is not readable.'
+				)
+			);
+
+			return false;
+		}
+
+		return true;
 	}
 }
