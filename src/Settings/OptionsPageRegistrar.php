@@ -46,7 +46,7 @@ class OptionsPageRegistrar
 		 * setting. Filtering this to a different capability additionally exposes the settings
 		 * page (and only this one field on it) to any user with that capability.
 		 *
-		 * @since NEXT
+		 * @since 0.11.0
 		 */
 		$allowed_informatieobjecttypen_capability = apply_filters( 'owcms::settings/allowed_informatieobjecttypen_capability', 'manage_options' );
 

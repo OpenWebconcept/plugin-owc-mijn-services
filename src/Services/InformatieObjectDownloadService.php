@@ -167,7 +167,7 @@ class InformatieObjectDownloadService
 	 * Find the Zaakinformatieobject for the given Zaak and download identification.
 	 * Object is used to validate that the download request is for a document that belongs to one of the configured allowed informatieobjecttypen.
 	 *
-	 * @since NEXT
+	 * @since 0.11.0
 	 */
 	protected function find_zaak_informatieobject( Zaak $zaak, string $download_identification ): ?Zaakinformatieobject
 	{
@@ -189,7 +189,7 @@ class InformatieObjectDownloadService
 	/**
 	 * Validate that the informatieobjecttype of the given Zaakinformatieobject is in the list of allowed informatieobjecttypen.
 	 *
-	 * @since NEXT
+	 * @since 0.11.0
 	 */
 	private function validate_information_object_to_configured_types( array $allowed_informatieobjecttypen, Zaakinformatieobject $zaakinformatie_object, string $download_identification, string $identification ): bool
 	{
@@ -214,7 +214,7 @@ class InformatieObjectDownloadService
 	/**
 	 * Prepare the download by writing the response body to a file.
 	 *
-	 * @since NEXT
+	 * @since 0.11.0
 	 */
 	private function prepare_download( string $download_identification, Response $response ): bool
 	{
@@ -244,7 +244,7 @@ class InformatieObjectDownloadService
 	/**
 	 * Check if the file does not exist or is not readable.
 	 *
-	 * @since NEXT
+	 * @since 0.11.0
 	 */
 	private function download_is_valid( string $download_identification ): bool
 	{
