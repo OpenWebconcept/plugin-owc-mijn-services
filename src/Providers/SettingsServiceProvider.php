@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use OWC\My_Services\Controllers\InformatieobjecttypenCacheController;
 use OWC\My_Services\Settings\OptionsPageRegistrar;
 use OWC\ZGW\ApiClientManager;
 use OWC\ZGW\WordPress\ClientProvider;
@@ -41,6 +42,9 @@ class SettingsServiceProvider extends ServiceProvider
 		$manager->container()->get( ClientProvider::class )->register();
 
 		add_action( 'cmb2_admin_init', ( new OptionsPageRegistrar() )->addSettingsFields( ... ) );
+
+		add_action( 'admin_post_' . InformatieobjecttypenCacheController::ACTION, ( new InformatieobjecttypenCacheController() )->handle_clear_cache_request( ... ) );
+		add_action( 'admin_notices', ( new InformatieobjecttypenCacheController() )->render_cache_cleared_notice( ... ) );
 	}
 
 	/**
