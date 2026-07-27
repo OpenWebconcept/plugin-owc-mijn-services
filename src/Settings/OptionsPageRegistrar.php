@@ -19,7 +19,14 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use Exception;
+use OWC\My_Services\CMB2\SelectOptgroupType;
+use OWC\My_Services\Controllers\InformatieobjecttypenCacheController;
 use OWC\My_Services\Services\LoggerService;
+use OWC\My_Services\Settings\Adapters\InformatieobjecttypeAdapter;
+use OWC\My_Services\Traits\Supplier;
+
+use function OWC\ZGW\apiClientManager;
 
 /**
  * Options page registrar for settings.
@@ -28,6 +35,8 @@ use OWC\My_Services\Services\LoggerService;
  */
 class OptionsPageRegistrar
 {
+	use Supplier;
+
 	/**
 	 * Add settings fields.
 	 */
@@ -94,18 +103,25 @@ class OptionsPageRegistrar
 
 		$options->add_field(
 			array(
-				'name'       => __( 'Toegestane informatieobjecttypen', 'owc-mijn-services' ),
-				'desc'       => __( 'Voer de URL\'s in van de informatieobjecttypen die mogen worden gebruikt voor het ophalen van informatieobjecten bij een zaak. Laat dit veld leeg om alle informatieobjecten te tonen.', 'owc-mijn-services' ),
-				'id'         => 'owc-mijn-services-allowed-informatieobjecttypen',
-				'type'       => 'text_url',
-				'repeatable' => true,
-				'attributes' => array(
+				'name'         => __( 'Toegestane informatieobjecttypen', 'owc-mijn-services' ),
+				'desc'         => __( 'Selecteer de informatieobjecttypen die mogen worden gebruikt voor het ophalen van informatieobjecten bij een zaak. Laat dit veld leeg om alle informatieobjecten te tonen.', 'owc-mijn-services' ),
+				'id'           => 'owc-mijn-services-allowed-informatieobjecttypen',
+				'type'         => 'select',
+				'repeatable'   => true,
+				'render_class' => SelectOptgroupType::class,
+				'options_cb'   => function () {
+					return $this->get_informatieobjecttype_options();
+				},
+				'after'        => function () {
+					( new InformatieobjecttypenCacheController() )->render_clear_cache_button();
+				},
+				'attributes'   => array(
 					'style' => 'width: 100%;',
 				),
-				'text'       => array(
+				'text'         => array(
 					'add_row_text' => __( 'Informatieobjecttype toevoegen', 'owc-mijn-services' ),
 				),
-				'show_on_cb' => function () use ( $allowed_informatieobjecttypen_capability ) {
+				'show_on_cb'   => function () use ( $allowed_informatieobjecttypen_capability ) {
 					return current_user_can( 'manage_options' ) || current_user_can( $allowed_informatieobjecttypen_capability );
 				},
 			)
@@ -149,6 +165,44 @@ class OptionsPageRegistrar
 				'show_on_cb'      => $admin_only_show_on_cb,
 			)
 		);
+	}
+
+	/**
+	 * Builds the list of informatieobjecttypen of all configured suppliers, grouped per supplier,
+	 * to use as options for the SelectOptgroupType field.
+	 *
+	 * @return array<string, string|array<string, string>>
+	 * @since NEXT
+	 */
+	private function get_informatieobjecttype_options(): array
+	{
+		$options = array(
+			'' => __( 'Selecteer een informatieobjecttype', 'owc-mijn-services' ),
+		);
+
+		foreach ($this->get_configured_suppliers() as $supplier) {
+			try {
+				$client = apiClientManager()->getClient( $supplier['name'] );
+			} catch (Exception $e) {
+				LoggerService::log( 'error', $e->getMessage() );
+
+				continue;
+			}
+
+			if ( ! $client->supports( 'informatieobjecttypen' )) {
+				continue;
+			}
+
+			$types = ( new InformatieobjecttypeAdapter( $client, $supplier['name'] ) )->handle();
+
+			if (array() === $types) {
+				continue;
+			}
+
+			$options[ $supplier['name'] ] = $types;
+		}
+
+		return $options;
 	}
 
 	private function handle_unchecked_checkbox( mixed $value ): ?string

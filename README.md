@@ -45,6 +45,40 @@ Both `owc-my-services/zaak` and `owc-my-services/mijn-zaken` blocks use componen
 - The NLDS React components and CSS are automatically loaded when a block is placed on the page.  
 - The project should have NLDS design tokens available to ensure styling.  
 
+## Settings
+
+All settings are available under **Settings > OWC Mijn Services** in the WordPress admin. By
+default, only administrators can see or edit them.
+
+- **Logboekinstellingen** — Enables logging of system activity and error messages, useful for
+  troubleshooting. See [Logging](#logging) below for where the log files end up.
+- **DOC- en DOCX-documenten uitsluiten** — Excludes `.doc` and `.docx` documents when fetching a
+  zaak's documents.
+- **Toegestane informatieobjecttypen** — Restricts which informatieobjecttypen may be used when
+  fetching or downloading a zaak's documents. Leave the field empty to allow all types. See
+  [Toegestane informatieobjecttypen](#toegestane-informatieobjecttypen) below.
+- **Productiecontroles uitschakelen** — Disables the requirement to configure at least one of the
+  "Filter op BSN" or "Filter op KVK" block attributes. Production checks are enabled by default.
+- **Filtering op KVK uitschakelen** — Disables filtering by KVK number, for suppliers that don't
+  support it. Users logged in via eHerkenning won't be able to retrieve zaken while this is off, if
+  the block relies on KVK filtering.
+- **Uitgebreide KVK-filtering inschakelen** — Additionally filters by RSIN or vestigingsnummer when
+  filtering by KVK, if available. Not every supplier supports these extra filter parameters.
+
+### Toegestane informatieobjecttypen
+
+This field is a repeatable dropdown, grouped per configured ZGW supplier, listing that supplier's
+informatieobjecttypen. Selected values are matched against the `informatieobjecttype` URL of a
+zaak's documents.
+
+- The list is fetched from each supplier's `informatieobjecttypen` endpoint and cached for 24
+  hours, so opening the settings page doesn't have to wait on the ZGW API.
+- A WP-Cron job runs daily at 04:00 to refresh the cache before anyone needs it.
+- Use the **Informatieobjecttypen opnieuw ophalen** button below the field to clear the cache
+  manually, forcing a fresh fetch on next use.
+- See [Grant access to the "Toegestane informatieobjecttypen" setting for other roles](#grant-access-to-the-toegestane-informatieobjecttypen-setting-for-other-roles)
+  to expose this one field to users without the `manage_options` capability.
+
 ## Logging
 
 Enable logging to keep track of errors during communication with the ZGW supplier(s).

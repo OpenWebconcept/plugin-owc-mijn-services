@@ -25,6 +25,7 @@ use OWC\My_Services\Providers\BladeServiceProvider;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Providers\GatekeeperServiceProvider;
 use OWC\My_Services\Providers\SettingsServiceProvider;
+use OWC\My_Services\Providers\WPCronServiceProvider;
 use Psr\Container\ContainerInterface;
 
 require_once __DIR__ . '/helpers.php';
@@ -68,6 +69,7 @@ final class Bootstrap
 			BladeServiceProvider::class,
 			BlockServiceProvider::class,
 			GatekeeperServiceProvider::class,
+			WPCronServiceProvider::class,
 		);
 
 		foreach ($providers as &$provider) {
