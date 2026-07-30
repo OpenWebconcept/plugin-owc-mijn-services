@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.12.0
  */
 
 namespace OWC\My_Services\CMB2;
@@ -28,7 +28,7 @@ use CMB2_Type_Select;
  * an array is rendered as an <optgroup> (keyed by group label) containing its own `value => label` options.
  * Flat and grouped entries may be mixed.
  *
- * @since NEXT
+ * @since 0.12.0
  */
 class SelectOptgroupType extends CMB2_Type_Select
 {

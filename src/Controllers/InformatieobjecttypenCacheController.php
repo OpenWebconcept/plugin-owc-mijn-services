@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.12.0
  */
 
 namespace OWC\My_Services\Controllers;
@@ -25,7 +25,7 @@ use OWC\My_Services\Traits\Supplier;
 /**
  * Controller for manually clearing the cached informatieobjecttypen.
  *
- * @since NEXT
+ * @since 0.12.0
  */
 class InformatieobjecttypenCacheController
 {

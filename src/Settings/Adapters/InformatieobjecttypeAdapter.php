@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.12.0
  */
 
 namespace OWC\My_Services\Settings\Adapters;
@@ -30,7 +30,7 @@ use OWC\ZGW\Support\Collection;
 /**
  * Adapter for fetching informatieobjecttypen to use as select options.
  *
- * @since NEXT
+ * @since 0.12.0
  */
 class InformatieobjecttypeAdapter
 {
@@ -50,7 +50,7 @@ class InformatieobjecttypeAdapter
 	/**
 	 * Builds the transient key used to cache the informatieobjecttypen of a supplier.
 	 *
-	 * @since NEXT
+	 * @since 0.12.0
 	 */
 	public static function transient_key( string $supplier_name ): string
 	{

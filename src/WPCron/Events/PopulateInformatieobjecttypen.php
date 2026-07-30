@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.12.0
  */
 
 namespace OWC\My_Services\WPCron\Events;
@@ -32,7 +32,7 @@ use function OWC\ZGW\apiClientManager;
  * Runs early in the morning so the cache is warm before anyone opens the settings page,
  * meaning nobody has to wait for the informatieobjecttypen to be fetched from the API.
  *
- * @since NEXT
+ * @since 0.12.0
  */
 class PopulateInformatieobjecttypen
 {

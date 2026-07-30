@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.12.0] - 2026-07-30
+
+-   Added: replace manual informatieobjecttype URLs with a cached, supplier-grouped select field
+-   Added: supplier EnableU
+
 ## [v0.11.0] - 2026-07-23
 
 -   Added: filter information objects on type if setting is enabled

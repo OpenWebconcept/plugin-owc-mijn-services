@@ -172,7 +172,7 @@ class OptionsPageRegistrar
 	 * to use as options for the SelectOptgroupType field.
 	 *
 	 * @return array<string, string|array<string, string>>
-	 * @since NEXT
+	 * @since 0.12.0
 	 */
 	private function get_informatieobjecttype_options(): array
 	{

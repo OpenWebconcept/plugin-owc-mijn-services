@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.12.0
  */
 
 namespace OWC\My_Services\Providers;
@@ -26,7 +26,7 @@ use OWC\My_Services\WPCron\Events\PopulateInformatieobjecttypen;
 /**
  * Register WP-Cron service provider.
  *
- * @since NEXT
+ * @since 0.12.0
  */
 class WPCronServiceProvider extends ServiceProvider
 {
