@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.12.2] - 2026-07-30
+
+-   Chore: remove version attribute from composer.json
+
 ## [v0.12.1] - 2026-07-30
 
 -   Chore: update deps + fix CVE-2026-45293
