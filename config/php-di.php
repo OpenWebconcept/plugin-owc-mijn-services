@@ -51,10 +51,10 @@ return array(
 	'procura.api-client-settings'           => function ( Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'procura' ) );
 	},
-	'enable-u.enabled'                       => function ( Container $container ) {
+	'enable-u.enabled'                      => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.get-configured-client', array( 'enable-u' ) );
 	},
-	'enable-u.api-client-settings'           => function ( Container $container ) {
+	'enable-u.api-client-settings'          => function ( Container $container ) {
 		return $container->make( 'zgw.get-configured-client', array( 'enable-u' ) );
 	},
 

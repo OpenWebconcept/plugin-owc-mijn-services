@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.12.1] - 2026-07-30
+
+-   Chore: update deps + fix CVE-2026-45293
+
 ## [v0.12.0] - 2026-07-30
 
 -   Added: replace manual informatieobjecttype URLs with a cached, supplier-grouped select field
