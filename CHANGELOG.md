@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.12.3] - 2026-07-31
+
+-   Fix: match download identification against informatieobject url as fallback
+
 ## [v0.12.2] - 2026-07-30
 
 -   Chore: remove version attribute from composer.json
