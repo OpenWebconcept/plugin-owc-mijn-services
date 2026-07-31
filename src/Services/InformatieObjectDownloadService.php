@@ -181,6 +181,10 @@ class InformatieObjectDownloadService
 			function ( $key, Zaakinformatieobject $zaakinformatie_object ) use ( $download_identification ) {
 				$matches = basename( (string) $zaakinformatie_object?->url ) === $download_identification;
 
+				if ( ! $matches) {
+					$matches = basename( (string) $zaakinformatie_object?->informatieobject?->url ) === $download_identification;
+				}
+
 				return $matches ? $zaakinformatie_object : null;
 			}
 		);
