@@ -9,7 +9,7 @@
 	}
 
 	$appearance ??= '';
-	$title ??= '';
+	$title = ($title ?? '') ?: __('Zaakomschrijving ontbreekt', 'owc-mijn-services');
 	$subTitle ??= '';
 	$href ??= '';
 	$context ??= '';
