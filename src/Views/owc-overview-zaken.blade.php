@@ -8,7 +8,7 @@
 	    exit();
 	}
 
-	$tabs = [
+	$tabs = array_values(array_filter([
 	    [
 	        'label' => 'Lopende zaken',
 	        // Uses partials/nlds/denhaag/card to render each card.
@@ -18,7 +18,7 @@
 	        'label' => 'Afgeronde zaken',
 	        'cards' => $completed_zaken,
 	    ],
-	];
+	], fn (array $tab): bool => !empty($tab['cards'])));
 @endphp
 
 <div class="js-nlds-denhaag-tab-component" data-tabs='@json($tabs)'></div>
