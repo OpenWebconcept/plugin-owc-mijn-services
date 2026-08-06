@@ -19,6 +19,8 @@
 
 			if ($statusUpdate) {
 				$statusUpdate = date_i18n(get_option('date_format'), $statusUpdate->datumStatusGezet->getTimestamp());
+			} else {
+				continue; // Skip steps without a date.
 			}
 	    }
 
