@@ -5,6 +5,7 @@ import { useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
+	BaseControl,
 	CheckboxControl,
 	Notice,
 	Placeholder,
@@ -49,6 +50,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 	const {
 		zaakClient,
 		zaakClients,
+		zaaktypen,
 		byBSN,
 		byKVK,
 		showTabs,
@@ -70,6 +72,22 @@ const Edit = ( { attributes, setAttributes } ) => {
 		! byBSN &&
 		! ( byKVK && ! disableKVKFiltering );
 
+	const zaaktypeOptionsBySupplier = window?.owcMyServices?.zaaktypeOptions ?? {};
+	const suppliersWithZaaktypeOptions = zaakClients.filter(
+		( supplier ) => ( zaaktypeOptionsBySupplier[ supplier ] ?? [] ).length > 0
+	);
+
+	const toggleZaaktype = ( supplier, url, checked ) => {
+		const current = zaaktypen[ supplier ] ?? [];
+		const next = checked
+			? [ ...current, url ]
+			: current.filter( ( value ) => value !== url );
+
+		setAttributes( {
+			zaaktypen: { ...zaaktypen, [ supplier ]: next },
+		} );
+	};
+
 	// Migrate legacy single zaakClient string to zaakClients array.
 	useEffect( () => {
 		if ( zaakClient && zaakClients.length === 0 ) {
@@ -83,6 +101,40 @@ const Edit = ( { attributes, setAttributes } ) => {
 				? [ ...zaakClients, supplier ]
 				: zaakClients.filter( ( value ) => value !== supplier ),
 		} );
+
+	// Replace zaaktype selections pointing at a superseded zaaktype version with its current URL.
+	useEffect( () => {
+		const migrationsBySupplier =
+			window?.owcMyServices?.zaaktypeUrlMigrations ?? {};
+
+		if ( Object.keys( migrationsBySupplier ).length === 0 ) {
+			return;
+		}
+
+		let changed = false;
+		const next = {};
+
+		Object.keys( zaaktypen ).forEach( ( supplier ) => {
+			const migrations = migrationsBySupplier[ supplier ] ?? {};
+			const urls = zaaktypen[ supplier ] ?? [];
+
+			const migratedUrls = urls.map( ( url ) => {
+				if ( migrations[ url ] ) {
+					changed = true;
+
+					return migrations[ url ];
+				}
+
+				return url;
+			} );
+
+			next[ supplier ] = [ ...new Set( migratedUrls ) ];
+		} );
+
+		if ( changed ) {
+			setAttributes( { zaaktypen: next } );
+		}
+	}, [] );
 
 	return (
 		<>
@@ -139,6 +191,63 @@ const Edit = ( { attributes, setAttributes } ) => {
 						) }
 					</VStack>
 				</PanelBody>
+				{ zaakClients.length > 0 && (
+					<PanelBody
+						title={ __( 'Zaaktypen', 'owc-mijn-services' ) }
+						initialOpen={ false }
+					>
+						<VStack >
+							{ suppliersWithZaaktypeOptions.length === 0 ? (
+								<Notice status="info" isDismissible={ false }>
+									{ __(
+										'Zaaktypefiltering is uitgeschakeld voor de geselecteerde zaaksystemen. Schakel dit in bij Instellingen → OWC Mijn Services → \'Zaaktypefiltering ondersteunde leveranciers\' om hier zaaktypen te kunnen selecteren.',
+										'owc-mijn-services'
+									) }
+								</Notice>
+							) : (
+								<BaseControl
+									id="owc-my-services-zaaktypen-selection"
+									label={ __( 'Zaaktypen', 'owc-mijn-services' ) }
+									help={ __(
+										'Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen.',
+										'owc-mijn-services'
+									) }
+								>
+									{ suppliersWithZaaktypeOptions.map( ( supplier ) => {
+										const options =
+											zaaktypeOptionsBySupplier[ supplier ] ?? [];
+
+										return (
+											<PanelBody
+												key={ supplier }
+												title={ supplier }
+												initialOpen={ false }
+												className="owc-my-services-zaaktypen-supplier-panel"
+											>
+												{ options.map( ( option ) => (
+													<CheckboxControl
+														key={ option.value }
+														label={ option.label }
+														checked={ (
+															zaaktypen[ supplier ] ?? []
+														).includes( option.value ) }
+														onChange={ ( checked ) =>
+															toggleZaaktype(
+																supplier,
+																option.value,
+																checked
+															)
+														}
+													/>
+												) ) }
+											</PanelBody>
+										);
+									} ) }
+								</BaseControl>
+							) }
+						</VStack>
+					</PanelBody>
+				) }
 				<PanelBody
 					title={ __( 'Zichtbare zaken', 'owc-mijn-services' ) }
 					initialOpen={ true }

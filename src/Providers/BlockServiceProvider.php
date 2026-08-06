@@ -19,12 +19,16 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use DI\NotFoundException;
 use OWC\My_Services\Blocks\MijnZaken;
 use OWC\My_Services\Blocks\Zaak;
 use OWC\My_Services\ContainerResolver;
+use OWC\My_Services\Settings\Adapters\ZaaktypeAdapter;
 use WP_Block_Editor_Context;
 use WP_Block_Type;
 use OWC\My_Services\Traits\Supplier;
+
+use function OWC\ZGW\apiClientManager;
 
 /**
  * Register block service provider.
@@ -130,6 +134,10 @@ class BlockServiceProvider extends ServiceProvider
 						'type'    => 'array',
 						'default' => array(),
 					),
+					'zaaktypen'        => array(
+						'type'    => 'object',
+						'default' => array(),
+					),
 					'byBSN'            => array(
 						'type'    => 'boolean',
 						'default' => true,
@@ -163,6 +171,7 @@ class BlockServiceProvider extends ServiceProvider
 		}
 
 		$this->preprare_and_add_client_options( $block_type );
+		$this->add_zaaktype_options( $block_type );
 	}
 
 	/**
@@ -212,28 +221,15 @@ class BlockServiceProvider extends ServiceProvider
 			return;
 		}
 
-		$clients = $this->get_configured_suppliers();
-
-		$options = array(
-			array(
-				'value' => '',
-				'label' => 'Selecteer een leverancier',
-			),
+		$options = array_map(
+			function ( $client ) {
+				return array(
+					'value' => $client['name'],
+					'label' => $client['name'],
+				);
+			},
+			$this->get_configured_suppliers()
 		);
-
-		if (0 < count( $clients )) {
-			$prepared_client_options = array_map(
-				function ( $client ) {
-					return array(
-						'value' => $client['name'],
-						'label' => $client['name'],
-					);
-				},
-				$clients
-			);
-
-			$options = array_merge( $options, $prepared_client_options );
-		}
 
 		$production_checks_enabled = ! ContainerResolver::make()->get( 'display.disable-production-checks' );
 		$disable_kvk_filtering     = ContainerResolver::make()->get( 'display.disable-kvk-filtering' );
@@ -249,6 +245,81 @@ class BlockServiceProvider extends ServiceProvider
 		}
 
 		$this->zaak_client_options_inline_script_added = true;
+	}
+
+	/**
+	 * Localizes the zaaktypen of every configured supplier that supports them, grouped
+	 * per supplier, so the block editor can offer a per-supplier zaaktype filter.
+	 *
+	 * Skips suppliers not selected in the 'Zaaktypefiltering ondersteunde leveranciers' setting,
+	 * and localizes nothing at all when no supplier is selected there, so the block editor never
+	 * receives zaaktype options for a supplier it can't actually filter on.
+	 *
+	 * Only runs in wp-admin: the result is only ever read by the block editor, and the
+	 * underlying zaaktypen are already cached in a transient (kept warm by a daily cron),
+	 * so this stays cheap even though it runs on every editor screen load.
+	 *
+	 * @since NEXT
+	 */
+	private function add_zaaktype_options( WP_Block_Type $block_type ): void
+	{
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$filtering_suppliers = ContainerResolver::make()->get( 'display.zaaktype-filtering-suppliers' );
+
+		if (array() === $filtering_suppliers) {
+			return;
+		}
+
+		$grouped    = array();
+		$migrations = array();
+
+		foreach ($this->get_configured_suppliers() as $supplier) {
+			if ( ! in_array( $supplier['name'], $filtering_suppliers, true )) {
+				continue;
+			}
+
+			try {
+				$client = apiClientManager()->getClient( $supplier['name'] );
+			} catch (NotFoundException $e) {
+				continue;
+			}
+
+			if ( ! $client->supports( 'zaaktypen' )) {
+				continue;
+			}
+
+			$types = ( new ZaaktypeAdapter( $client, $supplier['name'] ) )->handle();
+
+			if (array() === $types) {
+				continue;
+			}
+
+			$grouped[ $supplier['name'] ] = array_map(
+				function ( $url, $label ) {
+					return array(
+						'value' => $url,
+						'label' => $label,
+					);
+				},
+				array_keys( $types ),
+				$types
+			);
+
+			$supplier_migrations = ZaaktypeAdapter::url_migrations( $supplier['name'] );
+
+			if (array() !== $supplier_migrations) {
+				$migrations[ $supplier['name'] ] = $supplier_migrations;
+			}
+		}
+
+		wp_add_inline_script(
+			$block_type->editor_script,
+			'window.owcMyServices = window.owcMyServices || {}; window.owcMyServices.zaaktypeOptions = ' . wp_json_encode( $grouped ) . '; window.owcMyServices.zaaktypeUrlMigrations = ' . wp_json_encode( $migrations ) . ';',
+			'before'
+		);
 	}
 
 	public function maybe_handle_information_object_download( string $template ): string
