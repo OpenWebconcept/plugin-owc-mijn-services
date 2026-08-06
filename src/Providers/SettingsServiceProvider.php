@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use OWC\My_Services\Controllers\InformatieobjecttypenCacheController;
+use OWC\My_Services\Controllers\ZaaktypenCacheController;
 use OWC\My_Services\Settings\OptionsPageRegistrar;
 use OWC\ZGW\ApiClientManager;
 use OWC\ZGW\WordPress\ClientProvider;
@@ -43,9 +44,15 @@ class SettingsServiceProvider extends ServiceProvider
 
 		add_action( 'cmb2_admin_init', ( new OptionsPageRegistrar() )->addSettingsFields( ... ) );
 
+		// Informatieobjecttypen cache actions.
 		add_action( 'admin_post_' . InformatieobjecttypenCacheController::ACTION, ( new InformatieobjecttypenCacheController() )->handle_clear_cache_request( ... ) );
 		add_action( 'admin_notices', ( new InformatieobjecttypenCacheController() )->render_cache_cleared_notice( ... ) );
 
+		// Zaaktypen cache actions.
+		add_action( 'admin_post_' . ZaaktypenCacheController::ACTION, ( new ZaaktypenCacheController() )->handle_refetch_request( ... ) );
+		add_action( 'admin_notices', ( new ZaaktypenCacheController() )->render_refetched_notice( ... ) );
+
+		// Enqueue scripts for the settings page.
 		add_action( 'admin_enqueue_scripts', $this->enqueue_scripts( ... ) );
 	}
 

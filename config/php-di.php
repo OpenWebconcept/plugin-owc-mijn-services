@@ -106,6 +106,17 @@ return array(
 
 		return ( new InformatieobjecttypeCatalog() )->group_by_supplier( $urls );
 	},
+	/**
+	 * Suppliers for which filtering zaken on zaaktype is supported. Zaaktype filtering is
+	 * disabled by default, so a supplier only has it applied once explicitly selected here.
+	 *
+	 * @return string[]
+	 */
+	'display.zaaktype-filtering-suppliers'   => function ( Container $container ) {
+		$value = $container->make( 'zgw.settings', array( 'owc-mijn-services-zaaktype-filtering-suppliers' ) );
+
+		return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
+	},
 	'display.disable-production-checks'      => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-production-checks' ) );
 	},

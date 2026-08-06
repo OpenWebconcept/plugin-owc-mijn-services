@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' )) {
 
 use OWC\My_Services\CMB2\SelectOptgroupType;
 use OWC\My_Services\Controllers\InformatieobjecttypenCacheController;
+use OWC\My_Services\Controllers\ZaaktypenCacheController;
 use OWC\My_Services\Services\LoggerService;
 use OWC\My_Services\Traits\Supplier;
 
@@ -116,6 +117,39 @@ class OptionsPageRegistrar
 
 		$options->add_field(
 			array(
+				'name'              => __( 'Zaaktypefiltering ondersteunde leveranciers', 'owc-mijn-services' ),
+				'desc'              => __( 'Selecteer de leveranciers waarvan de Zaken API filteren op zaaktype ondersteunt. Alleen voor geselecteerde leveranciers wordt gefilterd op de zaaktypen die in het \'Mijn zaken\'-blok zijn geselecteerd; voor niet geselecteerde leveranciers worden altijd alle zaken opgehaald.', 'owc-mijn-services' ),
+				'id'                => 'owc-mijn-services-zaaktype-filtering-suppliers',
+				'type'              => 'multicheck',
+				'select_all_button' => false,
+				'options_cb'        => function () {
+					return $this->get_supplier_options();
+				},
+				'sanitization_cb'   => function ( $value ) {
+					return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
+				},
+				'show_on_cb'        => $allowed_settings_show_on_cb,
+			)
+		);
+
+		$options->add_field(
+			array(
+				'name'       => '', // Left blank to avoid duplicating the label_cb heading below.
+				'desc'       => __( 'De zaaktypen die gebruikt worden voor de zaaktypefilter in het \'Mijn zaken\'-blok worden dagelijks automatisch ververst. Gebruik onderstaande knop om ze direct opnieuw op te halen.', 'owc-mijn-services' ),
+				'id'         => 'owc-mijn-services-zaaktypen-cache',
+				'type'       => 'title',
+				'label_cb'   => function () { // 'title' fields have no label_cb by default, so restore it to match other rows.
+					return sprintf( '<label>%s</label>', esc_html__( 'Zaaktypen', 'owc-mijn-services' ) );
+				},
+				'after'      => function () {
+					( new ZaaktypenCacheController() )->render_refetch_button();
+				},
+				'show_on_cb' => $allowed_settings_show_on_cb,
+			)
+		);
+
+		$options->add_field(
+			array(
 				'name'            => __( 'Productiecontroles uitschakelen', 'owc-mijn-services' ),
 				'desc'            => __( 'Schakel deze optie in om de verplichting van het gebruik van de blokattributen \'Filter op BSN\' of \'Filter op KVK\' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist.', 'owc-mijn-services' ),
 				'id'              => 'owc-mijn-services-disable-production-checks',
@@ -177,6 +211,24 @@ class OptionsPageRegistrar
 	private function get_informatieobjecttype_options(): array
 	{
 		return ( new InformatieobjecttypeCatalog() )->per_supplier();
+	}
+
+	/**
+	 * Builds the list of configured suppliers as a name => name map, to use as options for the
+	 * 'Zaaktypefiltering ondersteunde leveranciers' multicheck field.
+	 *
+	 * @return array<string, string>
+	 * @since NEXT
+	 */
+	private function get_supplier_options(): array
+	{
+		$options = array();
+
+		foreach ($this->get_configured_suppliers() as $supplier) {
+			$options[ $supplier['name'] ] = $supplier['name'];
+		}
+
+		return $options;
 	}
 
 	private function handle_unchecked_checkbox( mixed $value ): ?string
