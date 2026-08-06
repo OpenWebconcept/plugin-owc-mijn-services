@@ -54,8 +54,12 @@ class Zaak extends Block
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De opgevraagde zaak is niet gevonden.', 'owc-mijn-services' ) ) );
 		}
 
-		// Supplier is needed for generation of the correct permalinks in the views.
-		$zaak->setValue( 'supplier', $supplier );
+		if (0 === count( $this->clients )) {
+			// Supplier is needed for generation of the correct permalinks in the views.
+			// When multiple clients are configured, retrieve_zaak() already tagged the
+			// zaak with the supplier it was actually found under.
+			$zaak->setValue( 'supplier', $supplier );
+		}
 
 		return owc_mijn_services_render_view(
 			'owc-single-zaak',
@@ -88,11 +92,39 @@ class Zaak extends Block
 				throw new Exception( 'No valid authentication filter applied to zaken filter.' );
 			}
 
-			$zaak = $this->client->zaken()->filter( $this->zaken_filter )->first() ?: null;
+			if (0 === count( $this->clients )) {
+				$zaak = $this->client->zaken()->filter( $this->zaken_filter )->first() ?: null;
+			} else {
+				$zaak = $this->retrieve_zaak_by_multiple_clients( $identification );
+			}
 		} catch (Exception $e) {
 			LoggerService::log_exception( $e, array( 'context' => "Error retrieving zaak with identification '{$identification}'." ) );
 
 			$zaak = null;
+		}
+
+		return $zaak;
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function retrieve_zaak_by_multiple_clients( string $identification ): ?ZaakEntity
+	{
+		$zaak = null;
+
+		foreach ($this->clients as $supplier_name => $client) {
+			try {
+				$zaak = $client->zaken()->filter( clone $this->zaken_filter )->first() ?: null;
+
+				if (null !== $zaak) {
+					$zaak->setValue( 'supplier', $supplier_name );
+
+					break;
+				}
+			} catch (Exception $e) {
+				LoggerService::log_exception( $e, array( 'context' => "Error retrieving zaak with identification '{$identification}' from supplier '{$supplier_name}'." ) );
+			}
 		}
 
 		return $zaak;
