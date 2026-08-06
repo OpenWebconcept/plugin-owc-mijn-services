@@ -36,7 +36,7 @@ trait AuthenticationFilter
 	 * RSIN and vestigingsNummer are not supported by every supplier, so they are
 	 * only used when explicitly enabled via the 'display.enable-extended-kvk-filtering' setting.
 	 */
-	protected function add_kvk_filter( ZakenFilter $filter, string $rsin, string $vestigingsNummer, string $kvk ): bool
+	protected function add_kvk_filter( ZakenFilter $filter, string $rsin, string $vestigings_nummer, string $kvk ): bool
 	{
 		$extended_filtering_enabled = (bool) ContainerResolver::make()->get( 'display.enable-extended-kvk-filtering' );
 
@@ -46,8 +46,8 @@ trait AuthenticationFilter
 			return true;
 		}
 
-		if ($extended_filtering_enabled && '' !== $vestigingsNummer) {
-			$filter->add( 'rol__betrokkeneIdentificatie__vestiging__vestigingsNummer', $vestigingsNummer );
+		if ($extended_filtering_enabled && '' !== $vestigings_nummer) {
+			$filter->add( 'rol__betrokkeneIdentificatie__vestiging__vestigingsNummer', $vestigings_nummer );
 
 			return true;
 		}

@@ -45,7 +45,7 @@ abstract class Block
 	protected ZakenFilter $zaken_filter;
 	protected string $bsn;
 	protected string $kvk;
-	protected string $vestigingsNummer;
+	protected string $vestigings_nummer;
 	protected string $rsin;
 
 	public function __construct()
@@ -62,12 +62,12 @@ abstract class Block
 		}
 
 		try {
-			$eHerkenning = eHerkenning::make();
+			$e_herkenning = eHerkenning::make();
 
-			$this->bsn              = DigiD::make()->bsn();
-			$this->kvk              = $eHerkenning->kvk();
-			$this->vestigingsNummer = $eHerkenning->vestigingsNummer();
-			$this->rsin             = $eHerkenning->rsin();
+			$this->bsn               = DigiD::make()->bsn();
+			$this->kvk               = $e_herkenning->kvk();
+			$this->vestigings_nummer = $e_herkenning->vestigingsNummer();
+			$this->rsin              = $e_herkenning->rsin();
 
 			if ('' === $this->bsn && '' === $this->kvk) {
 				throw new Exception( 'No BSN or KVK found.' );
@@ -146,10 +146,10 @@ abstract class Block
 			$authentication_filter_applied = true;
 		}
 
-		$has_kvk_identification = '' !== $this->kvk || '' !== $this->vestigingsNummer || '' !== $this->rsin;
+		$has_kvk_identification = '' !== $this->kvk || '' !== $this->vestigings_nummer || '' !== $this->rsin;
 
 		if ($has_kvk_identification && isset( $attributes['byKVK'] ) && true === $attributes['byKVK'] && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
-			$authentication_filter_applied = $this->add_kvk_filter( $this->zaken_filter, $this->rsin, $this->vestigingsNummer, $this->kvk ) || $authentication_filter_applied;
+			$authentication_filter_applied = $this->add_kvk_filter( $this->zaken_filter, $this->rsin, $this->vestigings_nummer, $this->kvk ) || $authentication_filter_applied;
 		}
 
 		if ( ! $authentication_filter_applied) {
