@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use OWC\My_Services\ContainerResolver;
+
 /**
  * Supplier trait.
  *
@@ -58,5 +60,20 @@ trait Supplier
 		);
 
 		return array_values( $clients );
+	}
+
+	/**
+	 * Whether filtering zaken on zaaktype is supported for the given supplier. Governed by the
+	 * 'Zaaktypefiltering ondersteunde leveranciers' setting, since not every supplier's Zaken API
+	 * supports filtering on the zaaktype parameter. Disabled by default; a supplier must be
+	 * explicitly selected in the setting before zaaktype filtering is applied for it.
+	 *
+	 * @since NEXT
+	 */
+	public function supports_zaaktype_filtering( string $supplier_name ): bool
+	{
+		$supported = (array) ContainerResolver::make()->get( 'display.zaaktype-filtering-suppliers' );
+
+		return in_array( $supplier_name, $supported, true );
 	}
 }

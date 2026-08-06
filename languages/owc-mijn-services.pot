@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-22T07:11:01+00:00\n"
+"POT-Creation-Date: 2026-09-22T08:29:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-mijn-services\n"
@@ -39,40 +39,38 @@ msgstr ""
 msgid "https://www.yard.nl"
 msgstr ""
 
-#: src/Blocks/Block.php:76
+#: src/Blocks/Block.php:93
 msgid "Je moet ingelogd zijn om deze informatie te kunnen zien."
 msgstr ""
 
-#: src/Blocks/Block.php:83
+#: src/Blocks/Block.php:100
 msgid "Configureer minimaal één filteroptie: 'Filter op BSN' of 'Filter op KVK'."
 msgstr ""
 
-#: src/Blocks/Block.php:91
+#: src/Blocks/Block.php:108
 msgid "De filterinstellingen van dit blok zijn niet compatibel met uw inlogmethode. Neem contact op met de beheerder van deze website."
 msgstr ""
 
-#: src/Blocks/Block.php:98
+#: src/Blocks/Block.php:117
 msgid "Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of ondersteunt zaken."
 msgstr ""
 
-#: src/Blocks/Block.php:105
+#: src/Blocks/Block.php:125
 #: src/Blocks/Zaak.php:48
 msgid "De gekozen zaaksysteem leverancier client is niet geconfigureerd."
 msgstr ""
 
-#: src/Blocks/Block.php:109
+#: src/Blocks/Block.php:129
 msgid "De gekozen zaaksysteem leverancier ondersteunt geen zaken."
 msgstr ""
 
 #: src/Blocks/MijnZaken.php:24
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:268
+#: resources/blocks/mijn-zaken/edit.js:369
 msgid "Het persoonlijke zakenoverzicht"
 msgstr ""
 
 #: src/Blocks/MijnZaken.php:25
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:272
+#: resources/blocks/mijn-zaken/edit.js:373
 msgid "Toont een overzicht van de zaken voor de ingelogde gebruiker."
 msgstr ""
 
@@ -106,6 +104,7 @@ msgid "Informatieobjecttypen opnieuw ophalen"
 msgstr ""
 
 #: src/Controllers/InformatieobjecttypenCacheController.php:64
+#: src/Controllers/ZaaktypenCacheController.php:64
 msgid "Je hebt geen toestemming om deze actie uit te voeren."
 msgstr ""
 
@@ -117,71 +116,90 @@ msgstr ""
 msgid "Het informatieobject kon niet worden gedownload."
 msgstr ""
 
+#: src/Controllers/ZaaktypenCacheController.php:49
+msgid "Zaaktypen opnieuw ophalen"
+msgstr ""
+
+#: src/Controllers/ZaaktypenCacheController.php:86
+msgid "De zaaktypen zijn opnieuw opgehaald."
+msgstr ""
+
 #: src/Macros/ZgwApiMacros.php:221
 msgid "Ophalen van het resultaat is mislukt"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:52
+#: src/Settings/OptionsPageRegistrar.php:53
 msgid "OWC Mijn Services"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:71
+#: src/Settings/OptionsPageRegistrar.php:72
 msgid "Logboekinstellingen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:72
+#: src/Settings/OptionsPageRegistrar.php:73
 msgid "Schakel deze optie in om het loggen van systeemactiviteiten en foutmeldingen te activeren. Dit kan nuttig zijn voor het opsporen en oplossen van problemen binnen de plug-in."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:84
+#: src/Settings/OptionsPageRegistrar.php:85
 msgid "DOC- en DOCX-documenten uitsluiten"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:85
+#: src/Settings/OptionsPageRegistrar.php:86
 msgid "Schakel deze optie in om DOC- en DOCX-documenten niet op te halen bij het tonen van een zaak."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:97
+#: src/Settings/OptionsPageRegistrar.php:98
 msgid "Toegestane informatieobjecttypen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:98
+#: src/Settings/OptionsPageRegistrar.php:99
 msgid "Selecteer de informatieobjecttypen die mogen worden gebruikt voor het ophalen van informatieobjecten bij een zaak. Laat dit veld leeg om alle informatieobjecten te tonen."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:111
+#: src/Settings/OptionsPageRegistrar.php:112
 msgid "Zoek en selecteer informatieobjecttypen…"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:119
+#: src/Settings/OptionsPageRegistrar.php:121
+msgid "De zaaktypen die gebruikt worden voor de zaaktypefilter in het 'Mijn zaken'-blok worden dagelijks automatisch ververst. Gebruik onderstaande knop om ze direct opnieuw op te halen."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:125
+#: build/mijn-zaken/index.js:1
+#: resources/blocks/mijn-zaken/edit.js:193
+#: resources/blocks/mijn-zaken/edit.js:199
+msgid "Zaaktypen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:136
 msgid "Productiecontroles uitschakelen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:120
+#: src/Settings/OptionsPageRegistrar.php:137
 msgid "Schakel deze optie in om de verplichting van het gebruik van de blokattributen 'Filter op BSN' of 'Filter op KVK' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:132
+#: src/Settings/OptionsPageRegistrar.php:149
 msgid "Filtering op KVK uitschakelen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:133
+#: src/Settings/OptionsPageRegistrar.php:150
 msgid "Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning) niet ondersteunt. Gebruikers die via eHerkenning zijn ingelogd kunnen dan geen zaken ophalen."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:145
+#: src/Settings/OptionsPageRegistrar.php:162
 msgid "Statusstappen zonder datum verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:146
+#: src/Settings/OptionsPageRegistrar.php:163
 msgid "Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:158
+#: src/Settings/OptionsPageRegistrar.php:175
 msgid "Volgnummers verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:159
+#: src/Settings/OptionsPageRegistrar.php:176
 msgid "Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond."
 msgstr ""
 
@@ -283,140 +301,54 @@ msgid "Er is (momenteel) geen status beschikbaar."
 msgstr ""
 
 #: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:24
-msgid "Standaard volgorde"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:25
-msgid "Startdatum"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:26
-msgid "Einddatum"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:28
-msgid "Publicatiedatum"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:32
-msgid "Archiefactiedatum"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:36
-msgid "Registratiedatum"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:40
-msgid "Zaaknummer"
+#: build/zaak/index.js:1
+#: resources/blocks/zaak/edit.js:44
+msgid "Instellingen"
 msgstr ""
 
 #: build/mijn-zaken/index.js:1
 #: build/zaak/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:91
+#: resources/blocks/mijn-zaken/edit.js:140
 #: resources/blocks/zaak/edit.js:50
 msgid "Zaaksystemen"
 msgstr ""
 
 #: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:97
-msgid "Er zijn nog geen zaaksystemen geconfigureerd in de ZGW API-instellingen."
+msgid "Selecteer de zaaksystemen waaruit de zaken opgehaald moeten worden."
 msgstr ""
 
 #: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:105
-msgid "Uit welke zaaksystemen worden zaken opgehaald?"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:132
-msgid "Selecteer minimaal één zaaksysteem. Zonder selectie worden er geen zaken getoond."
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:143
-msgid "Zichtbare zaken"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:148
-msgid "Persoonlijke zaken (DigiD)"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:152
-msgid "Zaken gekoppeld aan het BSN van de ingelogde gebruiker."
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:164
-msgid "Zet \"Persoonlijke zaken\" aan, anders worden er geen zaken getoond."
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:168
-msgid "Zet minimaal één van beide opties aan, anders worden er geen zaken getoond."
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:176
-msgid "Zakelijke zaken (eHerkenning) zijn uitgeschakeld in de plugin-instellingen."
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:183
-msgid "Zakelijke zaken (eHerkenning)"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:187
-msgid "Zaken gekoppeld aan het KVK-nummer van de ingelogde gebruiker."
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:201
-msgid "Weergave"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:206
-msgid "Tabbladen tonen"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:216
-msgid "Aantal zaken"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:228
-msgid "Sorteren op"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:237
-msgid "Volgorde"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:241
-msgid "Nieuwste eerst"
-msgstr ""
-
-#: build/mijn-zaken/index.js:1
-#: resources/blocks/mijn-zaken/edit.js:248
-msgid "Oudste eerst"
-msgstr ""
-
 #: build/zaak/index.js:1
-#: resources/blocks/zaak/edit.js:44
-msgid "Instellingen"
+#: resources/blocks/zaak/edit.js:76
+msgid "Geen leveranciers geconfigureerd."
+msgstr ""
+
+#: build/mijn-zaken/index.js:1
+#: resources/blocks/mijn-zaken/edit.js:200
+msgid "Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen."
+msgstr ""
+
+#: build/mijn-zaken/index.js:1
+#: build/zaak/index.js:1
+#: resources/blocks/zaak/edit.js:85
+msgid "Schakel de filteroptie Filter op BSN in."
+msgstr ""
+
+#: build/mijn-zaken/index.js:1
+#: build/zaak/index.js:1
+#: resources/blocks/zaak/edit.js:86
+msgid "Selecteer minimaal één filteroptie: Filter op BSN of Filter op KVK."
+msgstr ""
+
+#: build/mijn-zaken/index.js:1
+#: build/zaak/index.js:1
+#: resources/blocks/zaak/edit.js:114
+msgid "Filteren op KVK is uitgeschakeld in de instellingen van de plugin."
+msgstr ""
+
+#: build/mijn-zaken/index.js:1
+#: resources/blocks/mijn-zaken/edit.js:317
+msgid "Aantal zaken"
 msgstr ""
 
 #: build/zaak/index.js:1
@@ -424,22 +356,98 @@ msgstr ""
 msgid "Selecteer de zaaksystemen waarvan zaken op deze pagina getoond kunnen worden."
 msgstr ""
 
-#: build/zaak/index.js:1
-#: resources/blocks/zaak/edit.js:76
-msgid "Geen leveranciers geconfigureerd."
+#: resources/blocks/mijn-zaken/edit.js:25
+msgid "Standaard volgorde"
 msgstr ""
 
-#: build/zaak/index.js:1
-#: resources/blocks/zaak/edit.js:85
-msgid "Schakel de filteroptie Filter op BSN in."
+#: resources/blocks/mijn-zaken/edit.js:26
+msgid "Startdatum"
 msgstr ""
 
-#: build/zaak/index.js:1
-#: resources/blocks/zaak/edit.js:86
-msgid "Selecteer minimaal één filteroptie: Filter op BSN of Filter op KVK."
+#: resources/blocks/mijn-zaken/edit.js:27
+msgid "Einddatum"
 msgstr ""
 
-#: build/zaak/index.js:1
-#: resources/blocks/zaak/edit.js:114
-msgid "Filteren op KVK is uitgeschakeld in de instellingen van de plugin."
+#: resources/blocks/mijn-zaken/edit.js:29
+msgid "Publicatiedatum"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:33
+msgid "Archiefactiedatum"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:37
+msgid "Registratiedatum"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:41
+msgid "Zaaknummer"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:146
+msgid "Er zijn nog geen zaaksystemen geconfigureerd in de ZGW API-instellingen."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:154
+msgid "Uit welke zaaksystemen worden zaken opgehaald?"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:181
+msgid "Selecteer minimaal één zaaksysteem. Zonder selectie worden er geen zaken getoond."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:244
+msgid "Zichtbare zaken"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:249
+msgid "Persoonlijke zaken (DigiD)"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:253
+msgid "Zaken gekoppeld aan het BSN van de ingelogde gebruiker."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:265
+msgid "Zet \"Persoonlijke zaken\" aan, anders worden er geen zaken getoond."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:269
+msgid "Zet minimaal één van beide opties aan, anders worden er geen zaken getoond."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:277
+msgid "Zakelijke zaken (eHerkenning) zijn uitgeschakeld in de plugin-instellingen."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:284
+msgid "Zakelijke zaken (eHerkenning)"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:288
+msgid "Zaken gekoppeld aan het KVK-nummer van de ingelogde gebruiker."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:302
+msgid "Weergave"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:307
+msgid "Tabbladen tonen"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:329
+msgid "Sorteren op"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:338
+msgid "Volgorde"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:342
+msgid "Nieuwste eerst"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:349
+msgid "Oudste eerst"
 msgstr ""

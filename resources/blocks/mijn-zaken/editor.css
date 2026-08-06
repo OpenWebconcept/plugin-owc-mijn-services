@@ -1,1 +1,7 @@
 /* Block styles */
+
+.owc-my-services-zaaktypen-supplier-panel.components-panel__body {
+	margin: 0 0 8px;
+	border: 1px solid #ddd;
+}
+
