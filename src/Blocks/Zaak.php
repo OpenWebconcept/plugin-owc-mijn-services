@@ -107,7 +107,7 @@ class Zaak extends Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.13.0
 	 */
 	protected function retrieve_zaak_by_multiple_clients( string $identification ): ?ZaakEntity
 	{

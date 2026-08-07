@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.13.0] - 2026-08-07
+
+-   Change: don't display tab button when Zaken are absent
+-   Change: show default when zaak title is absent
+-   Change: camelCase to snake_case
+-   Change: don't display status steps without a date
+-   Fix: multi-client inside block 'owc-my-services/zaak'
+
 ## [v0.12.3] - 2026-07-31
 
 -   Fix: match download identification against informatieobject url as fallback
