@@ -14,7 +14,10 @@
 	    $statusUpdate = null;
 
 	    if ($zaak->statussen->isNotEmpty()) {
-	        $statusUpdate = $zaak->statussen->filter(fn($status) => $status->statustype->url === $step->url)->first();
+	        $statusUpdate = $zaak->statussen
+	            ->filter(fn($status) => $status->getAttributeValue('statustype') === $step->url)
+	            ->first();
+
 			$statusUpdate = is_object($statusUpdate) && $statusUpdate->datumStatusGezet ? $statusUpdate : null;
 
 			if ($statusUpdate) {
