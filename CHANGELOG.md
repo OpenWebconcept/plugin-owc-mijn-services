@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.13.1] - 2026-08-11
+
+-   Perf: avoid extra API call by reading statustype url from raw attribute
+
 ## [v0.13.0] - 2026-08-07
 
 -   Change: don't display tab button when Zaken are absent
