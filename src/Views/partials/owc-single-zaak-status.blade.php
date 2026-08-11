@@ -9,15 +9,24 @@
 	}
 
 	$stepsData = [];
+	$hasZaakStatussen = $zaak->statussen->isNotEmpty();
+	$statussenByStatustype = [];
+
+	if ($hasZaakStatussen) {
+	    foreach ($zaak->statussen->all() as $status) {
+	        $statustype = $status->getAttributeValue('statustype');
+
+	        if (!isset($statussenByStatustype[$statustype])) {
+	            $statussenByStatustype[$statustype] = $status;
+	        }
+	    }
+	}
 
 	foreach ($steps as $step) {
 	    $statusUpdate = null;
 
-	    if ($zaak->statussen->isNotEmpty()) {
-	        $statusUpdate = $zaak->statussen
-	            ->filter(fn($status) => $status->getAttributeValue('statustype') === $step->url)
-	            ->first();
-
+	    if ($hasZaakStatussen) {
+	        $statusUpdate = $statussenByStatustype[$step->url] ?? null;
 			$statusUpdate = is_object($statusUpdate) && $statusUpdate->datumStatusGezet ? $statusUpdate : null;
 
 			if ($statusUpdate) {
