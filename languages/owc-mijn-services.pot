@@ -173,7 +173,15 @@ msgstr ""
 msgid "Schakel deze optie in om bij het filteren op KVK (eHerkenning) ook te filteren op RSIN of vestigingsnummer, indien beschikbaar. Niet elke leverancier ondersteunt deze filterparameters."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:179
+#: src/Settings/OptionsPageRegistrar.php:171
+msgid "Statusstappen zonder datum verbergen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:172
+msgid "Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:193
 msgid "Selecteer een informatieobjecttype"
 msgstr ""
 

@@ -8,6 +8,8 @@
 	    exit();
 	}
 
+	$hideStatusStepsWithoutDate ??= false;
+
 	$stepsData = [];
 	$hasZaakStatussen = $zaak->statussen->isNotEmpty();
 	$statussenByStatustype = [];
@@ -31,7 +33,7 @@
 
 			if ($statusUpdate) {
 				$statusUpdate = date_i18n(get_option('date_format'), $statusUpdate->datumStatusGezet->getTimestamp());
-			} else {
+			} elseif ($hideStatusStepsWithoutDate) {
 				continue; // Skip steps without a date.
 			}
 	    }
@@ -61,7 +63,7 @@
 
 <h2 class="nl-heading nl-heading--level-2">{{ __('Status', 'owc-mijn-services') }}</h2>
 
-@if (empty($steps) || $zaak?->status?->statustype?->omschrijving === 'Niet Beschikbaar')
+@if ($steps->isEmpty() || $zaak?->status?->statustype?->omschrijving === 'Niet Beschikbaar')
 	<p class="nl-paragraph">{{ __('Er is (momenteel) geen status beschikbaar.', 'owc-mijn-services') }}</p>
 @else
 	@include('partials.nlds.denhaag.status', ['steps' => $stepsData])

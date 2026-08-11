@@ -22,6 +22,7 @@
 	@include('partials.owc-single-zaak-status', [
 		'zaak' => $zaak,
 		'steps' => $steps,
+		'hideStatusStepsWithoutDate' => $hide_status_steps_without_date ?? false,
 	])
 
 	@include('partials.owc-single-zaak-result', [

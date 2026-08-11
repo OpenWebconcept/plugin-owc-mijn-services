@@ -64,9 +64,10 @@ class Zaak extends Block
 		return owc_mijn_services_render_view(
 			'owc-single-zaak',
 			array(
-				'zaak'                => $zaak,
-				'information_objects' => $this->get_zaak_informatie_objecten( $zaak ),
-				'steps'               => $zaak->steps,
+				'zaak'                           => $zaak,
+				'information_objects'            => $this->get_zaak_informatie_objecten( $zaak ),
+				'steps'                          => $zaak->steps,
+				'hide_status_steps_without_date' => ContainerResolver::make()->get( 'display.hide-status-steps-without-date' ),
 			)
 		);
 	}
