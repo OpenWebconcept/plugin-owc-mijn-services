@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.13.2] - 2026-08-12
+
+-   Added: hide status steps without date via setting
+-   Change: avoid rescanning statussen collection each iteration
+
 ## [v0.13.1] - 2026-08-11
 
 -   Perf: avoid extra API call by reading statustype url from raw attribute
