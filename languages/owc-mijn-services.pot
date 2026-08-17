@@ -181,7 +181,15 @@ msgstr ""
 msgid "Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:193
+#: src/Settings/OptionsPageRegistrar.php:184
+msgid "Volgnummers verbergen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:185
+msgid "Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:206
 msgid "Selecteer een informatieobjecttype"
 msgstr ""
 

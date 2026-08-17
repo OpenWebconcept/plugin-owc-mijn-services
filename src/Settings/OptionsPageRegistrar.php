@@ -178,6 +178,19 @@ class OptionsPageRegistrar
 				'show_on_cb'      => $admin_only_show_on_cb,
 			)
 		);
+
+		$options->add_field(
+			array(
+				'name'            => __( 'Volgnummers verbergen', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond.', 'owc-mijn-services' ),
+				'id'              => 'owc-mijn-services-hide-volgnummers',
+				'type'            => 'checkbox',
+				'sanitization_cb' => function ( $value ) {
+					return $this->handle_unchecked_checkbox( $value );
+				},
+				'show_on_cb'      => $admin_only_show_on_cb,
+			)
+		);
 	}
 
 	/**

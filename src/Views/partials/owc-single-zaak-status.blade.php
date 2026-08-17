@@ -9,6 +9,7 @@
 	}
 
 	$hideStatusStepsWithoutDate ??= false;
+	$hideVolgnummers ??= false;
 
 	$stepsData = [];
 	$hasZaakStatussen = $zaak->statussen->isNotEmpty();
@@ -54,7 +55,7 @@
 	        'title' => $step->getValue('omschrijving', ''),
 	        'status' => $status,
 	        'date' => $statusUpdate ?? null,
-	        'meta' => $step->isPast() || $step->isCurrent() ? 'Volgnummer: ' . $step->volgnummer : null,
+	        'meta' => !$hideVolgnummers && ($step->isPast() || $step->isCurrent()) ? 'Volgnummer: ' . $step->volgnummer : null,
 	    ];
 
 	    $stepsData[] = $stepItem;
