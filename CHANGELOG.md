@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.13.3] - 2026-08-17
+
+-   Added: hide 'volgnummers' on single page of a Zaak via setting
+
 ## [v0.13.2] - 2026-08-12
 
 -   Added: hide status steps without date via setting
