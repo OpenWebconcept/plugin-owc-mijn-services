@@ -67,6 +67,7 @@ class Zaak extends Block
 				'zaak'                           => $zaak,
 				'information_objects'            => $this->get_zaak_informatie_objecten( $zaak ),
 				'steps'                          => $zaak->steps,
+				'endDate'                        => $zaak->endDate(),
 				'hide_status_steps_without_date' => ContainerResolver::make()->get( 'display.hide-status-steps-without-date' ),
 				'hide_volgnummers'               => ContainerResolver::make()->get( 'display.hide-volgnummers' ),
 			)
