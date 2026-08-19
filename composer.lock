@@ -333,16 +333,16 @@
         },
         {
             "name": "owc/zgw-api",
-            "version": "2.6.1",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenWebconcept/owc-zgw-api.git",
-                "reference": "89190ee851e1485eb355a8ff9077ce6fcf9894eb"
+                "reference": "7c87b69d99fc966b7320235672df5e4c61f18c4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/89190ee851e1485eb355a8ff9077ce6fcf9894eb",
-                "reference": "89190ee851e1485eb355a8ff9077ce6fcf9894eb",
+                "url": "https://api.github.com/repos/OpenWebconcept/owc-zgw-api/zipball/7c87b69d99fc966b7320235672df5e4c61f18c4d",
+                "reference": "7c87b69d99fc966b7320235672df5e4c61f18c4d",
                 "shasum": ""
             },
             "require": {
@@ -407,10 +407,10 @@
             ],
             "description": "PHP implementation of the ZGW API, with an optional WordPress integration.",
             "support": {
-                "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/2.6.1",
+                "source": "https://github.com/OpenWebconcept/owc-zgw-api/tree/2.6.2",
                 "issues": "https://github.com/OpenWebconcept/owc-zgw-api/issues"
             },
-            "time": "2026-08-11T07:34:35+00:00"
+            "time": "2026-08-19T10:55:19+00:00"
         },
         {
             "name": "php-di/invoker",
