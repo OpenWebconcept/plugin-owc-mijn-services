@@ -1,5 +1,12 @@
 # Changelog
 
+## [v0.14.0] - 2026-08-19
+
+-   Chore: update owc/zgw-api package
+-   Change: swap order in kvk filter, 'vestigingsNummer' before 'RSIN'
+-   Fix: add missing endDate to single zaak view
+-   Fix: Zaak result macro
+
 ## [v0.13.3] - 2026-08-17
 
 -   Added: hide 'volgnummers' on single page of a Zaak via setting
