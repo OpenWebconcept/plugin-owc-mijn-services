@@ -30,8 +30,8 @@ use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 trait AuthenticationFilter
 {
 	/**
-	 * Applies exactly one KVK-based identification filter, preferring RSIN, then
-	 * vestigingsNummer, then the plain kvkNummer, so only one is ever active.
+	 * Applies exactly one KVK-based identification filter, preferring vestigingsNummer, then
+	 * RSIN, then the plain kvkNummer, so only one is ever active.
 	 *
 	 * RSIN and vestigingsNummer are not supported by every supplier, so they are
 	 * only used when explicitly enabled via the 'display.enable-extended-kvk-filtering' setting.
@@ -40,14 +40,14 @@ trait AuthenticationFilter
 	{
 		$extended_filtering_enabled = (bool) ContainerResolver::make()->get( 'display.enable-extended-kvk-filtering' );
 
-		if ($extended_filtering_enabled && '' !== $rsin) {
-			$filter->add( 'rol__betrokkeneIdentificatie__nietNatuurlijkPersoon__innNnpId', $rsin );
+		if ($extended_filtering_enabled && '' !== $vestigings_nummer) {
+			$filter->add( 'rol__betrokkeneIdentificatie__vestiging__vestigingsNummer', $vestigings_nummer );
 
 			return true;
 		}
 
-		if ($extended_filtering_enabled && '' !== $vestigings_nummer) {
-			$filter->add( 'rol__betrokkeneIdentificatie__vestiging__vestigingsNummer', $vestigings_nummer );
+		if ($extended_filtering_enabled && '' !== $rsin) {
+			$filter->add( 'rol__betrokkeneIdentificatie__nietNatuurlijkPersoon__innNnpId', $rsin );
 
 			return true;
 		}
