@@ -214,7 +214,7 @@ class ZgwApiMacros
 			'result',
 			function () {
 				try {
-					return $this->getValue( 'resultaat' )?->toelichting ?? '';
+					return $this->getValue( 'resultaat' )?->resultaattype?->getValue( 'toelichting' );
 				} catch (Exception $e) {
 					LoggerService::log_exception( $e, array( 'context' => "Unable to get 'Zaak resultaat'" ) );
 
