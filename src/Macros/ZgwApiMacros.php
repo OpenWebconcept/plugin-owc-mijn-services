@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' )) {
 
 use Exception;
 use DateTimeImmutable;
+use DateInterval;
 use OWC\My_Services\Services\LoggerService;
 use OWC\ZGW\Entities\Enkelvoudiginformatieobject;
 use OWC\ZGW\Entities\Statustype;
@@ -41,7 +42,7 @@ class ZgwApiMacros
 	{
 		Zaak::macro(
 			'permalink',
-			function () {
+			function (): string {
 				$identification = $this->getValue( 'identificatie', '' );
 
 				if ('' === $identification) {
@@ -60,7 +61,7 @@ class ZgwApiMacros
 
 		Zaak::macro(
 			'startDate',
-			function ( string $format = 'j F Y' ) {
+			function ( string $format = 'j F Y' ): string {
 				$startDate = $this->getValue( 'startdatum', null );
 
 				if ( ! $startDate instanceof DateTimeImmutable) {
@@ -73,7 +74,7 @@ class ZgwApiMacros
 
 		Zaak::macro(
 			'registerDate',
-			function ( string $format = 'j F Y' ) {
+			function ( string $format = 'j F Y' ): string {
 				$register_date = $this->getValue( 'registratiedatum', null );
 
 				if ( ! $register_date instanceof DateTimeImmutable) {
@@ -86,7 +87,7 @@ class ZgwApiMacros
 
 		Zaak::macro(
 			'endDate',
-			function ( string $format = 'j F Y' ) {
+			function ( string $format = 'j F Y' ): string {
 				$end_date = $this->getValue( 'einddatum', null );
 
 				if ( ! $end_date instanceof DateTimeImmutable) {
@@ -99,7 +100,7 @@ class ZgwApiMacros
 
 		Zaak::macro(
 			'endDatePlanned',
-			function ( string $format = 'j F Y' ) {
+			function ( string $format = 'j F Y' ): string {
 				$end_date_planned = $this->getValue( 'einddatumGepland', null );
 
 				if ( ! $end_date_planned instanceof DateTimeImmutable) {
@@ -112,9 +113,9 @@ class ZgwApiMacros
 
 		Enkelvoudiginformatieobject::macro(
 			'downloadUrl',
-			function ( string $zaak_identification, string $supplier ) {
+			function ( string $zaak_identification, string $supplier ): string {
 				if ($this->isClassified() || ! $this->hasFinalStatus()) {
-					// return ''; // Is disabled for testing purposes.
+					return '';
 				}
 				$identification = $this->identification();
 
@@ -128,7 +129,7 @@ class ZgwApiMacros
 
 		Enkelvoudiginformatieobject::macro(
 			'identification',
-			function () {
+			function (): string {
 				$url = $this->getValue( 'url', '' );
 
 				if ( ! is_string( $url ) || '' === $url) {
@@ -143,7 +144,7 @@ class ZgwApiMacros
 
 		Enkelvoudiginformatieobject::macro(
 			'sizeFormatted',
-			function () {
+			function (): string {
 				$size = $this->getValue( 'bestandsomvang', 0 );
 
 				return $size ? ( size_format( $size ) ?: '' ) : '';
@@ -152,7 +153,7 @@ class ZgwApiMacros
 
 		Enkelvoudiginformatieobject::macro(
 			'formatType',
-			function () {
+			function (): string {
 				$mime_type = $this->getValue( 'formaat', '' );
 
 				if ( ! is_string( $mime_type ) || 1 > strlen( $mime_type )) {
@@ -167,7 +168,7 @@ class ZgwApiMacros
 
 		Enkelvoudiginformatieobject::macro(
 			'creationDate',
-			function () {
+			function (): string {
 				$date = $this->getValue( 'creatiedatum', null );
 
 				if ( ! $date instanceof DateTimeImmutable) {
@@ -184,7 +185,7 @@ class ZgwApiMacros
 
 		Enkelvoudiginformatieobject::macro(
 			'formattedMetaData',
-			function () {
+			function (): string {
 				$meta = array_filter(
 					array(
 						$this->formatType(),
@@ -203,7 +204,7 @@ class ZgwApiMacros
 
 		Statustype::macro(
 			'volgnummer',
-			function () {
+			function (): string {
 				$volgnummer = (string) $this->getValue( 'volgnummer', '' );
 
 				return ltrim( $volgnummer, '0' );
@@ -212,13 +213,125 @@ class ZgwApiMacros
 
 		Zaak::macro(
 			'result',
-			function () {
+			function (): string {
 				try {
-					return $this->getValue( 'resultaat' )?->resultaattype?->getValue( 'toelichting' );
+					return $this->getValue( 'resultaat' )?->resultaattype?->getValue( 'toelichting', '' ) ?? '';
 				} catch (Exception $e) {
 					LoggerService::log_exception( $e, array( 'context' => "Unable to get 'Zaak resultaat'" ) );
 
 					return __( 'Ophalen van het resultaat is mislukt', 'owc-mijn-services' );
+				}
+			}
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		Zaak::macro(
+			'extensionReason',
+			function (): string {
+				try {
+					return $this->getValue( 'verlenging' )['reden'] ?? '';
+				} catch (Exception $e) {
+					LoggerService::log_exception( $e, array( 'context' => "Unable to get 'Zaak verlenging reden'" ) );
+
+					return '';
+				}
+			}
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		Zaak::macro(
+			'extensionDuration',
+			function (): string {
+				try {
+					return $this->getValue( 'verlenging' )['duur'] ?? '';
+				} catch (Exception $e) {
+					LoggerService::log_exception( $e, array( 'context' => "Unable to get 'Zaak verlenging duur'" ) );
+
+					return '';
+				}
+			}
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		Zaak::macro(
+			'extensionDurationFormatted',
+			function (): string {
+				try {
+					$period = $this->extensionDuration();
+
+					if ('' === $period) {
+						return '';
+					}
+
+					$interval = new DateInterval( $period );
+
+					$units = array(
+						'y' => array( 'jaar', 'jaren' ),
+						'm' => array( 'maand', 'maanden' ),
+						'd' => array( 'dag', 'dagen' ),
+						'h' => array( 'uur', 'uren' ),
+						'i' => array( 'minuut', 'minuten' ),
+					);
+
+					$parts = array();
+
+					foreach ( $units as $property => list( $singular, $plural ) ) {
+						$value = $interval->{$property};
+
+						if ( $value > 0 ) {
+							$parts[] = sprintf(
+								'%d %s',
+								$value,
+								1 === $value ? $singular : $plural
+							);
+						}
+					}
+
+					return implode( ', ', $parts );
+				} catch (Exception $e) {
+					LoggerService::log_exception( $e, array( 'context' => "Unable to get 'Zaak verlenging duur'" ) );
+
+					return '';
+				}
+			}
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		Zaak::macro(
+			'extensionFormatted',
+			function (): string {
+				$reason = $this->extensionReason();
+
+				if ('' === $reason) {
+					return '';
+				}
+
+				$duration = $this->extensionDurationFormatted();
+
+				return '' === $duration ? $reason : sprintf( '%s (%s)', $reason, $duration );
+			}
+		);
+
+		/**
+		 * @since NEXT
+		 */
+		Zaak::macro(
+			'suspensionReason',
+			function (): string {
+				try {
+					return $this->getValue( 'opschorting' )['reden'] ?? '';
+				} catch (Exception $e) {
+					LoggerService::log_exception( $e, array( 'context' => "Unable to get 'Zaak opschorting reden'" ) );
+
+					return '';
 				}
 			}
 		);
