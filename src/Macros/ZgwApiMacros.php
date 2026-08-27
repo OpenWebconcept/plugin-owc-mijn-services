@@ -86,11 +86,11 @@ class ZgwApiMacros
 
 		Zaak::macro(
 			'endDate',
-			function ( string $format = 'j F Y' ) {
+			function ( string $format = 'j F Y' ): ?string {
 				$end_date = $this->getValue( 'einddatum', null );
 
 				if ( ! $end_date instanceof DateTimeImmutable) {
-					return '';
+					return null;
 				}
 
 				return date_i18n( $format, $end_date->getTimestamp() );
