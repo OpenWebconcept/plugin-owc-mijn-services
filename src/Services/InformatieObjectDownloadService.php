@@ -155,7 +155,16 @@ class InformatieObjectDownloadService
 				throw new Exception( 'No valid authentication filter applied to zaken filter.' );
 			}
 
-			return $this->client->zaken()->filter( $filter )->first() ?: null;
+			$zaak = $this->client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $filter )->first() ?: null;
+
+			// The betrokkene filters above independently match against the zaak's rollen, so they
+			// don't guarantee it's the same role that is both the betrokkene and the initiator.
+			// Verify that in code instead, now that the rollen are available on the zaak.
+			if ($zaak instanceof Zaak && ! $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->kvk, $this->vestigings_nummer, $this->rsin )) {
+				return null;
+			}
+
+			return $zaak;
 		} catch (Exception $e) {
 			LoggerService::log_exception( $e, array( 'context' => "Error validating zaak with identification '{$identification}' for informatieobject download." ) );
 

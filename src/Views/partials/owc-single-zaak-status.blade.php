@@ -40,9 +40,9 @@
 	    }
 
 	    // Determine step status
-	    if ($step->isPast()) {
+	    if ($step->isPast() && $statusUpdate) {
 	        $status = 'checked';
-	    } elseif ($step->isCurrent()) {
+	    } elseif ($step->isCurrent() && $statusUpdate) {
 	        $status = 'checked';
 	    } elseif ($step->isNext()) {
 	        $status = 'current';
