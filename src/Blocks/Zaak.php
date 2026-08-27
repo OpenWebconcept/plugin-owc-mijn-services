@@ -108,9 +108,16 @@ class Zaak extends Block
 			}
 
 			if (0 === count( $this->clients )) {
-				$zaak = $this->client->zaken()->filter( $this->zaken_filter )->first() ?: null;
+				$zaak = $this->client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $this->zaken_filter )->first() ?: null;
 			} else {
 				$zaak = $this->retrieve_zaak_by_multiple_clients( $identification );
+			}
+
+			// The betrokkene filters above independently match against the zaak's rollen, so they
+			// don't guarantee it's the same role that is both the betrokkene and the initiator.
+			// Verify that in code instead, now that the rollen are available on the zaak.
+			if ($zaak instanceof ZaakEntity && ! $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->kvk, $this->vestigings_nummer, $this->rsin )) {
+				$zaak = null;
 			}
 		} catch (Exception $e) {
 			LoggerService::log_exception( $e, array( 'context' => "Error retrieving zaak with identification '{$identification}'." ) );
@@ -130,7 +137,7 @@ class Zaak extends Block
 
 		foreach ($this->clients as $supplier_name => $client) {
 			try {
-				$zaak = $client->zaken()->filter( clone $this->zaken_filter )->first() ?: null;
+				$zaak = $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( clone $this->zaken_filter )->first() ?: null;
 
 				if (null !== $zaak) {
 					$zaak->setValue( 'supplier', $supplier_name );
