@@ -11,6 +11,7 @@ use OWC\My_Services\Auth\eHerkenning;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Services\LoggerService;
+use OWC\My_Services\Settings\Adapters\ZaaktypeAdapter;
 use OWC\My_Services\Traits\AuthenticationFilter;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
@@ -47,6 +48,22 @@ abstract class Block
 	protected string $kvk;
 	protected string $vestigings_nummer;
 	protected string $rsin;
+
+	/**
+	 * Map of supplier name to the zaaktype URLs the block is filtered on for that supplier.
+	 * An empty list for a supplier means all zaaktypen are shown.
+	 *
+	 * @since NEXT
+	 * @var array<string, string[]>
+	 */
+	protected array $zaaktypen_by_supplier = array();
+
+	/**
+	 * Supplier name resolved for the legacy single `zaakClient` attribute.
+	 *
+	 * @since NEXT
+	 */
+	protected string $single_client_supplier_name = '';
 
 	public function __construct()
 	{
@@ -91,6 +108,8 @@ abstract class Block
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De filterinstellingen van dit blok zijn niet compatibel met uw inlogmethode. Neem contact op met de beheerder van deze website.', 'owc-mijn-services' ) ) );
 		}
 
+		$this->zaaktypen_by_supplier = $this->normalize_zaaktypen_attribute( $attributes['zaaktypen'] ?? array() );
+
 		if (is_array( $attributes['zaakClients'] ?? null ) && 0 < count( $attributes['zaakClients'] )) {
 			$this->setup_clients( $attributes['zaakClients'] );
 
@@ -99,8 +118,9 @@ abstract class Block
 			}
 		} else {
 			try {
-				$supplier     = is_string( $attributes['zaakClient'] ?? null ) && '' !== $attributes['zaakClient'] ? $attributes['zaakClient'] : (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER );
-				$this->client = apiClientManager()->getClient( $supplier );
+				$supplier                          = is_string( $attributes['zaakClient'] ?? null ) && '' !== $attributes['zaakClient'] ? $attributes['zaakClient'] : (string) get_query_var( BlockServiceProvider::QUERY_VAR_SUPPLIER );
+				$this->client                      = apiClientManager()->getClient( $supplier );
+				$this->single_client_supplier_name = $supplier;
 			} catch (NotFoundException $e) {
 				return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier client is niet geconfigureerd.', 'owc-mijn-services' ) ) );
 			}
@@ -111,6 +131,28 @@ abstract class Block
 		}
 
 		return $this->render_block( $attributes, $block_content, $block );
+	}
+
+	/**
+	 * Normalizes the `zaaktypen` block attribute (a supplier name => zaaktype URLs map)
+	 * into a strictly typed array, discarding anything that doesn't match the expected shape.
+	 *
+	 * @since NEXT
+	 *
+	 * @return array<string, string[]>
+	 */
+	private function normalize_zaaktypen_attribute( $zaaktypen ): array
+	{
+		if ( ! is_array( $zaaktypen )) {
+			return array();
+		}
+
+		return array_map(
+			function ( $urls ) {
+				return is_array( $urls ) ? array_values( array_filter( $urls, 'is_string' ) ) : array();
+			},
+			$zaaktypen
+		);
 	}
 
 	/**
@@ -187,7 +229,9 @@ abstract class Block
 			return Collection::collect( array() );
 		}
 
-		return $this->client->zaken()->filter( $this->zaken_filter );
+		$zaaktype_urls = $this->resolve_zaaktype_urls( $this->single_client_supplier_name, $this->zaaktypen_by_supplier[ $this->single_client_supplier_name ] ?? array() );
+
+		return Collection::collect( $this->fetch_zaken( $this->client, $zaaktype_urls ) );
 	}
 
 	/**
@@ -202,9 +246,9 @@ abstract class Block
 
 		foreach ($this->clients as $supplier_name => $client) {
 			try {
-				$zaken = $client->zaken()->filter( clone $this->zaken_filter );
+				$zaaktype_urls = $this->resolve_zaaktype_urls( $supplier_name, $this->zaaktypen_by_supplier[ $supplier_name ] ?? array() );
 
-				foreach ($zaken->all() as $zaak) {
+				foreach ($this->fetch_zaken( $client, $zaaktype_urls ) as $zaak) {
 					$zaak->setValue( 'supplier', $supplier_name );
 					$all_zaken[] = $zaak;
 				}
@@ -214,6 +258,66 @@ abstract class Block
 		}
 
 		return Collection::collect( $all_zaken );
+	}
+
+	/**
+	 * Fetches zaken for a single client. When zaaktype URLs are given, issues one filtered
+	 * request per zaaktype and merges the results, since the ZGW Zaken API filters on a
+	 * single zaaktype per request. Without zaaktype URLs, all zaaktypen are fetched.
+	 *
+	 * @since NEXT
+	 *
+	 * @param string[] $zaaktype_urls
+	 */
+	private function fetch_zaken( Client $client, array $zaaktype_urls ): array
+	{
+		if (array() === $zaaktype_urls) {
+			return (array) $client->zaken()->filter( clone $this->zaken_filter )->all();
+		}
+
+		$zaken = array();
+
+		foreach ($zaaktype_urls as $zaaktype_url) {
+			$filter = ( clone $this->zaken_filter )->add( 'zaaktype', $zaaktype_url );
+			$zaken  = array_merge( $zaken, (array) $client->zaken()->filter( $filter )->all() );
+		}
+
+		return $zaken;
+	}
+
+	/**
+	 * Resolves any zaaktype URL that has been superseded by a newer version to that version's
+	 * URL, so a block's saved zaaktype selection keeps matching zaken even when it was chosen
+	 * before the zaaktype was re-versioned in the ZTC. Falls back to the URL as-is when no
+	 * migration is known (e.g. the block hasn't triggered a zaaktypen fetch yet).
+	 *
+	 * @since NEXT
+	 *
+	 * @param string[] $urls
+	 * @return string[]
+	 */
+	private function resolve_zaaktype_urls( string $supplier_name, array $urls ): array
+	{
+		if (array() === $urls) {
+			return $urls;
+		}
+
+		$migrations = ZaaktypeAdapter::url_migrations( $supplier_name );
+
+		if (array() === $migrations) {
+			return $urls;
+		}
+
+		return array_values(
+			array_unique(
+				array_map(
+					function ( $url ) use ( $migrations ) {
+						return $migrations[ $url ] ?? $url;
+					},
+					$urls
+				)
+			)
+		);
 	}
 
 	/**

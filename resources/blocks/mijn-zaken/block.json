@@ -8,6 +8,7 @@
 	"attributes": {
 		"zaakClient": { "type": "string", "default": "" },
 		"zaakClients": { "type": "array", "default": [] },
+		"zaaktypen": { "type": "object", "default": {} },
 		"byBSN": { "type": "boolean", "default": true },
 		"byKVK": { "type": "boolean", "default": false },
 		"perPage": {
