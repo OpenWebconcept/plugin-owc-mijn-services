@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.15.0] - 2026-09-01
+
+-   Change: enabled settings by filtered capability
+-   Change: return type of Zaak macro endDate
+
 ## [v0.14.0] - 2026-08-19
 
 -   Chore: update owc/zgw-api package
