@@ -48,16 +48,7 @@ class OptionsPageRegistrar
 			return;
 		}
 
-		/**
-		 * Filters the capability required to manage the 'Toegestane informatieobjecttypen' setting.
-		 *
-		 * Defaults to 'manage_options', in which case only administrators can see or edit the
-		 * setting. Filtering this to a different capability additionally exposes the settings
-		 * page (and only this one field on it) to any user with that capability.
-		 *
-		 * @since 0.11.0
-		 */
-		$allowed_informatieobjecttypen_capability = apply_filters( 'owcms::settings/allowed_informatieobjecttypen_capability', 'manage_options' );
+		$allowed_settings_capability = self::get_allowed_settings_capability();
 
 		$options = new_cmb2_box(
 			array(
@@ -67,12 +58,16 @@ class OptionsPageRegistrar
 
 				'option_key'   => 'owc_mijn_services_settings',
 				'parent_slug'  => 'options-general.php',
-				'capability'   => $allowed_informatieobjecttypen_capability,
+				'capability'   => $allowed_settings_capability,
 			)
 		);
 
 		$admin_only_show_on_cb = function () {
 			return current_user_can( 'manage_options' );
+		};
+
+		$allowed_settings_show_on_cb = function () use ( $allowed_settings_capability ) {
+			return current_user_can( 'manage_options' ) || current_user_can( $allowed_settings_capability );
 		};
 
 		$options->add_field(
@@ -121,9 +116,7 @@ class OptionsPageRegistrar
 				'text'         => array(
 					'add_row_text' => __( 'Informatieobjecttype toevoegen', 'owc-mijn-services' ),
 				),
-				'show_on_cb'   => function () use ( $allowed_informatieobjecttypen_capability ) {
-					return current_user_can( 'manage_options' ) || current_user_can( $allowed_informatieobjecttypen_capability );
-				},
+				'show_on_cb'   => $allowed_settings_show_on_cb,
 			)
 		);
 
@@ -175,7 +168,7 @@ class OptionsPageRegistrar
 				'sanitization_cb' => function ( $value ) {
 					return $this->handle_unchecked_checkbox( $value );
 				},
-				'show_on_cb'      => $admin_only_show_on_cb,
+				'show_on_cb'      => $allowed_settings_show_on_cb,
 			)
 		);
 
@@ -188,7 +181,7 @@ class OptionsPageRegistrar
 				'sanitization_cb' => function ( $value ) {
 					return $this->handle_unchecked_checkbox( $value );
 				},
-				'show_on_cb'      => $admin_only_show_on_cb,
+				'show_on_cb'      => $allowed_settings_show_on_cb,
 			)
 		);
 	}
@@ -238,5 +231,42 @@ class OptionsPageRegistrar
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Resolves the capability required to manage the non-administrator-only settings.
+	 *
+	 * @since 0.15.0
+	 */
+	public static function get_allowed_settings_capability(): string
+	{
+		/**
+		 * Filters the capability required to manage the non-administrator-only settings.
+		 *
+		 * Defaults to 'manage_options', in which case only administrators can see or edit these
+		 * settings. Filtering this to a different capability additionally exposes the settings
+		 * page (and only these fields on it) to any user with that capability.
+		 *
+		 * @since 0.15.0
+		 */
+		$capability = apply_filters( 'owcms::settings/allowed_settings_capability', 'manage_options' );
+
+		if ( has_filter( 'owcms::settings/allowed_informatieobjecttypen_capability' ) ) {
+			/**
+			 * Deprecated: use the `owcms::settings/allowed_settings_capability` filter instead,
+			 * which now also governs the 'Statusstappen zonder datum verbergen' and
+			 * 'Volgnummers verbergen' settings.
+			 *
+			 * @deprecated 0.15.0 Use `owcms::settings/allowed_settings_capability` instead.
+			 */
+			$capability = apply_filters_deprecated(
+				'owcms::settings/allowed_informatieobjecttypen_capability',
+				array( $capability ),
+				'0.15.0',
+				'owcms::settings/allowed_settings_capability'
+			);
+		}
+
+		return $capability;
 	}
 }

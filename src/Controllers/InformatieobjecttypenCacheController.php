@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use OWC\My_Services\Settings\Adapters\InformatieobjecttypeAdapter;
+use OWC\My_Services\Settings\OptionsPageRegistrar;
 use OWC\My_Services\Traits\Supplier;
 
 /**
@@ -57,7 +58,7 @@ class InformatieobjecttypenCacheController
 	 */
 	public function handle_clear_cache_request(): void
 	{
-		$capability = apply_filters( 'owcms::settings/allowed_informatieobjecttypen_capability', 'manage_options' );
+		$capability = OptionsPageRegistrar::get_allowed_settings_capability();
 
 		if ( ! current_user_can( 'manage_options' ) && ! current_user_can( $capability )) {
 			wp_die( esc_html__( 'Je hebt geen toestemming om deze actie uit te voeren.', 'owc-mijn-services' ) );
