@@ -5,43 +5,70 @@ import { useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
-	Disabled,
-	BaseControl,
 	CheckboxControl,
 	Notice,
+	Placeholder,
 	RangeControl,
 	SelectControl,
+	ToggleControl,
+	__experimentalVStack as VStack,
 } from '@wordpress/components';
-import ServerSideRender from '@wordpress/server-side-render';
 import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
  */
-import metadata from './block.json';
 import './editor.css';
 
-export default function Edit( { attributes, setAttributes } ) {
+const ORDER_BY_OPTIONS = [
+	{ label: __( 'Standaard volgorde', 'owc-mijn-services' ), value: '' },
+	{ label: __( 'Startdatum', 'owc-mijn-services' ), value: 'startdatum' },
+	{ label: __( 'Einddatum', 'owc-mijn-services' ), value: 'einddatum' },
+	{
+		label: __( 'Publicatiedatum', 'owc-mijn-services' ),
+		value: 'publicatiedatum',
+	},
+	{
+		label: __( 'Archiefactiedatum', 'owc-mijn-services' ),
+		value: 'archiefactiedatum',
+	},
+	{
+		label: __( 'Registratiedatum', 'owc-mijn-services' ),
+		value: 'registratiedatum',
+	},
+	{
+		label: __( 'Zaaknummer', 'owc-mijn-services' ),
+		value: 'identificatie',
+	},
+];
+
+const MIN_PER_PAGE = 1;
+const MAX_PER_PAGE = 25;
+
+const Edit = ( { attributes, setAttributes } ) => {
 	const {
 		zaakClient,
 		zaakClients,
 		byBSN,
 		byKVK,
+		showTabs,
 		perPage,
 		orderBy,
 		orderByDirection,
 	} = attributes;
 
-	const min = 1;
-	const max = 25;
-
 	const suppliers = ( window?.owcMyServices?.zaakClientOptions ?? [] ).filter(
 		( opt ) => opt.value !== ''
 	);
 
-	const productionChecksEnabled = window?.owcMyServices?.productionChecksEnabled ?? true;
-	const bsnKvkMissing = productionChecksEnabled && ! byBSN && ! ( byKVK && ! disableKVKFiltering );
-	const disableKVKFiltering = window?.owcMyServices?.disableKVKFiltering ?? false;
+	const productionChecksEnabled =
+		window?.owcMyServices?.productionChecksEnabled ?? true;
+	const disableKVKFiltering =
+		window?.owcMyServices?.disableKVKFiltering ?? false;
+	const bsnKvkMissing =
+		productionChecksEnabled &&
+		! byBSN &&
+		! ( byKVK && ! disableKVKFiltering );
 
 	// Migrate legacy single zaakClient string to zaakClients array.
 	useEffect( () => {
@@ -50,159 +77,206 @@ export default function Edit( { attributes, setAttributes } ) {
 		}
 	}, [] );
 
+	const toggleSupplier = ( supplier, checked ) =>
+		setAttributes( {
+			zaakClients: checked
+				? [ ...zaakClients, supplier ]
+				: zaakClients.filter( ( value ) => value !== supplier ),
+		} );
+
 	return (
 		<>
 			<InspectorControls>
 				<PanelBody
-					title={ __( 'Instellingen', 'owc-mijn-services' ) }
+					title={ __( 'Zaaksystemen', 'owc-mijn-services' ) }
 					initialOpen={ true }
 				>
-					{ suppliers.length > 0 ? (
-						<BaseControl
-							id="owc-my-services-zaak-clients-checkbox-selection"
-							label={ __( 'Zaaksystemen', 'owc-mijn-services' ) }
-							help={ __(
-								'Selecteer de zaaksystemen waaruit de zaken opgehaald moeten worden.',
-								'owc-mijn-services'
-							) }
-						>
-							{ suppliers.map( ( supplier ) => (
-								<CheckboxControl
-									key={ supplier.value }
-									label={ supplier.label }
-									checked={ zaakClients.includes(
-										supplier.value
+					<VStack >
+						{ suppliers.length === 0 ? (
+							<Notice status="warning" isDismissible={ false }>
+								{ __(
+									'Er zijn nog geen zaaksystemen geconfigureerd in de ZGW API-instellingen.',
+									'owc-mijn-services'
+								) }
+							</Notice>
+						) : (
+							<>
+								<p>
+									{ __(
+										'Uit welke zaaksystemen worden zaken opgehaald?',
+										'owc-mijn-services'
 									) }
-									onChange={ ( checked ) => {
-										const next = checked
-											? [ ...zaakClients, supplier.value ]
-											: zaakClients.filter(
-													( v ) =>
-														v !== supplier.value
-											  );
-										setAttributes( { zaakClients: next } );
-									} }
-								/>
-							) ) }
-						</BaseControl>
-					) : (
-						<p>
-							{ __(
-								'Geen leveranciers geconfigureerd.',
+								</p>
+								<VStack spacing={ 2 }>
+									{ suppliers.map( ( supplier ) => (
+										<CheckboxControl
+											key={ supplier.value }
+											label={ supplier.label }
+											checked={ zaakClients.includes(
+												supplier.value
+											) }
+											onChange={ ( checked ) =>
+												toggleSupplier(
+													supplier.value,
+													checked
+												)
+											}
+										/>
+									) ) }
+								</VStack>
+								{ zaakClients.length === 0 && (
+									<Notice
+										status="warning"
+										isDismissible={ false }
+									>
+										{ __(
+											'Selecteer minimaal één zaaksysteem. Zonder selectie worden er geen zaken getoond.',
+											'owc-mijn-services'
+										) }
+									</Notice>
+								) }
+							</>
+						) }
+					</VStack>
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Zichtbare zaken', 'owc-mijn-services' ) }
+					initialOpen={ true }
+				>
+					<VStack >
+						<ToggleControl
+							label={ __(
+								'Persoonlijke zaken (DigiD)',
 								'owc-mijn-services'
 							) }
-						</p>
-					) }
-					{ bsnKvkMissing && (
-						<Notice status="warning" isDismissible={ false }>
-							{ disableKVKFiltering
-								? __( 'Schakel de filteroptie Filter op BSN in.', 'owc-mijn-services' )
-								: __( 'Selecteer minimaal één filteroptie: Filter op BSN of Filter op KVK.', 'owc-mijn-services' )
-							}
-						</Notice>
-					) }
-					<CheckboxControl
-						label="Filter op BSN"
-						help="Filter zaken die aangemaakt zijn door de ingelogde gebruiker op basis van het BSN nummer."
-						checked={ byBSN }
-						onChange={ ( byBSN ) =>
-							setAttributes( {
-								byBSN,
-							} )
-						}
-					/>
-					{ ! disableKVKFiltering && (
-						<CheckboxControl
-							label="Filter op KVK"
-							help="Filter zaken die aangemaakt zijn door de ingelogde gebruiker op basis van het KVK nummer."
-							checked={ byKVK }
-							onChange={ ( byKVK ) =>
-								setAttributes( {
-									byKVK,
-								} )
+							help={ __(
+								'Zaken gekoppeld aan het BSN van de ingelogde gebruiker.',
+								'owc-mijn-services'
+							) }
+							checked={ byBSN }
+							onChange={ ( value ) =>
+								setAttributes( { byBSN: value } )
 							}
 						/>
-					) }
-					{ disableKVKFiltering && (
-						<Notice status="warning" isDismissible={ false }>
-							{ __(
-								'Filteren op KVK is uitgeschakeld in de instellingen van de plugin.',
+						{ bsnKvkMissing && (
+							<Notice status="warning" isDismissible={ false }>
+								{ disableKVKFiltering
+									? __(
+											'Zet "Persoonlijke zaken" aan, anders worden er geen zaken getoond.',
+											'owc-mijn-services'
+									  )
+									: __(
+											'Zet minimaal één van beide opties aan, anders worden er geen zaken getoond.',
+											'owc-mijn-services'
+									  ) }
+							</Notice>
+						) }
+						{ disableKVKFiltering ? (
+							<Notice status="info" isDismissible={ false }>
+								{ __(
+									'Zakelijke zaken (eHerkenning) zijn uitgeschakeld in de plugin-instellingen.',
+									'owc-mijn-services'
+								) }
+							</Notice>
+						) : (
+							<ToggleControl
+								label={ __(
+									'Zakelijke zaken (eHerkenning)',
+									'owc-mijn-services'
+								) }
+								help={ __(
+									'Zaken gekoppeld aan het KVK-nummer van de ingelogde gebruiker.',
+									'owc-mijn-services'
+								) }
+								checked={ byKVK }
+								onChange={ ( value ) =>
+									setAttributes( { byKVK: value } )
+								}
+							/>
+						) }
+
+					</VStack>
+				</PanelBody>
+				<PanelBody
+					title={ __( 'Weergave', 'owc-mijn-services' ) }
+					initialOpen={ true }
+				>
+					<VStack >
+						<ToggleControl
+							label={ __(
+								'Tabbladen tonen',
 								'owc-mijn-services'
 							) }
-						</Notice>
-					) }
-					<RangeControl
-						label={ __( 'Aantal zaken', 'owc-mijn-services' ) }
-						value={ perPage }
-						min={ min }
-						max={ max }
-						onChange={ ( value ) =>
-							setAttributes( { perPage: value } )
-						}
-					/>
-					<SelectControl
-						label="Sorteer op"
-						value={ orderBy }
-						options={ [
-							{
-								label: 'Selecteer een optie',
-								value: '',
-							},
-							{
-								label: 'Startdatum',
-								value: 'startdatum',
-							},
-							{ 	label: 'Einddatum',
-								value: 'einddatum',
-							},
-							{
-								label: 'Publicatiedatum',
-								value: 'publicatiedatum',
-							},
-							{
-								label: 'Archiefactiedatum',
-								value: 'archiefactiedatum',
-							},
-							{
-								label: 'Registratiedatum',
-								value: 'registratiedatum',
-							},
-							{
-								label: 'Identificatie',
-								value: 'identificatie',
-							},
-						] }
-						onChange={ ( neworderBy ) =>
-							setAttributes( {
-								orderBy: neworderBy,
-							} )
-						}
-					/>
-					{ orderBy && '' !== orderBy && (
+							checked={ showTabs }
+							onChange={ ( value ) =>
+								setAttributes( { showTabs: value } )
+							}
+						/>
+						<RangeControl
+							label={ __(
+								'Aantal zaken',
+								'owc-mijn-services'
+							) }
+							value={ perPage }
+							min={ MIN_PER_PAGE }
+							max={ MAX_PER_PAGE }
+							onChange={ ( value ) =>
+								setAttributes( { perPage: value } )
+							}
+						/>
 						<SelectControl
-							label="Sorteer volgorde"
-							value={ orderByDirection }
-							options={ [
-								{ label: 'Oplopend', value: '+' },
-								{ label: 'Aflopend', value: '-' },
-							] }
-							onChange={ ( neworderByDirection ) =>
-								setAttributes( {
-									orderByDirection: neworderByDirection,
-								} )
+							label={ __( 'Sorteren op', 'owc-mijn-services' ) }
+							value={ orderBy }
+							options={ ORDER_BY_OPTIONS }
+							onChange={ ( value ) =>
+								setAttributes( { orderBy: value } )
 							}
 						/>
-					) }
+						{ orderBy && (
+							<SelectControl
+								label={ __( 'Volgorde', 'owc-mijn-services' ) }
+								value={ orderByDirection }
+								options={ [
+									{
+										label: __(
+											'Nieuwste eerst',
+											'owc-mijn-services'
+										),
+										value: '-',
+									},
+									{
+										label: __(
+											'Oudste eerst',
+											'owc-mijn-services'
+										),
+										value: '+',
+									},
+								] }
+								onChange={ ( value ) =>
+									setAttributes( {
+										orderByDirection: value,
+									} )
+								}
+							/>
+						) }
+					</VStack>
 				</PanelBody>
 			</InspectorControls>
 			<div { ...useBlockProps() }>
-				<Disabled>
-					<ServerSideRender
-						block={ metadata.name }
-						attributes={ attributes }
-					/>
-				</Disabled>
+				<Placeholder
+					icon="list-view"
+					label={ __(
+						'Het persoonlijke zakenoverzicht',
+						'owc-mijn-services'
+					) }
+					instructions={ __(
+						'Toont een overzicht van de zaken voor de ingelogde gebruiker.',
+						'owc-mijn-services'
+					) }
+				/>
 			</div>
 		</>
 	);
-}
+};
+
+export default Edit;

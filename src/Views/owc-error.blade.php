@@ -13,8 +13,8 @@
 @endphp
 
 @if (isset($message))
-	<div class="owc-error">
-		<h2>{{ $header_text }}</h2>
-		<p>{{ $message }}</p>
+	<div class="owc-mijn-services owc-error">
+		<h2 class="owc-mijn-services-error__heading">{{ $header_text }}</h2>
+		<p class="owc-mijn-services-error__message">{{ $message }}</p>
 	</div>
 @endif

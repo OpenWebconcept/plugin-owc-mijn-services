@@ -8,17 +8,26 @@
 	    exit();
 	}
 
-	$tabs = array_values(array_filter([
+	$show_tabs = $show_tabs ?? true;
+	$all_zaken = $all_zaken ?? [];
+
+	$tabs = [
 	    [
-	        'label' => 'Lopende zaken',
+	        'label' => __('Lopende zaken', 'owc-mijn-services'),
 	        // Uses partials/nlds/denhaag/card to render each card.
-			'cards' => $current_zaken,
+	        'cards' => $current_zaken,
+	        'emptyMessage' => __('U heeft op dit moment geen lopende zaken.', 'owc-mijn-services'),
 	    ],
-		[
-	        'label' => 'Afgeronde zaken',
+	    [
+	        'label' => __('Afgeronde zaken', 'owc-mijn-services'),
 	        'cards' => $completed_zaken,
+	        'emptyMessage' => __('U heeft nog geen afgeronde zaken.', 'owc-mijn-services'),
 	    ],
-	], fn (array $tab): bool => !empty($tab['cards'])));
+	];
 @endphp
 
-<div class="js-nlds-denhaag-tab-component" data-tabs='@json($tabs)'></div>
+@if ($show_tabs)
+	<div class="js-nlds-denhaag-tab-component" data-tabs-enabled="true" data-tabs='@json($tabs)'></div>
+@else
+	<div class="js-nlds-denhaag-tab-component" data-tabs-enabled="false" data-cards='@json($all_zaken)'></div>
+@endif
