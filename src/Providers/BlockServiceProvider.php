@@ -138,6 +138,10 @@ class BlockServiceProvider extends ServiceProvider
 						'type'    => 'boolean',
 						'default' => false,
 					),
+					'showTabs'         => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
 					'perPage'          => array(
 						'type'    => 'number',
 						'default' => 10,

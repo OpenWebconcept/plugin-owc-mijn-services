@@ -10,6 +10,7 @@
 		"zaakClients": { "type": "array", "default": [] },
 		"byBSN": { "type": "boolean", "default": true },
 		"byKVK": { "type": "boolean", "default": false },
+		"showTabs": { "type": "boolean", "default": true },
 		"perPage": {
 			"type": "number",
 			"default": 10
