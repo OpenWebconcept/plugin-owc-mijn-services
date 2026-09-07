@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.15.1] - 2026-09-07
+
+-   Feat: tabs toggle, editor panel rework, empty-tab message
+
 ## [v0.15.0] - 2026-09-01
 
 -   Change: enabled settings by filtered capability
