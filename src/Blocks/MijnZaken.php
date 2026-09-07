@@ -64,6 +64,8 @@ class MijnZaken extends Block
 		return owc_mijn_services_render_view(
 			'owc-overview-zaken',
 			array(
+				'show_tabs'       => (bool) ( $attributes['showTabs'] ?? true ),
+				'all_zaken'       => $this->filter_and_map_zaken( $zaken, fn () => true ),
 				'current_zaken'   => $this->get_current_zaken( $zaken ),
 				'completed_zaken' => $this->get_completed_zaken( $zaken ),
 			)
