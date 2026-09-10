@@ -100,9 +100,6 @@ return array(
 	'display.disable-kvk-filtering'          => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-kvk-filtering' ) );
 	},
-	'display.enable-extended-kvk-filtering'  => function ( Container $container ) {
-		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-enable-extended-kvk-filtering' ) );
-	},
 	'display.hide-status-steps-without-date' => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-hide-status-steps-without-date' ) );
 	},

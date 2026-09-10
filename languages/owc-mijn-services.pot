@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | Mijn Services 0.15.1\n"
+"Project-Id-Version: OWC | Mijn Services 0.15.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-mijn-services\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-07T12:29:21+00:00\n"
+"POT-Creation-Date: 2026-09-10T00:00:00+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-mijn-services\n"
@@ -167,30 +167,22 @@ msgid "Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:151
-msgid "Uitgebreide KVK-filtering inschakelen"
-msgstr ""
-
-#: src/Settings/OptionsPageRegistrar.php:152
-msgid "Schakel deze optie in om bij het filteren op KVK (eHerkenning) ook te filteren op RSIN of vestigingsnummer, indien beschikbaar. Niet elke leverancier ondersteunt deze filterparameters."
-msgstr ""
-
-#: src/Settings/OptionsPageRegistrar.php:164
 msgid "Statusstappen zonder datum verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:165
+#: src/Settings/OptionsPageRegistrar.php:152
 msgid "Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:177
+#: src/Settings/OptionsPageRegistrar.php:164
 msgid "Volgnummers verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:178
+#: src/Settings/OptionsPageRegistrar.php:165
 msgid "Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:199
+#: src/Settings/OptionsPageRegistrar.php:186
 msgid "Selecteer een informatieobjecttype"
 msgstr ""
 

@@ -19,7 +19,6 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use OWC\My_Services\ContainerResolver;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 use OWC\ZGW\Entities\Attributes\SubjectType;
 use OWC\ZGW\Entities\Rol;
@@ -45,27 +44,19 @@ trait AuthenticationFilter
 	 * Applies exactly one KVK-based identification filter, preferring vestigingsNummer, then
 	 * RSIN, then the plain kvkNummer, so only one is ever active.
 	 *
-	 * RSIN and vestigingsNummer are not supported by every supplier, so they are
-	 * only used when explicitly enabled via the 'display.enable-extended-kvk-filtering' setting.
+	 * The plain kvkNummer filter is not supported by every supplier and is deprecated,
+	 * so it is no longer used.
 	 */
 	protected function add_kvk_filter( ZakenFilter $filter, string $rsin, string $vestigings_nummer, string $kvk ): bool
 	{
-		$extended_filtering_enabled = (bool) ContainerResolver::make()->get( 'display.enable-extended-kvk-filtering' );
-
-		if ($extended_filtering_enabled && '' !== $vestigings_nummer) {
+		if ('' !== $vestigings_nummer) {
 			$filter->add( 'rol__betrokkeneIdentificatie__vestiging__vestigingsNummer', $vestigings_nummer );
 
 			return true;
 		}
 
-		if ($extended_filtering_enabled && '' !== $rsin) {
+		if ('' !== $rsin) {
 			$filter->add( 'rol__betrokkeneIdentificatie__nietNatuurlijkPersoon__innNnpId', $rsin );
-
-			return true;
-		}
-
-		if ('' !== $kvk) {
-			$filter->add( 'rol__betrokkeneIdentificatie__vestiging__kvkNummer', $kvk );
 
 			return true;
 		}
