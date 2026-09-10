@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.16.0] - 2026-09-09
+
+-   Change: remove deprecated plain KVK-number filter, always filter by vestigingsNummer/RSIN when available
+-   Change: remove 'Uitgebreide KVK-filtering inschakelen' setting (now always active)
+
 ## [v0.15.1] - 2026-09-07
 
 -   Feat: tabs toggle, editor panel rework, empty-tab message
