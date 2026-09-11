@@ -167,22 +167,30 @@ msgid "Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:151
-msgid "Statusstappen zonder datum verbergen"
-msgstr ""
-
-#: src/Settings/OptionsPageRegistrar.php:152
-msgid "Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond."
-msgstr ""
-
-#: src/Settings/OptionsPageRegistrar.php:164
 msgid "Volgnummers verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:165
+#: src/Settings/OptionsPageRegistrar.php:152
 msgid "Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:186
+#: src/Settings/OptionsPageRegistrar.php:164
+msgid "Statusstappen zonder datum verbergen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:165
+msgid "Schakel deze optie in om de nog niet bereikte status (het eerste of laatste statustype, zonder gezette datum) te verbergen in het statusoverzicht van een zaak. Standaard wordt deze stap getoond."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:177
+msgid "Statussen zonder informeren verbergen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:178
+msgid "Schakel deze optie in om statussen te verbergen waarvan het statustype 'informeren' op nee/false heeft staan. Schakel dit alleen in als de zaaksysteemleverancier dit veld betrouwbaar ondersteunt, anders kunnen alle statussen verborgen worden. Standaard worden alle statussen getoond."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:199
 msgid "Selecteer een informatieobjecttype"
 msgstr ""
 
