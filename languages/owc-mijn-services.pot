@@ -242,35 +242,43 @@ msgid "Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:287
-msgid "Statusstappen zonder datum verbergen"
-msgstr ""
-
-#: src/Settings/OptionsPageRegistrar.php:288
-msgid "Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond."
-msgstr ""
-
-#: src/Settings/OptionsPageRegistrar.php:300
 msgid "Volgnummers verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:301
+#: src/Settings/OptionsPageRegistrar.php:288
 msgid "Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond."
 msgstr ""
 
+#: src/Settings/OptionsPageRegistrar.php:300
+msgid "Statusstappen zonder datum verbergen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:301
+msgid "Schakel deze optie in om de nog niet bereikte status (het eerste of laatste statustype, zonder gezette datum) te verbergen in het statusoverzicht van een zaak. Standaard wordt deze stap getoond."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:313
+msgid "Statussen zonder informeren verbergen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:314
+msgid "Schakel deze optie in om statussen te verbergen waarvan het statustype 'informeren' op nee/false heeft staan. Schakel dit alleen in als de zaaksysteemleverancier dit veld betrouwbaar ondersteunt, anders kunnen alle statussen verborgen worden. Standaard worden alle statussen getoond."
+msgstr ""
+
 #. translators: %d: number of removed rows.
-#: src/Settings/OptionsPageRegistrar.php:467
+#: src/Settings/OptionsPageRegistrar.php:480
 #, php-format
 msgid "Bij 'Startdatum per zaaktype' stond een zaaktype dubbel. Er is %d rij verwijderd; per zaaktype is de vroegste datum bewaard."
 msgid_plural "Bij 'Startdatum per zaaktype' stonden zaaktypen dubbel. Er zijn %d rijen verwijderd; per zaaktype is de vroegste datum bewaard."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Settings/OptionsPageRegistrar.php:492
+#: src/Settings/OptionsPageRegistrar.php:505
 msgid "Van de volgende zaaktypen bij 'Startdatum per zaaktype' kon de identificatie niet worden opgehaald. Zolang dat zo is, worden van leveranciers met zaaktypefiltering mogelijk minder zaken getoond. Er wordt dagelijks automatisch opnieuw geprobeerd; controleer anders de verbinding met de leverancier en haal de zaaktypen opnieuw op of sla de instellingen opnieuw op."
 msgstr ""
 
 #. translators: %s: zaaktype label.
-#: src/Settings/OptionsPageRegistrar.php:534
+#: src/Settings/OptionsPageRegistrar.php:547
 #, php-format
 msgid "%s (oudere versie)"
 msgstr ""

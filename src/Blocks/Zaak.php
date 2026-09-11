@@ -9,6 +9,7 @@ use Exception;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Services\LoggerService;
+use OWC\My_Services\Services\ZaakStatusService;
 use OWC\My_Services\Settings\ZaaktypeStartDates;
 use OWC\ZGW\Entities\Zaak as ZaakEntity;
 use OWC\ZGW\Support\ZaakIdEncoderDecoder;
@@ -76,10 +77,13 @@ class Zaak extends Block
 				'zaak'                             => $zaak,
 				'information_objects'              => $this->get_display_allowed_zaak_informatie_objects( $information_objects ),
 				'confidential_information_objects' => $this->get_confidential_zaak_informatie_objects( $information_objects ),
-				'steps'                            => $zaak->steps,
+				'steps'                            => ZaakStatusService::get_steps(
+					$zaak,
+					(bool) ContainerResolver::make()->get( 'display.hide-volgnummers' ),
+					(bool) ContainerResolver::make()->get( 'display.filter-statussen-by-informeren' ),
+					(bool) ContainerResolver::make()->get( 'display.hide-status-steps-without-date' )
+				),
 				'endDate'                          => $zaak->endDate(),
-				'hide_status_steps_without_date'   => ContainerResolver::make()->get( 'display.hide-status-steps-without-date' ),
-				'hide_volgnummers'                 => ContainerResolver::make()->get( 'display.hide-volgnummers' ),
 			)
 		);
 	}
