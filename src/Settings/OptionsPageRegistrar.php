@@ -148,8 +148,21 @@ class OptionsPageRegistrar
 
 		$options->add_field(
 			array(
+				'name'            => __( 'Volgnummers verbergen', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond.', 'owc-mijn-services' ),
+				'id'              => 'owc-mijn-services-hide-volgnummers',
+				'type'            => 'checkbox',
+				'sanitization_cb' => function ( $value ) {
+					return $this->handle_unchecked_checkbox( $value );
+				},
+				'show_on_cb'      => $allowed_settings_show_on_cb,
+			)
+		);
+
+		$options->add_field(
+			array(
 				'name'            => __( 'Statusstappen zonder datum verbergen', 'owc-mijn-services' ),
-				'desc'            => __( 'Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond.', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om de nog niet bereikte status (het eerste of laatste statustype, zonder gezette datum) te verbergen in het statusoverzicht van een zaak. Standaard wordt deze stap getoond.', 'owc-mijn-services' ),
 				'id'              => 'owc-mijn-services-hide-status-steps-without-date',
 				'type'            => 'checkbox',
 				'sanitization_cb' => function ( $value ) {
@@ -161,9 +174,9 @@ class OptionsPageRegistrar
 
 		$options->add_field(
 			array(
-				'name'            => __( 'Volgnummers verbergen', 'owc-mijn-services' ),
-				'desc'            => __( 'Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond.', 'owc-mijn-services' ),
-				'id'              => 'owc-mijn-services-hide-volgnummers',
+				'name'            => __( 'Statussen zonder informeren verbergen', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om statussen te verbergen waarvan het statustype \'informeren\' op nee/false heeft staan. Schakel dit alleen in als de zaaksysteemleverancier dit veld betrouwbaar ondersteunt, anders kunnen alle statussen verborgen worden. Standaard worden alle statussen getoond.', 'owc-mijn-services' ),
+				'id'              => 'owc-mijn-services-filter-statussen-by-informeren',
 				'type'            => 'checkbox',
 				'sanitization_cb' => function ( $value ) {
 					return $this->handle_unchecked_checkbox( $value );
@@ -241,8 +254,8 @@ class OptionsPageRegistrar
 		if ( has_filter( 'owcms::settings/allowed_informatieobjecttypen_capability' ) ) {
 			/**
 			 * Deprecated: use the `owcms::settings/allowed_settings_capability` filter instead,
-			 * which now also governs the 'Statusstappen zonder datum verbergen' and
-			 * 'Volgnummers verbergen' settings.
+			 * which now also governs the 'Volgnummers verbergen', 'Statusstappen zonder datum
+			 * verbergen' and 'Statussen zonder informeren verbergen' settings.
 			 *
 			 * @deprecated 0.15.0 Use `owcms::settings/allowed_settings_capability` instead.
 			 */

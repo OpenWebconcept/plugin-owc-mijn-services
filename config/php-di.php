@@ -100,11 +100,14 @@ return array(
 	'display.disable-kvk-filtering'          => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-kvk-filtering' ) );
 	},
+	'display.hide-volgnummers'               => function ( Container $container ) {
+		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-hide-volgnummers' ) );
+	},
 	'display.hide-status-steps-without-date' => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-hide-status-steps-without-date' ) );
 	},
-	'display.hide-volgnummers'               => function ( Container $container ) {
-		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-hide-volgnummers' ) );
+	'display.filter-statussen-by-informeren' => function ( Container $container ) {
+		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-filter-statussen-by-informeren' ) );
 	},
 
 	/**
