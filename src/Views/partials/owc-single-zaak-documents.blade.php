@@ -22,8 +22,13 @@
 
 			$name = $object->getValue('bestandsnaam', '');
 			$href = $object->downloadUrl($zaak->getValue('identificatie', ''), $zaak->getValue('supplier', ''));
-			$size = $object->formattedMetaData() ?: null;
+			$size = $object->sizeFormatted() ?: null;
 			$lastUpdated = $object->getValue('lastUpdated', null);
+			$creationDate = $object->getValue('creatiedatum', null);
+
+			if (null === $lastUpdated && $creationDate instanceof DateTimeImmutable) {
+			    $lastUpdated = $creationDate->format('Y-m-d');
+			}
 		@endphp
 
 		@include('partials.nlds.denhaag.file', [
