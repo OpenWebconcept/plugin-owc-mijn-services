@@ -1,1 +1,204 @@
-.denhaag-card-group{--denhaag-card-group-distanced:0;display:grid;gap:var(--_denhaag-card-group-responsive-gap,var(--denhaag-card-group-gap));margin-block-end:calc(var(--denhaag-card-group-distanced)*var(--denhaag-card-group-margin-block));margin-block-start:calc(var(--denhaag-card-group-distanced)*var(--denhaag-card-group-margin-block));margin-inline-end:calc(var(--denhaag-card-group-distanced)*var(--denhaag-card-group-margin-inline));margin-inline-start:calc(var(--denhaag-card-group-distanced)*var(--denhaag-card-group-margin-inline))}@media (width >= 768px){.denhaag-card-group{grid-template-columns:repeat(2,1fr)}}@media (width >= 1024px){.denhaag-card-group{grid-template-columns:repeat(3,1fr)}}.denhaag-card-group--rows .denhaag-card-authentication{display:grid;grid-template-rows:auto auto 1fr;min-block-size:var(--denhaag-card-authentication-portrait-min-block-size);text-align:center}.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__header{grid-template-areas:"card-logo" "card-heading";grid-template-rows:calc(var(--denhaag-card-authentication-portrait-logo-size) + var(--denhaag-card-authentication-portrait-logo-margin-block-end)) auto;margin-block-end:var(--denhaag-card-authentication-portrait-header-margin-block-end)}.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__logo{height:var(--denhaag-card-authentication-portrait-logo-size);margin-block-end:var(--denhaag-card-authentication-portrait-logo-margin-block-end);margin-inline-end:auto;margin-inline-start:auto;width:var(--denhaag-card-authentication-portrait-logo-size)}.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__title{margin-block-end:var(--denhaag-card-authentication-title-margin-block-end)}.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__cta{display:flex;justify-content:center}.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__footer{display:flex;flex-direction:column;justify-content:end;margin-block-start:var(--denhaag-card-authentication-portrait-footer-margin-block-start)}.denhaag-card-group--distanced{--denhaag-card-group-distanced:1}.denhaag-card-group--responsive{--_denhaag-card-group-responsive-gap:var(--denhaag-card-group-xs-gap,var(--denhaag-card-group-gap));--denhaag-card-authentication-portrait-max-inline-size:calc(33.33333% - var(--_denhaag-card-group-responsive-gap))}@media (width >= 768px){.denhaag-card-group--responsive{--_denhaag-card-group-responsive-gap:var(--denhaag-card-group-s-gap,var(--denhaag-card-group-gap))}.denhaag-card-group--responsive .denhaag-card-authentication{display:grid;grid-template-rows:auto auto 1fr;min-block-size:var(--denhaag-card-authentication-portrait-min-block-size);text-align:center}.denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__header{grid-template-areas:"card-logo" "card-heading";grid-template-rows:calc(var(--denhaag-card-authentication-portrait-logo-size) + var(--denhaag-card-authentication-portrait-logo-margin-block-end)) auto;margin-block-end:var(--denhaag-card-authentication-portrait-header-margin-block-end)}.denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__logo{height:var(--denhaag-card-authentication-portrait-logo-size);margin-block-end:var(--denhaag-card-authentication-portrait-logo-margin-block-end);margin-inline-end:auto;margin-inline-start:auto;width:var(--denhaag-card-authentication-portrait-logo-size)}.denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__title{margin-block-end:var(--denhaag-card-authentication-title-margin-block-end)}.denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__cta{display:flex;justify-content:center}.denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__footer{display:flex;flex-direction:column;justify-content:end;margin-block-start:var(--denhaag-card-authentication-portrait-footer-margin-block-start)}}@media (width >= 1024px){.denhaag-card-group--responsive{--_denhaag-card-group-responsive-gap:var(--denhaag-card-group-m-gap,var(--denhaag-card-group-gap))}}@media (width >= 1280px){.denhaag-card-group--responsive{--_denhaag-card-group-responsive-gap:var(--denhaag-card-group-l-gap,var(--denhaag-card-group-gap))}}@media (width >= 1768px){.denhaag-card-group--responsive{--_denhaag-card-group-responsive-gap:var(--denhaag-card-group-xl-gap,var(--denhaag-card-group-gap))}}.nl-paragraph{color:var(--nl-paragraph-color,inherit);font-family:var(--nl-paragraph-font-family,inherit);font-size:var(--nl-paragraph-font-size,inherit);font-weight:var(--nl-paragraph-font-weight,inherit);line-height:var(--nl-paragraph-line-height,inherit);margin-block-end:var(--nl-paragraph-margin-block-end,revert);margin-block-start:var(--nl-paragraph-margin-block-start,revert)}.nl-paragraph--lead{font-size:var(--nl-paragraph-lead-font-size,var(--nl-paragraph-font-size,inherit));font-weight:var(--nl-paragraph-lead-font-weight,var(--nl-paragraph-font-weight,inherit));line-height:var(--nl-paragraph-lead-line-height,var(--nl-paragraph-line-height,inherit));margin-block-end:var(--nl-paragraph-lead-margin-block-end,var(--nl-paragraph-margin-block-end,revert));margin-block-start:var(--nl-paragraph-lead-margin-block-start,var(--nl-paragraph-margin-block-start,revert))}.nl-paragraph__lead{font-weight:inherit}
+/*!*******************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./resources/blocks/mijn-zaken/style.css ***!
+  \*******************************************************************************************************************************************************************************************/
+/**
+ * @license EUPL-1.2
+ * Copyright (c) 2020-2022 Gemeente Den Haag
+ * Copyright (c) 2020-2022 Frameless B.V.
+ */
+/**
+ * @license EUPL-1.2
+ * Copyright (c) 2020-2022 Gemeente Den Haag
+ * Copyright (c) 2020-2022 Frameless B.V.
+ */
+/**
+ * @license EUPL-1.2
+ * Copyright (c) 2020-2022 Gemeente Den Haag
+ * Copyright (c) 2020-2022 Frameless B.V.
+ */
+.denhaag-card-group {
+  --denhaag-card-group-distanced: 0;
+  display: grid;
+  gap: var(--_denhaag-card-group-responsive-gap, var(--denhaag-card-group-gap));
+  margin-block-start: calc(var(--denhaag-card-group-distanced) * var(--denhaag-card-group-margin-block));
+  margin-block-end: calc(var(--denhaag-card-group-distanced) * var(--denhaag-card-group-margin-block));
+  margin-inline-start: calc(var(--denhaag-card-group-distanced) * var(--denhaag-card-group-margin-inline));
+  margin-inline-end: calc(var(--denhaag-card-group-distanced) * var(--denhaag-card-group-margin-inline));
+}
+@media (width >= 768px) {
+  .denhaag-card-group {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (width >= 1024px) {
+  .denhaag-card-group {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.denhaag-card-group--rows .denhaag-card-authentication {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  min-block-size: var(--denhaag-card-authentication-portrait-min-block-size);
+  text-align: center;
+}
+.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__header {
+  grid-template-areas: "card-logo" "card-heading";
+  grid-template-rows: calc(var(--denhaag-card-authentication-portrait-logo-size) + var(--denhaag-card-authentication-portrait-logo-margin-block-end)) auto;
+  margin-block-end: var(--denhaag-card-authentication-portrait-header-margin-block-end);
+}
+.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__logo {
+  height: var(--denhaag-card-authentication-portrait-logo-size);
+  width: var(--denhaag-card-authentication-portrait-logo-size);
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  margin-block-end: var(--denhaag-card-authentication-portrait-logo-margin-block-end);
+}
+.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__title {
+  margin-block-end: var(--denhaag-card-authentication-title-margin-block-end);
+}
+.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__cta {
+  display: flex;
+  justify-content: center;
+}
+.denhaag-card-group--rows .denhaag-card-authentication .denhaag-card-authentication__footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  margin-block-start: var(--denhaag-card-authentication-portrait-footer-margin-block-start);
+}
+.denhaag-card-group--distanced {
+  --denhaag-card-group-distanced: 1;
+}
+.denhaag-card-group--responsive {
+  --_denhaag-card-group-responsive-gap: var(--denhaag-card-group-xs-gap, var(--denhaag-card-group-gap));
+  --denhaag-card-authentication-portrait-max-inline-size: calc((100% / 3) - var(--_denhaag-card-group-responsive-gap));
+}
+@media (width >= 768px) {
+  .denhaag-card-group--responsive {
+    --_denhaag-card-group-responsive-gap: var(--denhaag-card-group-s-gap, var(--denhaag-card-group-gap));
+  }
+  .denhaag-card-group--responsive .denhaag-card-authentication {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    min-block-size: var(--denhaag-card-authentication-portrait-min-block-size);
+    text-align: center;
+  }
+  .denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__header {
+    grid-template-areas: "card-logo" "card-heading";
+    grid-template-rows: calc(var(--denhaag-card-authentication-portrait-logo-size) + var(--denhaag-card-authentication-portrait-logo-margin-block-end)) auto;
+    margin-block-end: var(--denhaag-card-authentication-portrait-header-margin-block-end);
+  }
+  .denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__logo {
+    height: var(--denhaag-card-authentication-portrait-logo-size);
+    width: var(--denhaag-card-authentication-portrait-logo-size);
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    margin-block-end: var(--denhaag-card-authentication-portrait-logo-margin-block-end);
+  }
+  .denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__title {
+    margin-block-end: var(--denhaag-card-authentication-title-margin-block-end);
+  }
+  .denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__cta {
+    display: flex;
+    justify-content: center;
+  }
+  .denhaag-card-group--responsive .denhaag-card-authentication .denhaag-card-authentication__footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    margin-block-start: var(--denhaag-card-authentication-portrait-footer-margin-block-start);
+  }
+}
+@media (width >= 1024px) {
+  .denhaag-card-group--responsive {
+    --_denhaag-card-group-responsive-gap: var(--denhaag-card-group-m-gap, var(--denhaag-card-group-gap));
+  }
+}
+@media (width >= 1280px) {
+  .denhaag-card-group--responsive {
+    --_denhaag-card-group-responsive-gap: var(--denhaag-card-group-l-gap, var(--denhaag-card-group-gap));
+  }
+}
+@media (width >= 1768px) {
+  .denhaag-card-group--responsive {
+    --_denhaag-card-group-responsive-gap: var(--denhaag-card-group-xl-gap, var(--denhaag-card-group-gap));
+  }
+}
+.nl-paragraph{color:var(--nl-paragraph-color, inherit);font-family:var(--nl-paragraph-font-family, inherit);font-size:var(--nl-paragraph-font-size, inherit);font-weight:var(--nl-paragraph-font-weight, inherit);line-height:var(--nl-paragraph-line-height, inherit);margin-block-end:var(--nl-paragraph-margin-block-end, revert);margin-block-start:var(--nl-paragraph-margin-block-start, revert)}
+.nl-paragraph--lead{font-size:var(--nl-paragraph-lead-font-size, var(--nl-paragraph-font-size, inherit));font-weight:var(--nl-paragraph-lead-font-weight, var(--nl-paragraph-font-weight, inherit));line-height:var(--nl-paragraph-lead-line-height, var(--nl-paragraph-line-height, inherit));margin-block-end:var(--nl-paragraph-lead-margin-block-end, var(--nl-paragraph-margin-block-end, revert));margin-block-start:var(--nl-paragraph-lead-margin-block-start, var(--nl-paragraph-margin-block-start, revert))}
+.nl-paragraph__lead{font-weight:inherit}
+/*# sourceMappingURL=paragraph.css.map */
+.owc-navigation-spinner {
+  position: fixed;
+  z-index: 9999;
+  inset-block-end: calc(
+    var(--owc-navigation-spinner-inset-block-end, 1rem) +
+      env(safe-area-inset-bottom, 0px)
+  );
+  inset-inline-end: calc(
+    var(--owc-navigation-spinner-inset-inline-end, 1rem) +
+      max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px))
+  );
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-inline-size: min(
+    20rem,
+    calc(100vw - var(--owc-navigation-spinner-icon-size))
+  );
+  pointer-events: none;
+}
+.owc-navigation-spinner[hidden] {
+  display: none;
+}
+.owc-navigation-spinner__icon {
+  inline-size: var(--owc-navigation-spinner-icon-size, 2.5rem) !important;
+  block-size: var(--owc-navigation-spinner-icon-size, 2.5rem) !important;
+  color: var(--owc-navigation-spinner-icon-color, currentColor);
+  fill: currentColor;
+  animation: owc-navigation-spinner-rotation 1000ms linear infinite;
+}
+.owc-navigation-spinner__label {
+  position: absolute;
+  overflow: hidden;
+  clip-path: inset(50%);
+  inline-size: 1px;
+  block-size: 1px;
+  white-space: nowrap;
+}
+.owc-navigation-spinner__message {
+  padding-block: var(--owc-navigation-spinner-message-padding-block, 0.5rem);
+  padding-inline: var(
+    --owc-navigation-spinner-message-padding-inline,
+    0.625rem
+  );
+  border-radius: var(--owc-navigation-spinner-message-radius, 0.25rem);
+  background-color: var(
+    --owc-navigation-spinner-message-bg-color,
+    var(--color-white)
+  );
+  box-shadow: var(
+    --owc-navigation-spinner-shadow,
+    0 0.125rem 0.5rem rgb(0 0 0 / 25%)
+  );
+  color: var(--owc-navigation-spinner-message-color, var(--color-black));
+  font-size: var(--owc-navigation-spinner-message-font-size, 0.875rem);
+  line-height: 1.25;
+}
+@keyframes owc-navigation-spinner-rotation {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .owc-navigation-spinner__icon {
+    animation: none;
+  }
+}
+
+
+/*# sourceMappingURL=style-index.css.map*/

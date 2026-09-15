@@ -1,2 +1,80 @@
-@import '@gemeente-denhaag/card-group/dist/index.css';
-@import '@nl-design-system-candidate/paragraph-css/dist/paragraph.css';
+@import "@gemeente-denhaag/card-group/dist/index.css";
+@import "@nl-design-system-candidate/paragraph-css/dist/paragraph.css";
+
+.owc-navigation-spinner {
+  position: fixed;
+  z-index: 9999;
+  inset-block-end: calc(
+    var(--owc-navigation-spinner-inset-block-end, 1rem) +
+      env(safe-area-inset-bottom, 0px)
+  );
+  inset-inline-end: calc(
+    var(--owc-navigation-spinner-inset-inline-end, 1rem) +
+      max(env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px))
+  );
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-inline-size: min(
+    20rem,
+    calc(100vw - var(--owc-navigation-spinner-icon-size))
+  );
+  pointer-events: none;
+}
+
+.owc-navigation-spinner[hidden] {
+  display: none;
+}
+
+.owc-navigation-spinner__icon {
+  inline-size: var(--owc-navigation-spinner-icon-size, 2.5rem) !important;
+  block-size: var(--owc-navigation-spinner-icon-size, 2.5rem) !important;
+  color: var(--owc-navigation-spinner-icon-color, currentColor);
+  fill: currentColor;
+  animation: owc-navigation-spinner-rotation 1000ms linear infinite;
+}
+
+.owc-navigation-spinner__label {
+  position: absolute;
+  overflow: hidden;
+  clip-path: inset(50%);
+  inline-size: 1px;
+  block-size: 1px;
+  white-space: nowrap;
+}
+
+.owc-navigation-spinner__message {
+  padding-block: var(--owc-navigation-spinner-message-padding-block, 0.5rem);
+  padding-inline: var(
+    --owc-navigation-spinner-message-padding-inline,
+    0.625rem
+  );
+  border-radius: var(--owc-navigation-spinner-message-radius, 0.25rem);
+  background-color: var(
+    --owc-navigation-spinner-message-bg-color,
+    var(--color-white)
+  );
+  box-shadow: var(
+    --owc-navigation-spinner-shadow,
+    0 0.125rem 0.5rem rgb(0 0 0 / 25%)
+  );
+  color: var(--owc-navigation-spinner-message-color, var(--color-black));
+  font-size: var(--owc-navigation-spinner-message-font-size, 0.875rem);
+  line-height: 1.25;
+}
+
+@keyframes owc-navigation-spinner-rotation {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .owc-navigation-spinner__icon {
+    animation: none;
+  }
+}
