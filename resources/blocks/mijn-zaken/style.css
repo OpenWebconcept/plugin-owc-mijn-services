@@ -44,6 +44,15 @@
 }
 
 .owc-navigation-spinner__message {
+  display: flex;
+  align-items: center;
+  gap: var(--owc-navigation-spinner-message-gap, 0.5rem);
+
+  /*
+   * The container above is inert so the page stays navigable. The message opts
+   * back in, otherwise its close button could never be clicked.
+   */
+  pointer-events: auto;
   padding-block: var(--owc-navigation-spinner-message-padding-block, 0.5rem);
   padding-inline: var(
     --owc-navigation-spinner-message-padding-inline,
@@ -61,6 +70,34 @@
   color: var(--owc-navigation-spinner-message-color, var(--color-black));
   font-size: var(--owc-navigation-spinner-message-font-size, 0.875rem);
   line-height: 1.25;
+}
+
+.owc-navigation-spinner__dismiss {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--owc-navigation-spinner-dismiss-size, 1.5rem);
+  block-size: var(--owc-navigation-spinner-dismiss-size, 1.5rem);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.owc-navigation-spinner__dismiss:focus-visible {
+  outline: var(
+    --owc-navigation-spinner-dismiss-focus-outline,
+    0.125rem solid currentColor
+  );
+  outline-offset: 0.125rem;
+}
+
+.owc-navigation-spinner__dismiss-icon {
+  inline-size: var(--owc-navigation-spinner-dismiss-icon-size, 1rem) !important;
+  block-size: var(--owc-navigation-spinner-dismiss-icon-size, 1rem) !important;
+  fill: currentColor;
 }
 
 @keyframes owc-navigation-spinner-rotation {

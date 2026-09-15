@@ -12,7 +12,7 @@
 
 import { createRoot } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { SpinnerIcon } from '@gemeente-denhaag/icons';
+import { CloseIcon, SpinnerIcon } from '@gemeente-denhaag/icons';
 
 const SHOW_DELAY_MS = 400;
 const TIMEOUT_MS = 30000;
@@ -34,9 +34,22 @@ const SpinnerContent = () => (
 );
 
 const TimedOutContent = () => (
-	<span className={ `${ BASE_CLASS }__message` }>
-		{ __( 'Het laden duurt langer dan verwacht.', 'owc-mijn-services' ) }
-	</span>
+	<div className={ `${ BASE_CLASS }__message` }>
+		<span>
+			{ __(
+				'Het laden duurt langer dan verwacht.',
+				'owc-mijn-services'
+			) }
+		</span>
+		<button
+			type="button"
+			className={ `${ BASE_CLASS }__dismiss` }
+			onClick={ hideNavigationSpinner }
+			aria-label={ __( 'Melding sluiten', 'owc-mijn-services' ) }
+		>
+			<CloseIcon className={ `${ BASE_CLASS }__dismiss-icon` } />
+		</button>
+	</div>
 );
 
 const clearTimers = () => {
