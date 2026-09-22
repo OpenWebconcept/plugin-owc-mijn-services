@@ -25,8 +25,8 @@ export default function Edit( { attributes, setAttributes } ) {
 	);
 
 	const productionChecksEnabled = window?.owcMyServices?.productionChecksEnabled ?? true;
-	const bsnKvkMissing = productionChecksEnabled && ! byBSN && ! ( byKVK && ! disableKVKFiltering );
 	const disableKVKFiltering = window?.owcMyServices?.disableKVKFiltering ?? false;
+	const bsnKvkMissing = productionChecksEnabled && ! byBSN && ! ( byKVK && ! disableKVKFiltering );
 
 	// Migrate legacy single zaakClient string to zaakClients array.
 	useEffect( () => {
