@@ -59,6 +59,13 @@ class MijnZaken extends Block
 			);
 		}
 
+		$order = $this->resolve_order( $attributes );
+
+		if (null !== $order) {
+			[ $field, $reverse ] = $order;
+			$zaken               = $zaken->sortByAttribute( $field, $reverse );
+		}
+
 		$zaken = $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) );
 
 		return owc_mijn_services_render_view(
@@ -77,17 +84,39 @@ class MijnZaken extends Block
 	 */
 	protected function handle_filter_ordering( array $attributes ): void
 	{
-		if ( ! is_string( $attributes['orderBy'] ?? null ) || '' === $attributes['orderBy']) {
+		$order = $this->resolve_order( $attributes );
+
+		if (null === $order) {
 			return;
 		}
 
-		if ( ! is_string( $attributes['orderByDirection'] ?? null )) {
-			$attributes['orderByDirection'] = '-';
-		} elseif ( $attributes['orderByDirection'] !== '-' ) {
-			$attributes['orderByDirection'] = '';
+		[ $field, $reverse ] = $order;
+
+		$this->zaken_filter->orderBy( sprintf( '%s%s', $reverse ? '-' : '', $field ) );
+	}
+
+	/**
+	 * Resolves the validated orderBy field and direction from the block attributes. Shared by
+	 * handle_filter_ordering(), which applies it to the live API request, and render_block(),
+	 * which re-applies it as a PHP-side sort after fetching: merging zaken from multiple
+	 * zaaktypen and/or suppliers means each individual API request comes back correctly ordered,
+	 * but the merged result as a whole is not, so it must be re-sorted before it's truncated to
+	 * perPage.
+	 *
+	 * @since NEXT
+	 *
+	 * @return array{0: string, 1: bool}|null Tuple of [orderBy field, reverse], or null when no
+	 *                                         ordering is configured.
+	 */
+	private function resolve_order( array $attributes ): ?array
+	{
+		if ( ! is_string( $attributes['orderBy'] ?? null ) || '' === $attributes['orderBy']) {
+			return null;
 		}
 
-		$this->zaken_filter->orderBy( sprintf( '%s%s', $attributes['orderByDirection'], $attributes['orderBy'] ) );
+		$reverse = ! is_string( $attributes['orderByDirection'] ?? null ) || '-' === $attributes['orderByDirection'];
+
+		return array( $attributes['orderBy'], $reverse );
 	}
 
 	/**
