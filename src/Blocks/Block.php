@@ -251,15 +251,17 @@ abstract class Block
 			return $zaakinformatie_objecten;
 		}
 
-		$exclude_doc_docx              = (bool) ContainerResolver::make()->get( 'display.exclude-doc-docx' );
-		$allowed_informatieobjecttypen = (array) ContainerResolver::make()->get( 'display.allowed-informatieobjecttypen' );
+		$exclude_doc_docx     = (bool) ContainerResolver::make()->get( 'display.exclude-doc-docx' );
+		$allowed_per_supplier = (array) ContainerResolver::make()->get( 'display.allowed-informatieobjecttypen' );
+		$supplier_name        = (string) $zaak->getValue( 'supplier', '' );
+		$allowed_for_supplier = (array) ( $allowed_per_supplier[ $supplier_name ] ?? array() );
 
-		if ( ! $exclude_doc_docx && empty( $allowed_informatieobjecttypen )) {
+		if ( ! $exclude_doc_docx && array() === $allowed_for_supplier ) {
 			return $zaakinformatie_objecten;
 		}
 
 		return $zaakinformatie_objecten->filter(
-			function ( Zaakinformatieobject $zaakinformatie_object ) use ( $exclude_doc_docx, $allowed_informatieobjecttypen ) {
+			function ( Zaakinformatieobject $zaakinformatie_object ) use ( $exclude_doc_docx, $allowed_for_supplier ) {
 				if ( ! $zaakinformatie_object->informatieobject instanceof Enkelvoudiginformatieobject) {
 					return false;
 				}
@@ -270,7 +272,7 @@ abstract class Block
 					return false;
 				}
 
-				if ( 0 < count( $allowed_informatieobjecttypen ) && ! in_array( $informatieobject->informatieobjecttype, $allowed_informatieobjecttypen, true )) {
+				if ( 0 < count( $allowed_for_supplier ) && ! in_array( $informatieobject->informatieobjecttype, $allowed_for_supplier, true )) {
 					return false;
 				}
 

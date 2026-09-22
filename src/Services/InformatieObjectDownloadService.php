@@ -82,7 +82,8 @@ class InformatieObjectDownloadService
 			return '';
 		}
 
-		$this->client = apiClientManager()->getClient( $this->supplier_key_to_name( $supplier ) );
+		$supplier_name = $this->supplier_key_to_name( $supplier );
+		$this->client  = apiClientManager()->getClient( $supplier_name );
 
 		$identification = ZaakIdEncoderDecoder::decode( $identification );
 		$zaak           = $this->validate_zaak( $identification );
@@ -106,10 +107,11 @@ class InformatieObjectDownloadService
 			return '';
 		}
 
-		$allowed_informatieobjecttypen = (array) ContainerResolver::make()->get( 'display.allowed-informatieobjecttypen' );
+		$allowed_per_supplier = (array) ContainerResolver::make()->get( 'display.allowed-informatieobjecttypen' );
+		$allowed_for_supplier = (array) ( $allowed_per_supplier[ $supplier_name ] ?? array() );
 
-		if ( 0 < count( $allowed_informatieobjecttypen )) {
-			if ( ! $this->validate_information_object_to_configured_types( $allowed_informatieobjecttypen, $zaakinformatie_object, $download_identification, $identification )) {
+		if ( 0 < count( $allowed_for_supplier )) {
+			if ( ! $this->validate_information_object_to_configured_types( $allowed_for_supplier, $zaakinformatie_object, $download_identification, $identification )) {
 				return '';
 			}
 		}

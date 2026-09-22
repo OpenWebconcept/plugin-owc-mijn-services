@@ -1,0 +1,45 @@
+/**
+ * Fixes Select2's search input sitting lower than the selected choice pills.
+ *
+ * WordPress admin's own input styles override Select2's `margin-top`/`line-height`
+ * on the inline search field, breaking the vertical alignment Select2 relies on.
+ * Flex-aligning the row instead makes it robust against that override.
+ *
+ * Scoped via the original select's id (Select2 always inserts its widget as the next
+ * sibling of the source element) instead of a custom container class, since Select2's
+ * `containerCssClass` option requires the 'full' build and errors on the core build.
+ */
+#owc-mijn-services-allowed-informatieobjecttypen + .select2-container {
+	.select2-selection--multiple {
+		.select2-selection__rendered {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			padding: 5px;
+			gap: 4px;
+		}
+
+		.select2-selection__choice {
+			margin: 0;
+			float: none;
+		}
+	}
+
+	.select2-search--inline {
+		margin: 0;
+		float: none;
+
+		.select2-search__field {
+			height: auto;
+			min-height: 0;
+			padding: 0;
+			margin: 0;
+			box-shadow: none;
+			line-height: normal;
+		}
+	}
+}
+
+#owc-mijn-services-allowed-informatieobjecttypen + .select2-container--default .select2-selection--multiple .select2-selection__clear {
+	margin-top: 0;
+}
