@@ -103,7 +103,7 @@ class MijnZaken extends Block
 	 * but the merged result as a whole is not, so it must be re-sorted before it's truncated to
 	 * perPage.
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 *
 	 * @return array{0: string, 1: bool}|null Tuple of [orderBy field, reverse], or null when no
 	 *                                         ordering is configured.

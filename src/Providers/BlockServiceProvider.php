@@ -259,7 +259,7 @@ class BlockServiceProvider extends ServiceProvider
 	 * underlying zaaktypen are already cached in a transient (kept warm by a daily cron),
 	 * so this stays cheap even though it runs on every editor screen load.
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 */
 	private function add_zaaktype_options( WP_Block_Type $block_type ): void
 	{

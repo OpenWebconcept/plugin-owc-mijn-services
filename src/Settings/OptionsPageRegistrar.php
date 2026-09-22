@@ -138,7 +138,8 @@ class OptionsPageRegistrar
 				'desc'       => __( 'De zaaktypen die gebruikt worden voor de zaaktypefilter in het \'Mijn zaken\'-blok worden dagelijks automatisch ververst. Gebruik onderstaande knop om ze direct opnieuw op te halen.', 'owc-mijn-services' ),
 				'id'         => 'owc-mijn-services-zaaktypen-cache',
 				'type'       => 'title',
-				'label_cb'   => function () { // 'title' fields have no label_cb by default, so restore it to match other rows.
+				'label_cb'   => function () {
+					// 'title' fields have no label_cb by default, so restore it to match other rows.
 					return sprintf( '<label>%s</label>', esc_html__( 'Zaaktypen', 'owc-mijn-services' ) );
 				},
 				'after'      => function () {
@@ -218,7 +219,7 @@ class OptionsPageRegistrar
 	 * 'Zaaktypefiltering ondersteunde leveranciers' multicheck field.
 	 *
 	 * @return array<string, string>
-	 * @since NEXT
+	 * @since 0.17.0
 	 */
 	private function get_supplier_options(): array
 	{

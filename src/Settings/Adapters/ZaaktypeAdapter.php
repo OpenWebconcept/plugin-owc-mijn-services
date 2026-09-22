@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.17.0
  */
 
 namespace OWC\My_Services\Settings\Adapters;
@@ -30,7 +30,7 @@ use OWC\ZGW\Support\Collection;
 /**
  * Adapter for fetching zaaktypen to use as select options.
  *
- * @since NEXT
+ * @since 0.17.0
  */
 class ZaaktypeAdapter
 {
@@ -49,8 +49,6 @@ class ZaaktypeAdapter
 
 	/**
 	 * Builds the transient key used to cache the zaaktypen of a supplier.
-	 *
-	 * @since NEXT
 	 */
 	public static function transient_key( string $supplier_name ): string
 	{
@@ -59,8 +57,6 @@ class ZaaktypeAdapter
 
 	/**
 	 * Builds the transient key used to cache the zaaktype URL migrations of a supplier.
-	 *
-	 * @since NEXT
 	 */
 	public static function migrations_transient_key( string $supplier_name ): string
 	{
@@ -71,8 +67,6 @@ class ZaaktypeAdapter
 	 * Returns a map of superseded zaaktype URL => current (latest version) zaaktype URL for a
 	 * supplier, built the last time its zaaktypen were freshly fetched by handle(). Only reads
 	 * the cache, never triggers a live fetch itself, so it's safe to call at render time.
-	 *
-	 * @since NEXT
 	 *
 	 * @return array<string, string>
 	 */
@@ -126,8 +120,6 @@ class ZaaktypeAdapter
 	 * version) to the URL of its latest version, so filters that still reference an older
 	 * version (e.g. a block's saved attributes) can be resolved to a currently valid zaaktype.
 	 *
-	 * @since NEXT
-	 *
 	 * @param Zaaktype[] $raw
 	 * @param Zaaktype[] $filtered
 	 * @return array<string, string>
@@ -170,8 +162,6 @@ class ZaaktypeAdapter
 	 * only the one with the latest 'versiedatum' (version date) per description. A zaaktype is
 	 * versioned in the ZTC API by creating a new resource with the same omschrijving, so without
 	 * this the block would offer several selectable entries that all represent the same zaaktype.
-	 *
-	 * @since NEXT
 	 */
 	private function filter_zaaktypen_by_version_date( array $zaaktypen ): array
 	{

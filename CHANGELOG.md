@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.17.0] - 2026-09-22
+
+-   Added: use placeholder component in owc-my-services/zaak block
+-   Added: filter zaken on configured Zaaktypen
+-   Added: split informatieobjecttype filtering per supplier
+-   Fix: bsnKvkMissing reads disableKVKFiltering one line before its const declaration
+-   Fix: re-sort merged zaken by orderBy before truncating to perPage
+
 ## [v0.16.0] - 2026-09-09
 
 -   Change: remove deprecated plain KVK-number filter, always filter by vestigingsNummer/RSIN when available

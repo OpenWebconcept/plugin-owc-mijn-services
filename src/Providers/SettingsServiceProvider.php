@@ -67,7 +67,7 @@ class SettingsServiceProvider extends ServiceProvider
 	 * Loads Select2 for the grouped 'Toegestane informatieobjecttypen' select, only on this
 	 * plugin's own settings page.
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 */
 	public function enqueue_scripts( string $hook_suffix ): void
 	{
