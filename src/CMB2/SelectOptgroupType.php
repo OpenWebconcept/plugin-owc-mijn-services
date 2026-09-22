@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * CMB2 select field type that renders grouped options as <optgroup> elements.
+ * CMB2 multi-select field type that renders grouped options as <optgroup> elements.
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
@@ -22,11 +22,12 @@ if ( ! defined( 'ABSPATH' )) {
 use CMB2_Type_Select;
 
 /**
- * CMB2 select field type that renders grouped options as <optgroup> elements.
+ * CMB2 multi-select field type that renders grouped options as <optgroup> elements.
  *
  * Field options are expected as a `value => label` map, where any entry whose value is itself
  * an array is rendered as an <optgroup> (keyed by group label) containing its own `value => label` options.
- * Flat and grouped entries may be mixed.
+ * Flat and grouped entries may be mixed. Renders as a `<select multiple>` so several options,
+ * across groups, can be selected at once.
  *
  * @since 0.12.0
  */
@@ -37,11 +38,12 @@ class SelectOptgroupType extends CMB2_Type_Select
 		$attrs = $this->parse_args(
 			'select',
 			array(
-				'class'   => 'cmb2_select',
-				'name'    => $this->_name(),
-				'id'      => $this->_id(),
-				'desc'    => $this->_desc( true ),
-				'options' => $this->concat_grouped_items(),
+				'class'    => 'cmb2_select',
+				'name'     => $this->_name() . '[]',
+				'id'       => $this->_id(),
+				'desc'     => $this->_desc( true ),
+				'multiple' => 'multiple',
+				'options'  => $this->concat_grouped_items(),
 			)
 		);
 
@@ -56,30 +58,22 @@ class SelectOptgroupType extends CMB2_Type_Select
 	{
 		$field = $this->field;
 
-		$value = trim( (string) ( null !== $field->escaped_value() ? $field->escaped_value() : $field->get_default() ) );
+		$value = (array) ( null !== $field->escaped_value() ? $field->escaped_value() : $field->get_default() );
 
-		$options = array();
-
-		if ($option_none = $field->args( 'show_option_none' )) {
-			$options[''] = $option_none;
-		}
-
-		$options = $options + (array) $field->options();
-
-		return $this->handle_options( $options, $value );
+		return $this->handle_options( (array) $field->options(), $value );
 	}
 
 	/**
 	 * Handle options and return the HTML string for the <option> and <optgroup> elements.
 	 */
-	private function handle_options( array $options, string $value ): string
+	private function handle_options( array $options, array $selected_values ): string
 	{
 		$html     = '';
 		$iterator = 1;
 
 		foreach ($options as $key => $option) {
 			if ( ! is_array( $option )) {
-				$html .= $this->render_option( $key, $option, $value, $iterator++ );
+				$html .= $this->render_option( $key, $option, $selected_values, $iterator++ );
 
 				continue;
 			}
@@ -87,7 +81,7 @@ class SelectOptgroupType extends CMB2_Type_Select
 			$html .= sprintf( '<optgroup label="%s">', esc_attr( $key ) );
 
 			foreach ($option as $opt_value => $opt_label) {
-				$html .= $this->render_option( $opt_value, $opt_label, $value, $iterator++ );
+				$html .= $this->render_option( $opt_value, $opt_label, $selected_values, $iterator++ );
 			}
 
 			$html .= '</optgroup>';
@@ -96,14 +90,14 @@ class SelectOptgroupType extends CMB2_Type_Select
 		return $html;
 	}
 
-	private function render_option( string $opt_value, string $opt_label, string $selected_value, int $iterator ): string
+	private function render_option( string $opt_value, string $opt_label, array $selected_values, int $iterator ): string
 	{
 		$args = array(
 			'value' => $opt_value,
 			'label' => $opt_label,
 		);
 
-		if ($selected_value === $opt_value) {
+		if (in_array( $opt_value, $selected_values, true )) {
 			$args['checked'] = 'checked';
 		}
 

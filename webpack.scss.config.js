@@ -3,7 +3,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: {
-    editor: './resources/scss/editor.scss'
+    editor: './resources/scss/editor.scss',
+    'informatieobjecttypen-select': './resources/scss/admin/informatieobjecttypen-select.scss'
   },
   output: {
     path: path.resolve(process.cwd(), 'build/css'),

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use DI\Container;
+use OWC\My_Services\Settings\InformatieobjecttypeCatalog;
 use OWC\My_Services\Settings\Settings;
 
 return array(
@@ -89,10 +90,21 @@ return array(
 	'display.exclude-doc-docx'               => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-exclude-doc-docx' ) );
 	},
+	/**
+	 * Allowed informatieobjecttypen, grouped per supplier, so filtering only applies to the
+	 * supplier(s) for which informatieobjecttypen were actually selected.
+	 *
+	 * @return array<string, string[]>
+	 */
 	'display.allowed-informatieobjecttypen'  => function ( Container $container ) {
 		$value = $container->make( 'zgw.settings', array( 'owc-mijn-services-allowed-informatieobjecttypen' ) );
+		$urls  = is_array( $value ) ? array_values( array_filter( $value ) ) : array();
 
-		return is_array( $value ) ? array_values( array_filter( $value ) ) : array();
+		if (array() === $urls) {
+			return array();
+		}
+
+		return ( new InformatieobjecttypeCatalog() )->group_by_supplier( $urls );
 	},
 	'display.disable-production-checks'      => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-production-checks' ) );
