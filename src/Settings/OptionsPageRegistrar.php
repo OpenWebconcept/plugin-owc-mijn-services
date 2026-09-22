@@ -19,14 +19,10 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-use Exception;
 use OWC\My_Services\CMB2\SelectOptgroupType;
 use OWC\My_Services\Controllers\InformatieobjecttypenCacheController;
 use OWC\My_Services\Services\LoggerService;
-use OWC\My_Services\Settings\Adapters\InformatieobjecttypeAdapter;
 use OWC\My_Services\Traits\Supplier;
-
-use function OWC\ZGW\apiClientManager;
 
 /**
  * Options page registrar for settings.
@@ -102,7 +98,6 @@ class OptionsPageRegistrar
 				'desc'         => __( 'Selecteer de informatieobjecttypen die mogen worden gebruikt voor het ophalen van informatieobjecten bij een zaak. Laat dit veld leeg om alle informatieobjecten te tonen.', 'owc-mijn-services' ),
 				'id'           => 'owc-mijn-services-allowed-informatieobjecttypen',
 				'type'         => 'select',
-				'repeatable'   => true,
 				'render_class' => SelectOptgroupType::class,
 				'options_cb'   => function () {
 					return $this->get_informatieobjecttype_options();
@@ -111,10 +106,9 @@ class OptionsPageRegistrar
 					( new InformatieobjecttypenCacheController() )->render_clear_cache_button();
 				},
 				'attributes'   => array(
-					'style' => 'width: 100%;',
-				),
-				'text'         => array(
-					'add_row_text' => __( 'Informatieobjecttype toevoegen', 'owc-mijn-services' ),
+					'class'            => 'cmb2_select owcms-informatieobjecttypen-select',
+					'style'            => 'width: 100%;',
+					'data-placeholder' => __( 'Zoek en selecteer informatieobjecttypen…', 'owc-mijn-services' ),
 				),
 				'show_on_cb'   => $allowed_settings_show_on_cb,
 			)
@@ -177,38 +171,12 @@ class OptionsPageRegistrar
 	 * Builds the list of informatieobjecttypen of all configured suppliers, grouped per supplier,
 	 * to use as options for the SelectOptgroupType field.
 	 *
-	 * @return array<string, string|array<string, string>>
+	 * @return array<string, array<string, string>>
 	 * @since 0.12.0
 	 */
 	private function get_informatieobjecttype_options(): array
 	{
-		$options = array(
-			'' => __( 'Selecteer een informatieobjecttype', 'owc-mijn-services' ),
-		);
-
-		foreach ($this->get_configured_suppliers() as $supplier) {
-			try {
-				$client = apiClientManager()->getClient( $supplier['name'] );
-			} catch (Exception $e) {
-				LoggerService::log( 'error', $e->getMessage() );
-
-				continue;
-			}
-
-			if ( ! $client->supports( 'informatieobjecttypen' )) {
-				continue;
-			}
-
-			$types = ( new InformatieobjecttypeAdapter( $client, $supplier['name'] ) )->handle();
-
-			if (array() === $types) {
-				continue;
-			}
-
-			$options[ $supplier['name'] ] = $types;
-		}
-
-		return $options;
+		return ( new InformatieobjecttypeCatalog() )->per_supplier();
 	}
 
 	private function handle_unchecked_checkbox( mixed $value ): ?string

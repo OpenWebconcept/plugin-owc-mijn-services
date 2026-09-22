@@ -31,6 +31,7 @@
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^31.8.0",
+		"copy-webpack-plugin": "^10.2.4",
 		"mini-css-extract-plugin": "^2.9.4",
 		"sass": "^1.93.2"
 	}
