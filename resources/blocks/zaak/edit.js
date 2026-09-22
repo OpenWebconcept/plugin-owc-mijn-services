@@ -5,18 +5,16 @@ import { useEffect } from '@wordpress/element';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
-	Disabled,
 	BaseControl,
 	CheckboxControl,
 	Notice,
+	Placeholder,
 } from '@wordpress/components';
-import ServerSideRender from '@wordpress/server-side-render';
 import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
  */
-import metadata from './block.json';
 import './editor.css';
 
 export default function Edit( { attributes, setAttributes } ) {
@@ -120,12 +118,17 @@ export default function Edit( { attributes, setAttributes } ) {
 				</PanelBody>
 			</InspectorControls>
 			<div { ...useBlockProps() }>
-				<Disabled>
-					<ServerSideRender
-						block={ metadata.name }
-						attributes={ attributes }
-					/>
-				</Disabled>
+				<Placeholder
+					icon="list-view"
+					label={ __(
+						'Detailpagina van een zaak',
+						'owc-mijn-services'
+					) }
+					instructions={ __(
+						'Toont de details van een specifieke zaak.',
+						'owc-mijn-services'
+					) }
+				/>
 			</div>
 		</>
 	);
