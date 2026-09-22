@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.17.0
  */
 
 namespace OWC\My_Services\Settings;
@@ -33,7 +33,7 @@ use function OWC\ZGW\apiClientManager;
  * and to resolve which supplier a previously selected informatieobjecttype url belongs to,
  * so filtering can be scoped per supplier.
  *
- * @since NEXT
+ * @since 0.17.0
  */
 class InformatieobjecttypeCatalog
 {

@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.17.0
  */
 
 namespace OWC\My_Services\Controllers;
@@ -25,7 +25,7 @@ use OWC\My_Services\WPCron\Events\PopulateZaaktypen;
 /**
  * Controller for manually re-fetching the cached zaaktypen.
  *
- * @since NEXT
+ * @since 0.17.0
  */
 class ZaaktypenCacheController
 {

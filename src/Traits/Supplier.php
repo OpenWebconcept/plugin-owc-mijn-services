@@ -68,7 +68,7 @@ trait Supplier
 	 * supports filtering on the zaaktype parameter. Disabled by default; a supplier must be
 	 * explicitly selected in the setting before zaaktype filtering is applied for it.
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 */
 	public function supports_zaaktype_filtering( string $supplier_name ): bool
 	{

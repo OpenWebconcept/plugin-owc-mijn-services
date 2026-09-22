@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.17.0
  */
 
 namespace OWC\My_Services\WPCron\Events;
@@ -30,7 +30,7 @@ use function OWC\ZGW\apiClientManager;
  * Runs early in the morning so the cache is warm before an editor opens the
  * block editor, meaning nobody has to wait for the zaaktypen to be fetched from the API.
  *
- * @since NEXT
+ * @since 0.17.0
  */
 class PopulateZaaktypen
 {
