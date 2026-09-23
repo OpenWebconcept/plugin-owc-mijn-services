@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.18.0] - 2026-09-23
+
+-   Change: use correct File component props
+-   Change: use creation date as fallback for last update date in File component
+
 ## [v0.17.0] - 2026-09-22
 
 -   Added: use placeholder component in owc-my-services/zaak block
