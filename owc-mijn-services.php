@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
-const VERSION = '0.17.0';
+const VERSION = '0.18.0';
 define( 'OWC_MY_SERVICES_FILE', __FILE__ );
 define( 'OWC_MY_SERVICES_DIR_PATH', plugin_dir_path( OWC_MY_SERVICES_FILE ) );
 define( 'OWC_MY_SERVICES_PLUGIN_URL', plugins_url( '/', OWC_MY_SERVICES_FILE ) );
