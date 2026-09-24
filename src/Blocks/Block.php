@@ -53,7 +53,7 @@ abstract class Block
 	 * Map of supplier name to the zaaktype URLs the block is filtered on for that supplier.
 	 * An empty list for a supplier means all zaaktypen are shown.
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 * @var array<string, string[]>
 	 */
 	protected array $zaaktypen_by_supplier = array();
@@ -61,7 +61,7 @@ abstract class Block
 	/**
 	 * Supplier name resolved for the legacy single `zaakClient` attribute.
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 */
 	protected string $single_client_supplier_name = '';
 
@@ -137,7 +137,7 @@ abstract class Block
 	 * Normalizes the `zaaktypen` block attribute (a supplier name => zaaktype URLs map)
 	 * into a strictly typed array, discarding anything that doesn't match the expected shape.
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 *
 	 * @return array<string, string[]>
 	 */
@@ -269,7 +269,7 @@ abstract class Block
 	 * request per zaaktype and merges the results, since the ZGW Zaken API filters on a
 	 * single zaaktype per request. Without zaaktype URLs, all zaaktypen are fetched.
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 *
 	 * @param string[] $zaaktype_urls
 	 */
@@ -295,7 +295,7 @@ abstract class Block
 	 * before the zaaktype was re-versioned in the ZTC. Falls back to the URL as-is when no
 	 * migration is known (e.g. the block hasn't triggered a zaaktypen fetch yet).
 	 *
-	 * @since NEXT
+	 * @since 0.17.0
 	 *
 	 * @param string[] $urls
 	 * @return string[]
