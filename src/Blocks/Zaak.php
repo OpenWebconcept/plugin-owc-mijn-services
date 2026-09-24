@@ -64,14 +64,14 @@ class Zaak extends Block
 		/**
 		 * TEST.
 		 */
-		$zaak->setValue(
-			'verlenging',
-			array(
-				'reden' => 'test',
-				'duur'  => 'P42D',
-			)
-		);
-		$zaak->setValue( 'opschorting', array( 'reden' => 'test' ) );
+		// $zaak->setValue(
+		//  'verlenging',
+		//  array(
+		//      'reden' => 'test',
+		//      'duur'  => 'P42D',
+		//  )
+		// );
+		// $zaak->setValue( 'opschorting', array( 'reden' => 'test' ) );
 
 		return owc_mijn_services_render_view(
 			'owc-single-zaak',
