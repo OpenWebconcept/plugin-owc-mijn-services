@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use OWC\My_Services\ContainerResolver;
 use OWC\ZGW\Endpoints\Filter\ZakenFilter;
 use OWC\ZGW\Entities\Attributes\SubjectType;
 use OWC\ZGW\Entities\Rol;
