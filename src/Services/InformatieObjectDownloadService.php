@@ -150,7 +150,7 @@ class InformatieObjectDownloadService
 			$has_kvk_identification = '' !== $this->kvk || '' !== $this->vestigings_nummer || '' !== $this->rsin;
 
 			if ($has_kvk_identification && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
-				$authentication_filter_applied = $this->add_kvk_filter( $filter, $this->rsin, $this->vestigings_nummer, $this->kvk ) || $authentication_filter_applied;
+				$authentication_filter_applied = $this->add_kvk_filter( $filter, $this->rsin, $this->vestigings_nummer ) || $authentication_filter_applied;
 			}
 
 			if ( ! $authentication_filter_applied) {

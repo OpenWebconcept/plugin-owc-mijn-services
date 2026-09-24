@@ -35,7 +35,7 @@ trait AuthenticationFilter
 	 * The plain kvkNummer filter is not supported by every supplier and is deprecated,
 	 * so it is no longer used.
 	 */
-	protected function add_kvk_filter( ZakenFilter $filter, string $rsin, string $vestigings_nummer, string $kvk ): bool
+	protected function add_kvk_filter( ZakenFilter $filter, string $rsin, string $vestigings_nummer ): bool
 	{
 		if ('' !== $vestigings_nummer) {
 			$filter->add( 'rol__betrokkeneIdentificatie__vestiging__vestigingsNummer', $vestigings_nummer );
