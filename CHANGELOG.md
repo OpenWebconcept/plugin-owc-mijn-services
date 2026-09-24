@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.18.1] - 2026-09-24
+
+-   Fix: missing @since version annotations in Block (replace NEXT placeholders with 0.17.0)
+
 ## [v0.18.0] - 2026-09-23
 
 -   Change: use correct File component props
