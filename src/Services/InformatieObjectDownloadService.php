@@ -150,7 +150,7 @@ class InformatieObjectDownloadService
 			$has_kvk_identification = '' !== $this->kvk || '' !== $this->vestigings_nummer || '' !== $this->rsin;
 
 			if ($has_kvk_identification && ! ContainerResolver::make()->get( 'display.disable-kvk-filtering' )) {
-				$authentication_filter_applied = $this->add_kvk_filter( $filter, $this->rsin, $this->vestigings_nummer, $this->kvk ) || $authentication_filter_applied;
+				$authentication_filter_applied = $this->add_kvk_filter( $filter, $this->rsin, $this->vestigings_nummer ) || $authentication_filter_applied;
 			}
 
 			if ( ! $authentication_filter_applied) {
@@ -162,7 +162,7 @@ class InformatieObjectDownloadService
 			// The betrokkene filters above independently match against the zaak's rollen, so they
 			// don't guarantee it's the same role that is both the betrokkene and the initiator.
 			// Verify that in code instead, now that the rollen are available on the zaak.
-			if ($zaak instanceof Zaak && ! $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->kvk, $this->vestigings_nummer, $this->rsin )) {
+			if ($zaak instanceof Zaak && ! $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->vestigings_nummer, $this->rsin )) {
 				return null;
 			}
 
