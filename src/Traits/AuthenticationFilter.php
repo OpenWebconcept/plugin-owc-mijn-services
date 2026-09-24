@@ -77,7 +77,7 @@ trait AuthenticationFilter
 	 *
 	 * @since NEXT
 	 */
-	protected function zaak_has_authenticated_initiator( Zaak $zaak, string $bsn, string $kvk, string $vestigings_nummer, string $rsin ): bool
+	protected function zaak_has_authenticated_initiator( Zaak $zaak, string $bsn, string $vestigings_nummer, string $rsin ): bool
 	{
 		if ('' !== $bsn && $zaak->isInitiatedBy( $bsn )) {
 			return true;
@@ -87,18 +87,12 @@ trait AuthenticationFilter
 			return false;
 		}
 
-		$extended_filtering_enabled = (bool) ContainerResolver::make()->get( 'display.enable-extended-kvk-filtering' );
-
-		if ($extended_filtering_enabled && '' !== $vestigings_nummer) {
+		if ('' !== $vestigings_nummer) {
 			return $this->zaak_has_initiator_role( $zaak, SubjectType::VESTIGING, 'vestigingsNummer', $vestigings_nummer );
 		}
 
-		if ($extended_filtering_enabled && '' !== $rsin) {
+		if ('' !== $rsin) {
 			return $this->zaak_has_initiator_role( $zaak, SubjectType::NIET_NATUURLIJK_PERSOON, 'innNnpId', $rsin );
-		}
-
-		if ('' !== $kvk) {
-			return $this->zaak_has_initiator_role( $zaak, SubjectType::VESTIGING, 'kvkNummer', $kvk );
 		}
 
 		return false;

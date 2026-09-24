@@ -116,7 +116,7 @@ class Zaak extends Block
 			// The betrokkene filters above independently match against the zaak's rollen, so they
 			// don't guarantee it's the same role that is both the betrokkene and the initiator.
 			// Verify that in code instead, now that the rollen are available on the zaak.
-			if ($zaak instanceof ZaakEntity && ! $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->kvk, $this->vestigings_nummer, $this->rsin )) {
+			if ($zaak instanceof ZaakEntity && ! $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->vestigings_nummer, $this->rsin )) {
 				$zaak = null;
 			}
 		} catch (Exception $e) {
