@@ -276,17 +276,40 @@ abstract class Block
 	private function fetch_zaken( Client $client, array $zaaktype_urls ): array
 	{
 		if (array() === $zaaktype_urls) {
-			return (array) $client->zaken()->filter( clone $this->zaken_filter )->all();
+			return $this->filter_zaken_by_authenticated_initiator(
+				(array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( clone $this->zaken_filter )->all()
+			);
 		}
 
 		$zaken = array();
 
 		foreach ($zaaktype_urls as $zaaktype_url) {
 			$filter = ( clone $this->zaken_filter )->add( 'zaaktype', $zaaktype_url );
-			$zaken  = array_merge( $zaken, (array) $client->zaken()->filter( $filter )->all() );
+			$zaken  = array_merge( $zaken, (array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $filter )->all() );
 		}
 
-		return $zaken;
+		return $this->filter_zaken_by_authenticated_initiator( $zaken );
+	}
+
+	/**
+	 * The betrokkene and 'rol__omschrijvingGeneriek' query filters each match against the zaak's
+	 * rollen independently, so a zaak where the authenticated user holds a different role (e.g.
+	 * 'adviseur') next to someone else's initiator role would still be returned. Drops those zaken,
+	 * matching the check the single zaak view performs.
+	 *
+	 * @since NEXT
+	 *
+	 * @param Zaak[] $zaken
+	 * @return Zaak[]
+	 */
+	private function filter_zaken_by_authenticated_initiator( array $zaken ): array
+	{
+		return array_values(
+			array_filter(
+				$zaken,
+				fn ( Zaak $zaak ) => $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->vestigings_nummer, $this->rsin )
+			)
+		);
 	}
 
 	/**
