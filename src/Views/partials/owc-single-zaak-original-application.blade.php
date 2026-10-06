@@ -40,10 +40,11 @@
 			    : null;
 
 			$name = $object->getValue('bestandsnaam', '');
-			$size = $object->formattedMetaData() ?? null;
-			$lastUpdated = $object->getValue('lastUpdated', null);
+			$id = $object->identification();
+			$meta = $object->formattedMetaData();
+			$extension = $object->formatType();
 		@endphp
 
-		@include('partials.nlds.denhaag.file', compact('name', 'href', 'size', 'lastUpdated'))
+		@include('partials.components.file', compact('extension', 'href', 'id', 'meta', 'name'))
 	@endforeach
 @endif
