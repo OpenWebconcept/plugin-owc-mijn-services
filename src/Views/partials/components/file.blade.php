@@ -35,7 +35,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" class="denhaag-icon denhaag-file__link__icon" focusable="false" aria-hidden="true" shape-rendering="auto">
                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 13v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-4M5 8l5 5 5-5M10 13V1"></path>
                 </svg>
-                <div class="utrecht-link" tabindex="-1">Download</div>
+                <div class="utrecht-link" tabindex="-1">{{ __('Download', 'owc-mijn-services') }}</div>
             </div>
         </div>
     </a>
