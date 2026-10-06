@@ -183,13 +183,34 @@ class ZgwApiMacros
 		);
 
 		Enkelvoudiginformatieobject::macro(
+			'lastUpdatedDate',
+			function () {
+				$date = $this->getValue( 'lastUpdated', null );
+
+				try {
+					if (is_string( $date ) && '' !== $date) {
+						$date = new DateTimeImmutable( $date );
+					}
+
+					if ( ! $date instanceof DateTimeImmutable) {
+						return $this->creationDate();
+					}
+
+					return $date->format( 'd-m-Y' );
+				} catch (Exception $e) {
+					return $this->creationDate();
+				}
+			}
+		);
+
+		Enkelvoudiginformatieobject::macro(
 			'formattedMetaData',
 			function () {
 				$meta = array_filter(
 					array(
 						$this->formatType(),
 						$this->sizeFormatted(),
-						$this->creationDate(),
+						$this->lastUpdatedDate(),
 					)
 				);
 
