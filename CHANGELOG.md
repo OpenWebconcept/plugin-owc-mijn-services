@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.18.2] - 2026-10-06
+
+-   Change: temporarily replace NL Design file component with a Blade copy to fix rendering issues
+
 ## [v0.18.1] - 2026-09-24
 
 -   Fix: missing @since version annotations in Block (replace NEXT placeholders with 0.17.0)
