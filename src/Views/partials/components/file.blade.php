@@ -18,6 +18,11 @@
 
     $nameId = 'name-' . $id;
     $descriptionId = 'description-' . $id;
+
+    /**
+     * Note: this component is only meant to temporarily replace the NL Design component until the outstanding issues
+     * have been fixed.
+     */
 @endphp
 
 @if ($href)
