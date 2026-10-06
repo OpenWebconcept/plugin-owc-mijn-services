@@ -20,22 +20,13 @@
 			    continue;
 			}
 
-			$name = $object->getValue('bestandsnaam', '');
 			$href = $object->downloadUrl($zaak->getValue('identificatie', ''), $zaak->getValue('supplier', ''));
-			$size = $object->sizeFormatted() ?: null;
-			$lastUpdated = $object->getValue('lastUpdated', null);
-			$creationDate = $object->getValue('creatiedatum', null);
-
-			if (null === $lastUpdated && $creationDate instanceof DateTimeImmutable) {
-			    $lastUpdated = $creationDate->format('Y-m-d');
-			}
+			$name = $object->getValue('bestandsnaam', '');
+			$id = $object->identification();
+			$meta = $object->formattedMetaData();
+			$extension = $object->formatType();
 		@endphp
 
-		@include('partials.nlds.denhaag.file', [
-			'name' => $name,
-			'href' => $href,
-			'size' => $size,
-			'lastUpdated' => $lastUpdated,
-		])
+		@include('partials.components.file', compact('extension', 'href', 'id', 'meta', 'name'))
 	@endforeach
 @endif
