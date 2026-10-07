@@ -297,7 +297,7 @@ abstract class Block
 	 * 'adviseur') next to someone else's initiator role would still be returned. Drops those zaken,
 	 * matching the check the single zaak view performs.
 	 *
-	 * @since NEXT
+	 * @since 0.19.0
 	 *
 	 * @param Zaak[] $zaken
 	 * @return Zaak[]

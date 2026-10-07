@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | Mijn Services 0.18.2\n"
+"Project-Id-Version: OWC | Mijn Services 0.19.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-mijn-services\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-06T12:12:27+00:00\n"
+"POT-Creation-Date: 2026-10-07T08:10:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-mijn-services\n"
@@ -76,8 +76,8 @@ msgstr ""
 msgid "Toont een overzicht van de zaken voor de ingelogde gebruiker."
 msgstr ""
 
-#: src/Blocks/MijnZaken.php:47
-#: src/Blocks/MijnZaken.php:54
+#: src/Blocks/MijnZaken.php:50
+#: src/Blocks/MijnZaken.php:57
 msgid "Er zijn geen zaken gevonden."
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 msgid "De zaaktypen zijn opnieuw opgehaald."
 msgstr ""
 
-#: src/Macros/ZgwApiMacros.php:242
+#: src/Macros/ZgwApiMacros.php:243
 msgid "Ophalen van het resultaat is mislukt"
 msgstr ""
 
@@ -294,7 +294,7 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: src/Views/partials/owc-single-zaak-details.blade.php:28
+#: src/Views/partials/owc-single-zaak-details.blade.php:30
 msgid "Details"
 msgstr ""
 
@@ -310,11 +310,11 @@ msgstr ""
 msgid "Zaak resultaat"
 msgstr ""
 
-#: src/Views/partials/owc-single-zaak-status.blade.php:65
+#: src/Views/partials/owc-single-zaak-status.blade.php:69
 msgid "Status"
 msgstr ""
 
-#: src/Views/partials/owc-single-zaak-status.blade.php:68
+#: src/Views/partials/owc-single-zaak-status.blade.php:72
 msgid "Er is (momenteel) geen status beschikbaar."
 msgstr ""
 

@@ -75,7 +75,7 @@ trait AuthenticationFilter
 	 * that check in code instead, using the same identification precedence as add_kvk_filter,
 	 * against roles already available on the zaak (see EXPAND_WITH_ROLLEN).
 	 *
-	 * @since NEXT
+	 * @since 0.19.0
 	 */
 	protected function zaak_has_authenticated_initiator( Zaak $zaak, string $bsn, string $vestigings_nummer, string $rsin ): bool
 	{

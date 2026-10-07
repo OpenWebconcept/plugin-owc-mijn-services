@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.19.0] - 2026-10-07
+
+-   Added: usage of Zaak extension and suspension
+-   Added: filter zaken on role initiator
+-   Change: show status as checked when date is present
+-   Fix: only mark next status step as current when current step is checked
+-   Fix: verify authenticated initiator role on zaken overview
+
 ## [v0.18.2] - 2026-10-06
 
 -   Change: temporarily replace NL Design file component with a Blade copy to fix rendering issues

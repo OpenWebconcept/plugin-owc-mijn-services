@@ -246,7 +246,7 @@ class ZgwApiMacros
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 0.19.0
 		 */
 		Zaak::macro(
 			'extensionReason',
@@ -262,7 +262,7 @@ class ZgwApiMacros
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 0.19.0
 		 */
 		Zaak::macro(
 			'extensionDuration',
@@ -278,7 +278,7 @@ class ZgwApiMacros
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 0.19.0
 		 */
 		Zaak::macro(
 			'extensionDurationFormatted',
@@ -324,7 +324,7 @@ class ZgwApiMacros
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 0.19.0
 		 */
 		Zaak::macro(
 			'extensionFormatted',
@@ -342,7 +342,7 @@ class ZgwApiMacros
 		);
 
 		/**
-		 * @since NEXT
+		 * @since 0.19.0
 		 */
 		Zaak::macro(
 			'suspensionReason',
