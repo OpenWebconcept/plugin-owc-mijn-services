@@ -11,6 +11,8 @@
 	$fields = [
 	    'Datum aanvraag' => $zaak->registerDate('j F Y'),
 	    'Startdatum' => $zaak->startDate('j F Y'),
+		'Verlenging' => $zaak->extensionFormatted(),
+		'Opschorting' => $zaak->suspensionReason(),
 	    'Einddatum gepland' => $zaak->endDatePlanned() && empty($zaak->endDate()) ? $zaak->endDatePlanned() : null,
 	    'Einddatum' => $zaak->endDate(),
 	    'Zaaknummer' => $zaak->getValue('identificatie', ''),

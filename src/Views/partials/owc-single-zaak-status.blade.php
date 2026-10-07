@@ -25,6 +25,9 @@
 	    }
 	}
 
+	// The next step is only marked as current once the current step is actually checked (has a date).
+	$currentStepChecked = false;
+
 	foreach ($steps as $step) {
 	    $statusUpdate = null;
 
@@ -40,11 +43,12 @@
 	    }
 
 	    // Determine step status
-	    if ($step->isPast()) {
+	    if ($step->isPast() && $statusUpdate) {
 	        $status = 'checked';
-	    } elseif ($step->isCurrent()) {
+	    } elseif ($step->isCurrent() && $statusUpdate) {
 	        $status = 'checked';
-	    } elseif ($step->isNext()) {
+	        $currentStepChecked = true;
+	    } elseif ($step->isNext() && $currentStepChecked) {
 	        $status = 'current';
 	    } else {
 	        $status = 'not-checked';
