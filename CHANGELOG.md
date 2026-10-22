@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.19.1] - 2026-10-22
+
+-   Fix: make initiator filter hookable to disable it until a better fix is available
+
 ## [v0.19.0] - 2026-10-07
 
 -   Added: usage of Zaak extension and suspension

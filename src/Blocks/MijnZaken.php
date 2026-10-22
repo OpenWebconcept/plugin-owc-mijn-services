@@ -30,7 +30,9 @@ class MijnZaken extends Block
 		$this->handle_filter_ordering( $attributes );
 
 		// Make sure initiators are only allowed to see their own cases, and not those of other initiators.
-		$this->zaken_filter->add( 'rol__omschrijvingGeneriek', 'initiator' );
+		if ($this->should_verify_initiator_role()) {
+			$this->zaken_filter->add( 'rol__omschrijvingGeneriek', 'initiator' );
+		}
 
 		try {
 			if ( 0 < count( $this->clients )) {
