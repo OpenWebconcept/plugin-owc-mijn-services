@@ -66,6 +66,20 @@ trait AuthenticationFilter
 	}
 
 	/**
+	 * Whether zaken are restricted to those where the authenticated user holds the 'initiator' role,
+	 * both in the API request ('rol__omschrijvingGeneriek') and in code (zaak_has_authenticated_initiator()).
+	 *
+	 * Can be disabled through the filter for suppliers that don't support it, e.g. Decos JOIN, which
+	 * leaves 'omschrijvingGeneriek' empty and doesn't support retrieving rollen per zaak.
+	 *
+	 * @since NEXT
+	 */
+	protected function should_verify_initiator_role(): bool
+	{
+		return (bool) apply_filters( 'owcms::zaken/verify_initiator_role', true );
+	}
+
+	/**
 	 * Verifies that the given zaak has a role with 'omschrijvingGeneriek' 'initiator' whose
 	 * betrokkene identification matches the authenticated user.
 	 *
@@ -79,6 +93,10 @@ trait AuthenticationFilter
 	 */
 	protected function zaak_has_authenticated_initiator( Zaak $zaak, string $bsn, string $vestigings_nummer, string $rsin ): bool
 	{
+		if ( ! $this->should_verify_initiator_role()) {
+			return true;
+		}
+
 		if ('' !== $bsn && $zaak->isInitiatedBy( $bsn )) {
 			return true;
 		}
