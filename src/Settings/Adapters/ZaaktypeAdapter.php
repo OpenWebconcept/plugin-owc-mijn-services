@@ -64,6 +64,32 @@ class ZaaktypeAdapter
 	}
 
 	/**
+	 * Builds the transient key used to cache the zaaktype URL => identificatie map of a supplier.
+	 *
+	 * @since NEXT
+	 */
+	public static function identificaties_transient_key( string $supplier_name ): string
+	{
+		return sprintf( 'owcms-zaaktypen-identificaties-%s', strtolower( $supplier_name ) );
+	}
+
+	/**
+	 * Returns a map of zaaktype URL => zaaktype identificatie for every known version of every
+	 * zaaktype of a supplier, built the last time its zaaktypen were freshly fetched by handle().
+	 * Only reads the cache, never triggers a live fetch itself, so it's safe to call at render time.
+	 *
+	 * @since NEXT
+	 *
+	 * @return array<string, string>
+	 */
+	public static function url_identificaties( string $supplier_name ): array
+	{
+		$identificaties = get_transient( self::identificaties_transient_key( $supplier_name ) );
+
+		return is_array( $identificaties ) ? $identificaties : array();
+	}
+
+	/**
 	 * Returns a map of superseded zaaktype URL => current (latest version) zaaktype URL for a
 	 * supplier, built the last time its zaaktypen were freshly fetched by handle(). Only reads
 	 * the cache, never triggers a live fetch itself, so it's safe to call at render time.
@@ -111,8 +137,35 @@ class ZaaktypeAdapter
 
 		set_transient( $transient_key, $types, self::TRANSIENT_LIFETIME_IN_SECONDS );
 		set_transient( self::migrations_transient_key( $this->supplier_name ), $this->build_url_migrations( $raw, $filtered ), self::TRANSIENT_LIFETIME_IN_SECONDS );
+		set_transient( self::identificaties_transient_key( $this->supplier_name ), $this->build_url_identificaties( $raw ), self::TRANSIENT_LIFETIME_IN_SECONDS );
 
 		return $types;
+	}
+
+	/**
+	 * Maps every zaaktype URL, including those of superseded versions, to its identificatie.
+	 * The identificatie is shared by all versions of a zaaktype, which makes it the stable key to
+	 * filter zaken on, whereas each version has its own URL.
+	 *
+	 * @since NEXT
+	 *
+	 * @param Zaaktype[] $raw
+	 * @return array<string, string>
+	 */
+	private function build_url_identificaties( array $raw ): array
+	{
+		$identificaties = array();
+
+		foreach ($raw as $zaaktype) {
+			$identificatie = trim( (string) ( $zaaktype->identificatie ?? '' ) );
+			$url           = trim( (string) ( $zaaktype->url ?? '' ) );
+
+			if ('' !== $identificatie && '' !== $url) {
+				$identificaties[ $url ] = $identificatie;
+			}
+		}
+
+		return $identificaties;
 	}
 
 	/**

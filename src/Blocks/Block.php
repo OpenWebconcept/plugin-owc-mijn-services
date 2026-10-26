@@ -229,11 +229,11 @@ abstract class Block
 			return Collection::collect( array() );
 		}
 
-		$zaaktype_urls = $this->supports_zaaktype_filtering( $this->single_client_supplier_name )
-			? $this->resolve_zaaktype_urls( $this->single_client_supplier_name, $this->zaaktypen_by_supplier[ $this->single_client_supplier_name ] ?? array() )
+		$zaaktype_identificaties = $this->supports_zaaktype_filtering( $this->single_client_supplier_name )
+			? $this->resolve_zaaktype_identificaties( $this->client, $this->single_client_supplier_name, $this->zaaktypen_by_supplier[ $this->single_client_supplier_name ] ?? array() )
 			: array();
 
-		return Collection::collect( $this->fetch_zaken( $this->client, $this->single_client_supplier_name, $zaaktype_urls ) );
+		return Collection::collect( $this->fetch_zaken( $this->client, $this->single_client_supplier_name, $zaaktype_identificaties ) );
 	}
 
 	/**
@@ -248,11 +248,11 @@ abstract class Block
 
 		foreach ($this->clients as $supplier_name => $client) {
 			try {
-				$zaaktype_urls = $this->supports_zaaktype_filtering( $supplier_name )
-					? $this->resolve_zaaktype_urls( $supplier_name, $this->zaaktypen_by_supplier[ $supplier_name ] ?? array() )
+				$zaaktype_identificaties = $this->supports_zaaktype_filtering( $supplier_name )
+					? $this->resolve_zaaktype_identificaties( $client, $supplier_name, $this->zaaktypen_by_supplier[ $supplier_name ] ?? array() )
 					: array();
 
-				foreach ($this->fetch_zaken( $client, $supplier_name, $zaaktype_urls ) as $zaak) {
+				foreach ($this->fetch_zaken( $client, $supplier_name, $zaaktype_identificaties ) as $zaak) {
 					$zaak->setValue( 'supplier', $supplier_name );
 					$all_zaken[] = $zaak;
 				}
@@ -265,38 +265,73 @@ abstract class Block
 	}
 
 	/**
-	 * Fetches zaken for a single client. When zaaktype URLs are given, issues one filtered
-	 * request per zaaktype and merges the results, since the ZGW Zaken API filters on a
-	 * single zaaktype per request. Without zaaktype URLs, all zaaktypen are fetched.
+	 * Fetches zaken for a single client. When zaaktype identificaties are given, the zaken are
+	 * filtered on them after fetching instead of passing a 'zaaktype' query filter: that filter
+	 * only matches a single zaaktype version URL, so zaken created with an older version of the
+	 * same zaaktype would be missed. Since the zaaktype filtering then happens client side, all
+	 * result pages are fetched. Without zaaktype identificaties, all zaaktypen are fetched.
 	 *
 	 * @since 0.17.0
 	 *
-	 * @param string[] $zaaktype_urls
+	 * @param string[] $zaaktype_identificaties
 	 */
-	private function fetch_zaken( Client $client, string $supplier_name, array $zaaktype_urls ): array
+	private function fetch_zaken( Client $client, string $supplier_name, array $zaaktype_identificaties ): array
 	{
-		$base_filter = clone $this->zaken_filter;
+		$filter = clone $this->zaken_filter;
 
 		// Make sure initiators are only allowed to see their own cases, and not those of other initiators.
 		if ($this->should_verify_initiator_role( $supplier_name )) {
-			$base_filter->add( 'rol__omschrijvingGeneriek', 'initiator' );
+			$filter->add( 'rol__omschrijvingGeneriek', 'initiator' );
 		}
 
-		if (array() === $zaaktype_urls) {
+		if (array() === $zaaktype_identificaties) {
 			return $this->filter_zaken_by_authenticated_initiator(
-				(array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $base_filter )->all(),
+				(array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $filter )->all(),
 				$supplier_name
 			);
 		}
 
-		$zaken = array();
+		$url_identificaties = ZaaktypeAdapter::url_identificaties( $supplier_name );
+		$zaken              = array();
+		$page               = 1;
 
-		foreach ($zaaktype_urls as $zaaktype_url) {
-			$filter = ( clone $base_filter )->add( 'zaaktype', $zaaktype_url );
-			$zaken  = array_merge( $zaken, (array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $filter )->all() );
+		while ($page) {
+			$result = $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( ( clone $filter )->page( $page ) );
+			$zaken  = array_merge( $zaken, (array) $result->all() );
+			$page   = $result->pageMeta()->getNextPageNumber();
 		}
 
+		$zaken = array_filter(
+			$zaken,
+			fn ( Zaak $zaak ) => in_array( $this->get_zaak_zaaktype_identificatie( $zaak, $url_identificaties ), $zaaktype_identificaties, true )
+		);
+
 		return $this->filter_zaken_by_authenticated_initiator( $zaken, $supplier_name );
+	}
+
+	/**
+	 * Returns the identificatie of the zaaktype of a zaak, preferring the expanded zaaktype and
+	 * the cached URL => identificatie map over lazily fetching the zaaktype from the API.
+	 *
+	 * @since NEXT
+	 *
+	 * @param array<string, string> $url_identificaties
+	 */
+	private function get_zaak_zaaktype_identificatie( Zaak $zaak, array $url_identificaties ): string
+	{
+		$zaaktype = $zaak->getAttributeValue( 'zaaktype' );
+
+		if (is_string( $zaaktype ) && isset( $url_identificaties[ $zaaktype ] )) {
+			return $url_identificaties[ $zaaktype ];
+		}
+
+		try {
+			return (string) ( $zaak->zaaktype?->identificatie ?? '' );
+		} catch (Throwable $e) {
+			LoggerService::log_exception( $e, array( 'context' => 'Error resolving zaaktype of zaak.' ) );
+
+			return '';
+		}
 	}
 
 	/**
@@ -321,38 +356,51 @@ abstract class Block
 	}
 
 	/**
-	 * Resolves any zaaktype URL that has been superseded by a newer version to that version's
-	 * URL, so a block's saved zaaktype selection keeps matching zaken even when it was chosen
-	 * before the zaaktype was re-versioned in the ZTC. Falls back to the URL as-is when no
-	 * migration is known (e.g. the block hasn't triggered a zaaktypen fetch yet).
+	 * Resolves the zaaktype URLs selected on the block to their identificaties. The identificatie
+	 * is shared by all versions of a zaaktype, so filtering on it keeps matching zaken regardless
+	 * of the zaaktype version they were created with, or the version selected on the block.
+	 * Falls back to fetching the zaaktype when its URL is not in the cached map (e.g. the
+	 * zaaktypen cron hasn't run yet).
 	 *
-	 * @since 0.17.0
+	 * @since NEXT
 	 *
 	 * @param string[] $urls
 	 * @return string[]
 	 */
-	private function resolve_zaaktype_urls( string $supplier_name, array $urls ): array
+	private function resolve_zaaktype_identificaties( Client $client, string $supplier_name, array $urls ): array
 	{
 		if (array() === $urls) {
-			return $urls;
+			return array();
 		}
 
-		$migrations = ZaaktypeAdapter::url_migrations( $supplier_name );
+		$url_identificaties = ZaaktypeAdapter::url_identificaties( $supplier_name );
+		$identificaties     = array();
 
-		if (array() === $migrations) {
-			return $urls;
+		foreach ($urls as $url) {
+			$identificatie = $url_identificaties[ $url ] ?? $this->fetch_zaaktype_identificatie( $client, $url );
+
+			if ('' !== $identificatie) {
+				$identificaties[] = $identificatie;
+			}
 		}
 
-		return array_values(
-			array_unique(
-				array_map(
-					function ( $url ) use ( $migrations ) {
-						return $migrations[ $url ] ?? $url;
-					},
-					$urls
-				)
-			)
-		);
+		return array_values( array_unique( $identificaties ) );
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function fetch_zaaktype_identificatie( Client $client, string $url ): string
+	{
+		try {
+			$zaaktype = $client->zaaktypen()->get( basename( (string) wp_parse_url( $url, PHP_URL_PATH ) ) );
+		} catch (Throwable $e) {
+			LoggerService::log_exception( $e, array( 'context' => "Error fetching zaaktype '{$url}'" ) );
+
+			return '';
+		}
+
+		return trim( (string) ( $zaaktype?->identificatie ?? '' ) );
 	}
 
 	/**
