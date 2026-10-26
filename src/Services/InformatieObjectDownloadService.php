@@ -86,7 +86,7 @@ class InformatieObjectDownloadService
 		$this->client  = apiClientManager()->getClient( $supplier_name );
 
 		$identification = ZaakIdEncoderDecoder::decode( $identification );
-		$zaak           = $this->validate_zaak( $identification );
+		$zaak           = $this->validate_zaak( $identification, $supplier_name );
 
 		if ( ! $zaak instanceof Zaak) {
 			return '';
@@ -135,7 +135,7 @@ class InformatieObjectDownloadService
 		return $download_identification;
 	}
 
-	protected function validate_zaak( string $identification ): ?Zaak
+	protected function validate_zaak( string $identification, string $supplier_name ): ?Zaak
 	{
 		try {
 			$filter = new ZakenFilter();
@@ -162,7 +162,7 @@ class InformatieObjectDownloadService
 			// The betrokkene filters above independently match against the zaak's rollen, so they
 			// don't guarantee it's the same role that is both the betrokkene and the initiator.
 			// Verify that in code instead, now that the rollen are available on the zaak.
-			if ($zaak instanceof Zaak && ! $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->vestigings_nummer, $this->rsin )) {
+			if ($zaak instanceof Zaak && ! $this->zaak_has_authenticated_initiator( $zaak, $supplier_name, $this->bsn, $this->vestigings_nummer, $this->rsin )) {
 				return null;
 			}
 

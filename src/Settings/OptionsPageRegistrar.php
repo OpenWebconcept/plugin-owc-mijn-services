@@ -151,6 +151,23 @@ class OptionsPageRegistrar
 
 		$options->add_field(
 			array(
+				'name'              => __( 'Initiatorrolfiltering uitschakelen', 'owc-mijn-services' ),
+				'desc'              => __( 'Standaard worden alleen zaken getoond waarbij de ingelogde gebruiker de rol \'initiator\' heeft. Selecteer de leveranciers die dit niet ondersteunen, bijvoorbeeld omdat \'omschrijvingGeneriek\' van de rol niet wordt gevuld; voor geselecteerde leveranciers wordt niet op de initiatorrol gefilterd.', 'owc-mijn-services' ),
+				'id'                => 'owc-mijn-services-initiator-filtering-excluded-suppliers',
+				'type'              => 'multicheck',
+				'select_all_button' => false,
+				'options_cb'        => function () {
+					return $this->get_supplier_options();
+				},
+				'sanitization_cb'   => function ( $value ) {
+					return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
+				},
+				'show_on_cb'        => $admin_only_show_on_cb,
+			)
+		);
+
+		$options->add_field(
+			array(
 				'name'            => __( 'Productiecontroles uitschakelen', 'owc-mijn-services' ),
 				'desc'            => __( 'Schakel deze optie in om de verplichting van het gebruik van de blokattributen \'Filter op BSN\' of \'Filter op KVK\' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist.', 'owc-mijn-services' ),
 				'id'              => 'owc-mijn-services-disable-production-checks',

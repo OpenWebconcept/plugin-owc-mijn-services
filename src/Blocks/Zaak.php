@@ -43,7 +43,8 @@ class Zaak extends Block
 		}
 
 		try {
-			$this->client = apiClientManager()->getClient( $supplier );
+			$this->client                      = apiClientManager()->getClient( $supplier );
+			$this->single_client_supplier_name = $supplier;
 		} catch (NotFoundException $e) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De gekozen zaaksysteem leverancier client is niet geconfigureerd.', 'owc-mijn-services' ) ) );
 		}
@@ -104,7 +105,8 @@ class Zaak extends Block
 			// The betrokkene filters above independently match against the zaak's rollen, so they
 			// don't guarantee it's the same role that is both the betrokkene and the initiator.
 			// Verify that in code instead, now that the rollen are available on the zaak.
-			if ($zaak instanceof ZaakEntity && ! $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->vestigings_nummer, $this->rsin )) {
+			// When multiple clients are configured, the zaak is tagged with the supplier it was found under.
+			if ($zaak instanceof ZaakEntity && ! $this->zaak_has_authenticated_initiator( $zaak, (string) $zaak->getValue( 'supplier', $this->single_client_supplier_name ), $this->bsn, $this->vestigings_nummer, $this->rsin )) {
 				$zaak = null;
 			}
 		} catch (Exception $e) {
