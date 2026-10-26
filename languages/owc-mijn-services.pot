@@ -2,14 +2,14 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | Mijn Services 0.19.1\n"
+"Project-Id-Version: OWC | Mijn Services 0.19.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-mijn-services\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-22T15:14:34+00:00\n"
+"POT-Creation-Date: 2026-10-26T10:31:36+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-mijn-services\n"
@@ -56,7 +56,7 @@ msgid "Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of onderst
 msgstr ""
 
 #: src/Blocks/Block.php:125
-#: src/Blocks/Zaak.php:48
+#: src/Blocks/Zaak.php:49
 msgid "De gekozen zaaksysteem leverancier client is niet geconfigureerd."
 msgstr ""
 
@@ -76,8 +76,8 @@ msgstr ""
 msgid "Toont een overzicht van de zaken voor de ingelogde gebruiker."
 msgstr ""
 
-#: src/Blocks/MijnZaken.php:52
-#: src/Blocks/MijnZaken.php:59
+#: src/Blocks/MijnZaken.php:47
+#: src/Blocks/MijnZaken.php:54
 msgid "Er zijn geen zaken gevonden."
 msgstr ""
 
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Er is geen zaaknummer of leverancier opgegeven om de zaak te kunnen tonen."
 msgstr ""
 
-#: src/Blocks/Zaak.php:54
+#: src/Blocks/Zaak.php:55
 msgid "De opgevraagde zaak is niet gevonden."
 msgstr ""
 
@@ -186,34 +186,42 @@ msgid "Zaaktypen"
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:154
-msgid "Productiecontroles uitschakelen"
+msgid "Initiatorrolfiltering uitschakelen"
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:155
+msgid "Standaard worden alleen zaken getoond waarbij de ingelogde gebruiker de rol 'initiator' heeft. Selecteer de leveranciers die dit niet ondersteunen, bijvoorbeeld omdat 'omschrijvingGeneriek' van de rol niet wordt gevuld; voor geselecteerde leveranciers wordt niet op de initiatorrol gefilterd."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:171
+msgid "Productiecontroles uitschakelen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:172
 msgid "Schakel deze optie in om de verplichting van het gebruik van de blokattributen 'Filter op BSN' of 'Filter op KVK' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:167
+#: src/Settings/OptionsPageRegistrar.php:184
 msgid "Filtering op KVK uitschakelen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:168
+#: src/Settings/OptionsPageRegistrar.php:185
 msgid "Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning) niet ondersteunt. Gebruikers die via eHerkenning zijn ingelogd kunnen dan geen zaken ophalen."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:180
+#: src/Settings/OptionsPageRegistrar.php:197
 msgid "Statusstappen zonder datum verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:181
+#: src/Settings/OptionsPageRegistrar.php:198
 msgid "Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:193
+#: src/Settings/OptionsPageRegistrar.php:210
 msgid "Volgnummers verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:194
+#: src/Settings/OptionsPageRegistrar.php:211
 msgid "Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond."
 msgstr ""
 

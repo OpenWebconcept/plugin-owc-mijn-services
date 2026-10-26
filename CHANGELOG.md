@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.19.2] - 2026-10-26
+
+-   Fix: replace initiator filter hook with per-supplier setting
+
 ## [v0.19.1] - 2026-10-22
 
 -   Fix: make initiator filter hookable to disable it until a better fix is available
