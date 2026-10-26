@@ -66,17 +66,21 @@ trait AuthenticationFilter
 	}
 
 	/**
-	 * Whether zaken are restricted to those where the authenticated user holds the 'initiator' role,
-	 * both in the API request ('rol__omschrijvingGeneriek') and in code (zaak_has_authenticated_initiator()).
+	 * Whether zaken of the given supplier are restricted to those where the authenticated user holds
+	 * the 'initiator' role, both in the API request ('rol__omschrijvingGeneriek') and in code
+	 * (zaak_has_authenticated_initiator()).
 	 *
-	 * Can be disabled through the filter for suppliers that don't support it, e.g. Decos JOIN, which
-	 * leaves 'omschrijvingGeneriek' empty and doesn't support retrieving rollen per zaak.
+	 * Enabled by default. Suppliers that don't support it, e.g. Decos JOIN, which leaves 'omschrijvingGeneriek'
+	 * empty and doesn't support retrieving rollen per zaak, can be excluded through the
+	 * 'Initiatorrolfiltering uitschakelen' setting.
 	 *
-	 * @since NEXT
+	 * @since 0.19.1
 	 */
-	protected function should_verify_initiator_role(): bool
+	protected function should_verify_initiator_role( string $supplier_name ): bool
 	{
-		return (bool) apply_filters( 'owcms::zaken/verify_initiator_role', true );
+		$excluded = array_map( 'strtolower', (array) ContainerResolver::make()->get( 'display.initiator-filtering-excluded' ) );
+
+		return ! in_array( strtolower( $supplier_name ), $excluded, true );
 	}
 
 	/**
@@ -91,9 +95,9 @@ trait AuthenticationFilter
 	 *
 	 * @since 0.19.0
 	 */
-	protected function zaak_has_authenticated_initiator( Zaak $zaak, string $bsn, string $vestigings_nummer, string $rsin ): bool
+	protected function zaak_has_authenticated_initiator( Zaak $zaak, string $supplier_name, string $bsn, string $vestigings_nummer, string $rsin ): bool
 	{
-		if ( ! $this->should_verify_initiator_role()) {
+		if ( ! $this->should_verify_initiator_role( $supplier_name )) {
 			return true;
 		}
 

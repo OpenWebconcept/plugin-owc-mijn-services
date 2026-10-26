@@ -117,6 +117,18 @@ return array(
 
 		return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
 	},
+	/**
+	 * Suppliers excluded from restricting zaken to those where the authenticated user holds the
+	 * 'initiator' role. Initiator filtering is enabled by default, so a supplier only skips it once
+	 * explicitly selected here, e.g. one that doesn't fill 'omschrijvingGeneriek'.
+	 *
+	 * @return string[]
+	 */
+	'display.initiator-filtering-excluded'   => function ( Container $container ) {
+		$value = $container->make( 'zgw.settings', array( 'owc-mijn-services-initiator-filtering-excluded-suppliers' ) );
+
+		return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
+	},
 	'display.disable-production-checks'      => function ( Container $container ) {
 		return (bool) $container->make( 'zgw.settings', array( 'owc-mijn-services-disable-production-checks' ) );
 	},

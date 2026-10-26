@@ -233,7 +233,7 @@ abstract class Block
 			? $this->resolve_zaaktype_urls( $this->single_client_supplier_name, $this->zaaktypen_by_supplier[ $this->single_client_supplier_name ] ?? array() )
 			: array();
 
-		return Collection::collect( $this->fetch_zaken( $this->client, $zaaktype_urls ) );
+		return Collection::collect( $this->fetch_zaken( $this->client, $this->single_client_supplier_name, $zaaktype_urls ) );
 	}
 
 	/**
@@ -252,7 +252,7 @@ abstract class Block
 					? $this->resolve_zaaktype_urls( $supplier_name, $this->zaaktypen_by_supplier[ $supplier_name ] ?? array() )
 					: array();
 
-				foreach ($this->fetch_zaken( $client, $zaaktype_urls ) as $zaak) {
+				foreach ($this->fetch_zaken( $client, $supplier_name, $zaaktype_urls ) as $zaak) {
 					$zaak->setValue( 'supplier', $supplier_name );
 					$all_zaken[] = $zaak;
 				}
@@ -273,22 +273,30 @@ abstract class Block
 	 *
 	 * @param string[] $zaaktype_urls
 	 */
-	private function fetch_zaken( Client $client, array $zaaktype_urls ): array
+	private function fetch_zaken( Client $client, string $supplier_name, array $zaaktype_urls ): array
 	{
+		$base_filter = clone $this->zaken_filter;
+
+		// Make sure initiators are only allowed to see their own cases, and not those of other initiators.
+		if ($this->should_verify_initiator_role( $supplier_name )) {
+			$base_filter->add( 'rol__omschrijvingGeneriek', 'initiator' );
+		}
+
 		if (array() === $zaaktype_urls) {
 			return $this->filter_zaken_by_authenticated_initiator(
-				(array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( clone $this->zaken_filter )->all()
+				(array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $base_filter )->all(),
+				$supplier_name
 			);
 		}
 
 		$zaken = array();
 
 		foreach ($zaaktype_urls as $zaaktype_url) {
-			$filter = ( clone $this->zaken_filter )->add( 'zaaktype', $zaaktype_url );
+			$filter = ( clone $base_filter )->add( 'zaaktype', $zaaktype_url );
 			$zaken  = array_merge( $zaken, (array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $filter )->all() );
 		}
 
-		return $this->filter_zaken_by_authenticated_initiator( $zaken );
+		return $this->filter_zaken_by_authenticated_initiator( $zaken, $supplier_name );
 	}
 
 	/**
@@ -302,12 +310,12 @@ abstract class Block
 	 * @param Zaak[] $zaken
 	 * @return Zaak[]
 	 */
-	private function filter_zaken_by_authenticated_initiator( array $zaken ): array
+	private function filter_zaken_by_authenticated_initiator( array $zaken, string $supplier_name ): array
 	{
 		return array_values(
 			array_filter(
 				$zaken,
-				fn ( Zaak $zaak ) => $this->zaak_has_authenticated_initiator( $zaak, $this->bsn, $this->vestigings_nummer, $this->rsin )
+				fn ( Zaak $zaak ) => $this->zaak_has_authenticated_initiator( $zaak, $supplier_name, $this->bsn, $this->vestigings_nummer, $this->rsin )
 			)
 		);
 	}
