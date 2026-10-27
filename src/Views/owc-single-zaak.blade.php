@@ -33,6 +33,7 @@
 
 	@include('partials.owc-single-zaak-original-application', [
 		'zaak' => $zaak,
+		'confidential_information_objects' => $confidential_information_objects,
 	])
 @else
 	<h1>{{ __('Zaak niet gevonden.', 'owc-mijn-services') }}</h1>

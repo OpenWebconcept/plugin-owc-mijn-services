@@ -62,15 +62,18 @@ class Zaak extends Block
 			$zaak->setValue( 'supplier', $supplier );
 		}
 
+		$information_objects = $this->get_zaak_informatie_objects( $zaak );
+
 		return owc_mijn_services_render_view(
 			'owc-single-zaak',
 			array(
-				'zaak'                           => $zaak,
-				'information_objects'            => $this->get_zaak_informatie_objecten( $zaak ),
-				'steps'                          => $zaak->steps,
-				'endDate'                        => $zaak->endDate(),
-				'hide_status_steps_without_date' => ContainerResolver::make()->get( 'display.hide-status-steps-without-date' ),
-				'hide_volgnummers'               => ContainerResolver::make()->get( 'display.hide-volgnummers' ),
+				'zaak'                             => $zaak,
+				'information_objects'              => $this->get_display_allowed_zaak_informatie_objects( $information_objects ),
+				'confidential_information_objects' => $this->get_confidential_zaak_informatie_objects( $information_objects ),
+				'steps'                            => $zaak->steps,
+				'endDate'                          => $zaak->endDate(),
+				'hide_status_steps_without_date'   => ContainerResolver::make()->get( 'display.hide-status-steps-without-date' ),
+				'hide_volgnummers'                 => ContainerResolver::make()->get( 'display.hide-volgnummers' ),
 			)
 		);
 	}
