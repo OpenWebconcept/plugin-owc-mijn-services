@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.19.3] - 2026-10-27
+
+-   Fix: display bugs information objects
+
 ## [v0.19.2] - 2026-10-26
 
 -   Fix: replace initiator filter hook with per-supplier setting

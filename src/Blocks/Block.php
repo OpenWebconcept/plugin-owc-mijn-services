@@ -421,7 +421,7 @@ abstract class Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.19.3
 	 */
 	final protected function get_confidential_zaak_informatie_objects( Collection $information_objects ): Collection
 	{
@@ -433,7 +433,7 @@ abstract class Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.19.3
 	 */
 	final protected function get_display_allowed_zaak_informatie_objects( Collection $information_objects ): Collection
 	{
