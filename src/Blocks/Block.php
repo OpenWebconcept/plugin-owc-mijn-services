@@ -378,7 +378,7 @@ abstract class Block
 		}
 	}
 
-	final protected function get_zaak_informatie_objecten( Zaak $zaak ): Collection
+	final protected function get_zaak_informatie_objects( Zaak $zaak ): Collection
 	{
 		$zaakinformatie_objecten = $zaak->zaakinformatieobjecten;
 
@@ -416,6 +416,30 @@ abstract class Block
 				}
 
 				return true;
+			}
+		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	final protected function get_confidential_zaak_informatie_objects( Collection $information_objects ): Collection
+	{
+		return $information_objects->filter(
+			function ( Zaakinformatieobject $zaakinformatie_object ) {
+				return $zaakinformatie_object->informatieobject instanceof Enkelvoudiginformatieobject && $zaakinformatie_object->informatieobject->isConfidential();
+			}
+		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	final protected function get_display_allowed_zaak_informatie_objects( Collection $information_objects ): Collection
+	{
+		return $information_objects->filter(
+			function ( Zaakinformatieobject $zaakinformatie_object ) {
+				return $zaakinformatie_object->informatieobject instanceof Enkelvoudiginformatieobject && $zaakinformatie_object->informatieobject->isDisplayAllowed();
 			}
 		);
 	}

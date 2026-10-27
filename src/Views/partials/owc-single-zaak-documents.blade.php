@@ -9,16 +9,12 @@
 	}
 @endphp
 
-@if ($information_objects->isNotEmpty())
+@if (isset($information_objects) && $information_objects->isNotEmpty())
 	<h2 class="nl-heading nl-heading--level-2">{{ __('Documenten', 'owc-mijn-services') }}</h2>
 
 	@foreach ($information_objects as $document)
 		@php
 			$object = $document->informatieobject;
-
-			if (!$object->isDisplayAllowed()) {
-			    continue;
-			}
 
 			$href = $object->downloadUrl($zaak->getValue('identificatie', ''), $zaak->getValue('supplier', ''));
 			$name = $object->getValue('bestandsnaam', '');

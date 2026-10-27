@@ -29,15 +29,11 @@
 	'items' => $origineleAanvraag,
 ])
 
-@if ($information_objects && $information_objects->count() > 0)
-	@foreach ($information_objects as $document)
+@if (isset($confidential_information_objects) && $confidential_information_objects->isNotEmpty())
+	@foreach ($confidential_information_objects as $document)
 		@php
 			$object = $document->informatieobject;
-
-			// Only render if confidential and download URL exists
-			$href = $object->isConfidential()
-			    ? $object->downloadUrl($zaak->getValue('identificatie', ''), $zaak->getValue('supplier', ''))
-			    : null;
+			$href = $object->downloadUrl($zaak->getValue('identificatie', ''), $zaak->getValue('supplier', ''));
 
 			$name = $object->getValue('bestandsnaam', '');
 			$id = $object->identification();
