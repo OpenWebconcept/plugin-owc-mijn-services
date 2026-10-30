@@ -233,6 +233,10 @@ abstract class Block
 			? $this->resolve_zaaktype_identificaties( $this->client, $this->single_client_supplier_name, $this->zaaktypen_by_supplier[ $this->single_client_supplier_name ] ?? array() )
 			: array();
 
+		if (null === $zaaktype_identificaties) {
+			return Collection::collect( array() );
+		}
+
 		return Collection::collect( $this->fetch_zaken( $this->client, $this->single_client_supplier_name, $zaaktype_identificaties ) );
 	}
 
@@ -251,6 +255,10 @@ abstract class Block
 				$zaaktype_identificaties = $this->supports_zaaktype_filtering( $supplier_name )
 					? $this->resolve_zaaktype_identificaties( $client, $supplier_name, $this->zaaktypen_by_supplier[ $supplier_name ] ?? array() )
 					: array();
+
+				if (null === $zaaktype_identificaties) {
+					continue;
+				}
 
 				foreach ($this->fetch_zaken( $client, $supplier_name, $zaaktype_identificaties ) as $zaak) {
 					$zaak->setValue( 'supplier', $supplier_name );
@@ -360,14 +368,15 @@ abstract class Block
 	 * is shared by all versions of a zaaktype, so filtering on it keeps matching zaken regardless
 	 * of the zaaktype version they were created with, or the version selected on the block.
 	 * Falls back to fetching the zaaktype when its URL is not in the cached map (e.g. the
-	 * zaaktypen cron hasn't run yet).
+	 * zaaktypen cron hasn't run yet). Returns null when zaaktypen are selected but none of them
+	 * could be resolved, so callers don't fall back to fetching zaken of all zaaktypen.
 	 *
 	 * @since NEXT
 	 *
 	 * @param string[] $urls
-	 * @return string[]
+	 * @return string[]|null
 	 */
-	private function resolve_zaaktype_identificaties( Client $client, string $supplier_name, array $urls ): array
+	private function resolve_zaaktype_identificaties( Client $client, string $supplier_name, array $urls ): ?array
 	{
 		if (array() === $urls) {
 			return array();
@@ -382,6 +391,10 @@ abstract class Block
 			if ('' !== $identificatie) {
 				$identificaties[] = $identificatie;
 			}
+		}
+
+		if (array() === $identificaties) {
+			return null;
 		}
 
 		return array_values( array_unique( $identificaties ) );
