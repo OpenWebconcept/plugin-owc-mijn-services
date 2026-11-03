@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OWC\My_Services\Blocks;
 
+use DateTimeImmutable;
 use DI\NotFoundException;
 use Exception;
 use OWC\My_Services\Auth\DigiD;
@@ -12,6 +13,7 @@ use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Services\LoggerService;
 use OWC\My_Services\Settings\Adapters\ZaaktypeAdapter;
+use OWC\My_Services\Settings\ZaaktypeStartDates;
 use OWC\My_Services\Traits\AuthenticationFilter;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
@@ -279,7 +281,13 @@ abstract class Block
 	 * same zaaktype would be missed. Since the zaaktype filtering then happens client side, all
 	 * result pages are fetched. Without zaaktype identificaties, all zaaktypen are fetched.
 	 *
+	 * When a start date is configured for a zaaktype ('Startdatum per zaaktype' setting), its
+	 * zaken started before that date are dropped as well. When every selected zaaktype has a
+	 * start date, the request already asks for zaken started on or after the earliest of them,
+	 * to fetch fewer pages. Without zaaktype identificaties no start dates apply.
+	 *
 	 * @since 0.17.0
+	 * @since NEXT Applies the configured start date per zaaktype.
 	 *
 	 * @param string[] $zaaktype_identificaties
 	 */
@@ -300,8 +308,15 @@ abstract class Block
 		}
 
 		$url_identificaties = ZaaktypeAdapter::url_identificaties( $supplier_name );
+		$start_dates        = $this->get_start_dates_by_identificatie( $supplier_name, $zaaktype_identificaties );
 		$zaken              = array();
 		$page               = 1;
+
+		// Only narrow the request when every selected zaaktype has a start date, otherwise zaken
+		// of a zaaktype without one would be missed.
+		if (count( $start_dates ) === count( $zaaktype_identificaties )) {
+			$filter->byStartDate( min( $start_dates ), ZakenFilter::OPERATOR_GTE );
+		}
 
 		while ($page) {
 			$result = $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( ( clone $filter )->page( $page ) );
@@ -311,10 +326,61 @@ abstract class Block
 
 		$zaken = array_filter(
 			$zaken,
-			fn ( Zaak $zaak ) => in_array( $this->get_zaak_zaaktype_identificatie( $zaak, $url_identificaties ), $zaaktype_identificaties, true )
+			function ( Zaak $zaak ) use ( $url_identificaties, $zaaktype_identificaties, $start_dates ) {
+				$identificatie = $this->get_zaak_zaaktype_identificatie( $zaak, $url_identificaties );
+
+				if ( ! in_array( $identificatie, $zaaktype_identificaties, true )) {
+					return false;
+				}
+
+				return ! isset( $start_dates[ $identificatie ] ) || $this->zaak_started_on_or_after( $zaak, $start_dates[ $identificatie ] );
+			}
 		);
 
 		return $this->filter_zaken_by_authenticated_initiator( $zaken, $supplier_name );
+	}
+
+	/**
+	 * Returns the configured start date of each of the given zaaktype identificaties that has one.
+	 *
+	 * @since NEXT
+	 *
+	 * @param string   $supplier_name
+	 * @param string[] $zaaktype_identificaties
+	 * @return array<string, DateTimeImmutable> identificatie => start date.
+	 */
+	private function get_start_dates_by_identificatie( string $supplier_name, array $zaaktype_identificaties ): array
+	{
+		$start_dates = ContainerResolver::make()->get( 'display.zaaktype-start-dates' );
+
+		if ( ! $start_dates instanceof ZaaktypeStartDates) {
+			return array();
+		}
+
+		$dates = array();
+
+		foreach ($zaaktype_identificaties as $identificatie) {
+			$date = $start_dates->for_identificatie( $supplier_name, $identificatie );
+
+			if (null !== $date) {
+				$dates[ $identificatie ] = $date;
+			}
+		}
+
+		return $dates;
+	}
+
+	/**
+	 * Zaken without a startdatum are kept, as the date they started is unknown.
+	 *
+	 * @since NEXT
+	 */
+	private function zaak_started_on_or_after( Zaak $zaak, DateTimeImmutable $start_date ): bool
+	{
+		$started = $zaak->startdatum;
+
+		// 'Y-m-d' strings compare chronologically, and ignore any time or timezone.
+		return ! $started instanceof DateTimeImmutable || $started->format( ZaaktypeStartDates::DATE_FORMAT ) >= $start_date->format( ZaaktypeStartDates::DATE_FORMAT );
 	}
 
 	/**
