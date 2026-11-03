@@ -66,7 +66,7 @@ class ZaaktypeAdapter
 	/**
 	 * Builds the transient key used to cache the zaaktype URL => identificatie map of a supplier.
 	 *
-	 * @since NEXT
+	 * @since 0.20.0
 	 */
 	public static function identificaties_transient_key( string $supplier_name ): string
 	{
@@ -78,7 +78,7 @@ class ZaaktypeAdapter
 	 * zaaktype of a supplier, built the last time its zaaktypen were freshly fetched by handle().
 	 * Only reads the cache, never triggers a live fetch itself, so it's safe to call at render time.
 	 *
-	 * @since NEXT
+	 * @since 0.20.0
 	 *
 	 * @return array<string, string>
 	 */
@@ -147,7 +147,7 @@ class ZaaktypeAdapter
 	 * The identificatie is shared by all versions of a zaaktype, which makes it the stable key to
 	 * filter zaken on, whereas each version has its own URL.
 	 *
-	 * @since NEXT
+	 * @since 0.20.0
 	 *
 	 * @param Zaaktype[] $raw
 	 * @return array<string, string>

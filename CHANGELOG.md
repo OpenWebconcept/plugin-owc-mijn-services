@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.20.0] - 2026-11-03
+
+-   Added: filter zaken on zaaktype identifications
+
 ## [v0.19.3] - 2026-10-27
 
 -   Fix: display bugs information objects

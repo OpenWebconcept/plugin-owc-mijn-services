@@ -321,7 +321,7 @@ abstract class Block
 	 * Returns the identificatie of the zaaktype of a zaak, preferring the expanded zaaktype and
 	 * the cached URL => identificatie map over lazily fetching the zaaktype from the API.
 	 *
-	 * @since NEXT
+	 * @since 0.20.0
 	 *
 	 * @param array<string, string> $url_identificaties
 	 */
@@ -371,7 +371,7 @@ abstract class Block
 	 * zaaktypen cron hasn't run yet). Returns null when zaaktypen are selected but none of them
 	 * could be resolved, so callers don't fall back to fetching zaken of all zaaktypen.
 	 *
-	 * @since NEXT
+	 * @since 0.20.0
 	 *
 	 * @param string[] $urls
 	 * @return string[]|null
@@ -401,7 +401,7 @@ abstract class Block
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.20.0
 	 */
 	private function fetch_zaaktype_identificatie( Client $client, string $url ): string
 	{
