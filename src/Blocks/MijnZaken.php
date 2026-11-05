@@ -29,6 +29,16 @@ class MijnZaken extends Block
 
 		$this->handle_filter_ordering( $attributes );
 
+		$show_tabs          = (bool) ( $attributes['showTabs'] ?? true );
+		$per_page           = (int) ( $attributes['perPage'] ?? 10 );
+		$only_current_zaken = ! $show_tabs && (bool) ( $attributes['onlyCurrentZaken'] ?? false );
+
+		// Filter while fetching, so completed zaken don't take up places of current zaken. Further
+		// result pages are only fetched while fewer than perPage current zaken have been found.
+		// Always (re)set, as the block instance is shared between renders.
+		$this->zaak_predicate = $only_current_zaken ? fn ( $zaak ) => false === $zaak->hasEndDate() : null;
+		$this->required_zaken = $only_current_zaken ? $per_page : 0;
+
 		try {
 			if ( 0 < count( $this->clients )) {
 				$zaken = $this->get_zaken_from_clients();
@@ -51,7 +61,9 @@ class MijnZaken extends Block
 			return owc_mijn_services_render_view(
 				'owc-error',
 				array(
-					'message' => __( 'Er zijn geen zaken gevonden.', 'owc-mijn-services' ),
+					'message' => $only_current_zaken
+						? __( 'U heeft op dit moment geen lopende zaken.', 'owc-mijn-services' )
+						: __( 'Er zijn geen zaken gevonden.', 'owc-mijn-services' ),
 				)
 			);
 		}
@@ -63,12 +75,12 @@ class MijnZaken extends Block
 			$zaken               = $zaken->sortByAttribute( $field, $reverse );
 		}
 
-		$zaken = $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) );
+		$zaken = $zaken->take( $per_page );
 
 		return owc_mijn_services_render_view(
 			'owc-overview-zaken',
 			array(
-				'show_tabs'       => (bool) ( $attributes['showTabs'] ?? true ),
+				'show_tabs'       => $show_tabs,
 				'all_zaken'       => $this->filter_and_map_zaken( $zaken, fn () => true ),
 				'current_zaken'   => $this->get_current_zaken( $zaken ),
 				'completed_zaken' => $this->get_completed_zaken( $zaken ),

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OWC\My_Services\Blocks;
 
+use Closure;
 use DI\NotFoundException;
 use Exception;
 use OWC\My_Services\Auth\DigiD;
@@ -64,6 +65,24 @@ abstract class Block
 	 * @since 0.17.0
 	 */
 	protected string $single_client_supplier_name = '';
+
+	/**
+	 * Optional client side filter applied to the fetched zaken, e.g. to only keep current zaken.
+	 * When set, subsequent result pages are fetched until enough zaken match, see $required_zaken.
+	 *
+	 * @since 0.21.0
+	 * @var (Closure(Zaak): bool)|null
+	 */
+	protected ?Closure $zaak_predicate = null;
+
+	/**
+	 * Number of matching zaken needed per client. Once reached, no further result pages are
+	 * fetched. Since the API returns the zaken in the requested order, the first matches are the
+	 * ones that would be shown. 0 means all result pages are fetched.
+	 *
+	 * @since 0.21.0
+	 */
+	protected int $required_zaken = 0;
 
 	public function __construct()
 	{
@@ -277,7 +296,9 @@ abstract class Block
 	 * filtered on them after fetching instead of passing a 'zaaktype' query filter: that filter
 	 * only matches a single zaaktype version URL, so zaken created with an older version of the
 	 * same zaaktype would be missed. Since the zaaktype filtering then happens client side, all
-	 * result pages are fetched. Without zaaktype identificaties, all zaaktypen are fetched.
+	 * result pages are fetched. The same applies when a $zaak_predicate is set, although fetching
+	 * stops early once $required_zaken zaken match. Without either, only the first result page
+	 * is used.
 	 *
 	 * @since 0.17.0
 	 *
@@ -292,27 +313,52 @@ abstract class Block
 			$filter->add( 'rol__omschrijvingGeneriek', 'initiator' );
 		}
 
-		if (array() === $zaaktype_identificaties) {
+		if (array() === $zaaktype_identificaties && null === $this->zaak_predicate) {
 			return $this->filter_zaken_by_authenticated_initiator(
 				(array) $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( $filter )->all(),
 				$supplier_name
 			);
 		}
 
-		$url_identificaties = ZaaktypeAdapter::url_identificaties( $supplier_name );
+		$url_identificaties = array() !== $zaaktype_identificaties ? ZaaktypeAdapter::url_identificaties( $supplier_name ) : array();
 		$zaken              = array();
 		$page               = 1;
 
 		while ($page) {
 			$result = $client->zaken()->expandOnly( self::EXPAND_WITH_ROLLEN )->filter( ( clone $filter )->page( $page ) );
-			$zaken  = array_merge( $zaken, (array) $result->all() );
+			$zaken  = array_merge( $zaken, $this->filter_fetched_zaken( (array) $result->all(), $supplier_name, $zaaktype_identificaties, $url_identificaties ) );
 			$page   = $result->pageMeta()->getNextPageNumber();
+
+			if (0 < $this->required_zaken && count( $zaken ) >= $this->required_zaken) {
+				break;
+			}
 		}
 
-		$zaken = array_filter(
-			$zaken,
-			fn ( Zaak $zaak ) => in_array( $this->get_zaak_zaaktype_identificatie( $zaak, $url_identificaties ), $zaaktype_identificaties, true )
-		);
+		return $zaken;
+	}
+
+	/**
+	 * Applies the client side filters to a page of fetched zaken.
+	 *
+	 * @since 0.21.0
+	 *
+	 * @param Zaak[]                $zaken
+	 * @param string[]              $zaaktype_identificaties
+	 * @param array<string, string> $url_identificaties
+	 * @return Zaak[]
+	 */
+	private function filter_fetched_zaken( array $zaken, string $supplier_name, array $zaaktype_identificaties, array $url_identificaties ): array
+	{
+		if (array() !== $zaaktype_identificaties) {
+			$zaken = array_filter(
+				$zaken,
+				fn ( Zaak $zaak ) => in_array( $this->get_zaak_zaaktype_identificatie( $zaak, $url_identificaties ), $zaaktype_identificaties, true )
+			);
+		}
+
+		if (null !== $this->zaak_predicate) {
+			$zaken = array_filter( $zaken, $this->zaak_predicate );
+		}
 
 		return $this->filter_zaken_by_authenticated_initiator( $zaken, $supplier_name );
 	}
