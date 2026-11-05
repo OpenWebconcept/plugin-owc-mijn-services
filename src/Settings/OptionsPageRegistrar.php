@@ -19,10 +19,10 @@ if ( ! defined( 'ABSPATH' )) {
 	exit;
 }
 
+use CMB2_Field;
 use OWC\My_Services\CMB2\SelectOptgroupType;
 use OWC\My_Services\Controllers\InformatieobjecttypenCacheController;
 use OWC\My_Services\Controllers\ZaaktypenCacheController;
-use CMB2_Field;
 use OWC\My_Services\Services\LoggerService;
 use OWC\My_Services\Settings\Adapters\ZaaktypeAdapter;
 use OWC\My_Services\Traits\Supplier;
