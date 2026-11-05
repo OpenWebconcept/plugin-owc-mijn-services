@@ -98,7 +98,8 @@ class ZaaktypeStartDates
 	 *
 	 * @param mixed                 $rows       Raw setting value: a list of `zaaktype`/`startdatum` rows.
 	 * @param array<string, string> $keys       Zaaktype URL => key shared by all versions of that
-	 *                                          zaaktype (its identificatie, or latest version URL).
+	 *                                          zaaktype, e.g. 'supplier|identificatie'. URLs without
+	 *                                          a key are deduplicated on the URL itself.
 	 * @return array{rows: array<int, array<string, mixed>>, removed: int}
 	 */
 	public static function deduplicate_rows( mixed $rows, array $keys ): array
