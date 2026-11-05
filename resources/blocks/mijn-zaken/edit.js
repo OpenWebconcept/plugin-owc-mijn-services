@@ -54,6 +54,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 		byBSN,
 		byKVK,
 		showTabs,
+		onlyCurrentZaken,
 		perPage,
 		orderBy,
 		orderByDirection,
@@ -321,11 +322,35 @@ const Edit = ( { attributes, setAttributes } ) => {
 								setAttributes( { showTabs: value } )
 							}
 						/>
+						{ ! showTabs && (
+							<ToggleControl
+								label={ __(
+									'Alleen lopende zaken tonen',
+									'owc-mijn-services'
+								) }
+								help={ __(
+									'Toon alleen zaken die nog niet zijn afgerond.',
+									'owc-mijn-services'
+								) }
+								checked={ onlyCurrentZaken }
+								onChange={ ( value ) =>
+									setAttributes( { onlyCurrentZaken: value } )
+								}
+							/>
+						) }
 						<RangeControl
 							label={ __(
 								'Aantal zaken',
 								'owc-mijn-services'
 							) }
+							help={
+								! showTabs && onlyCurrentZaken
+									? __(
+											'Het maximaal aantal lopende zaken dat getoond wordt, volgens de gekozen sortering.',
+											'owc-mijn-services'
+									  )
+									: undefined
+							}
 							value={ perPage }
 							min={ MIN_PER_PAGE }
 							max={ MAX_PER_PAGE }

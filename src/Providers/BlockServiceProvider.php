@@ -150,6 +150,10 @@ class BlockServiceProvider extends ServiceProvider
 						'type'    => 'boolean',
 						'default' => true,
 					),
+					'onlyCurrentZaken' => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
 					'perPage'          => array(
 						'type'    => 'number',
 						'default' => 10,
