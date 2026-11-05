@@ -63,12 +63,28 @@ class MijnZaken extends Block
 			$zaken               = $zaken->sortByAttribute( $field, $reverse );
 		}
 
+		$show_tabs = (bool) ( $attributes['showTabs'] ?? true );
+
+		// Filter before limiting to perPage, so completed zaken don't take up places of current zaken.
+		if ( ! $show_tabs && (bool) ( $attributes['onlyCurrentZaken'] ?? false ) ) {
+			$zaken = $zaken->filter( fn ( $zaak ) => false === $zaak->hasEndDate() );
+
+			if ( $zaken->isEmpty() ) {
+				return owc_mijn_services_render_view(
+					'owc-error',
+					array(
+						'message' => __( 'U heeft op dit moment geen lopende zaken.', 'owc-mijn-services' ),
+					)
+				);
+			}
+		}
+
 		$zaken = $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) );
 
 		return owc_mijn_services_render_view(
 			'owc-overview-zaken',
 			array(
-				'show_tabs'       => (bool) ( $attributes['showTabs'] ?? true ),
+				'show_tabs'       => $show_tabs,
 				'all_zaken'       => $this->filter_and_map_zaken( $zaken, fn () => true ),
 				'current_zaken'   => $this->get_current_zaken( $zaken ),
 				'completed_zaken' => $this->get_completed_zaken( $zaken ),
