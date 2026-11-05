@@ -29,6 +29,16 @@ class MijnZaken extends Block
 
 		$this->handle_filter_ordering( $attributes );
 
+		$show_tabs          = (bool) ( $attributes['showTabs'] ?? true );
+		$per_page           = (int) ( $attributes['perPage'] ?? 10 );
+		$only_current_zaken = ! $show_tabs && (bool) ( $attributes['onlyCurrentZaken'] ?? false );
+
+		// Filter while fetching, so completed zaken don't take up places of current zaken. Further
+		// result pages are only fetched while fewer than perPage current zaken have been found.
+		// Always (re)set, as the block instance is shared between renders.
+		$this->zaak_predicate = $only_current_zaken ? fn ( $zaak ) => false === $zaak->hasEndDate() : null;
+		$this->required_zaken = $only_current_zaken ? $per_page : 0;
+
 		try {
 			if ( 0 < count( $this->clients )) {
 				$zaken = $this->get_zaken_from_clients();
@@ -51,7 +61,9 @@ class MijnZaken extends Block
 			return owc_mijn_services_render_view(
 				'owc-error',
 				array(
-					'message' => __( 'Er zijn geen zaken gevonden.', 'owc-mijn-services' ),
+					'message' => $only_current_zaken
+						? __( 'U heeft op dit moment geen lopende zaken.', 'owc-mijn-services' )
+						: __( 'Er zijn geen zaken gevonden.', 'owc-mijn-services' ),
 				)
 			);
 		}
@@ -63,23 +75,7 @@ class MijnZaken extends Block
 			$zaken               = $zaken->sortByAttribute( $field, $reverse );
 		}
 
-		$show_tabs = (bool) ( $attributes['showTabs'] ?? true );
-
-		// Filter before limiting to perPage, so completed zaken don't take up places of current zaken.
-		if ( ! $show_tabs && (bool) ( $attributes['onlyCurrentZaken'] ?? false ) ) {
-			$zaken = $zaken->filter( fn ( $zaak ) => false === $zaak->hasEndDate() );
-
-			if ( $zaken->isEmpty() ) {
-				return owc_mijn_services_render_view(
-					'owc-error',
-					array(
-						'message' => __( 'U heeft op dit moment geen lopende zaken.', 'owc-mijn-services' ),
-					)
-				);
-			}
-		}
-
-		$zaken = $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) );
+		$zaken = $zaken->take( $per_page );
 
 		return owc_mijn_services_render_view(
 			'owc-overview-zaken',
