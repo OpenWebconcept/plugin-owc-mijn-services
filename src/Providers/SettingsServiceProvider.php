@@ -43,6 +43,7 @@ class SettingsServiceProvider extends ServiceProvider
 		$manager->container()->get( ClientProvider::class )->register();
 
 		add_action( 'cmb2_admin_init', ( new OptionsPageRegistrar() )->addSettingsFields( ... ) );
+		add_action( 'admin_notices', ( new OptionsPageRegistrar() )->render_zaaktype_start_dates_notices( ... ) );
 
 		// Informatieobjecttypen cache actions.
 		add_action( 'admin_post_' . InformatieobjecttypenCacheController::ACTION, ( new InformatieobjecttypenCacheController() )->handle_clear_cache_request( ... ) );
@@ -64,10 +65,11 @@ class SettingsServiceProvider extends ServiceProvider
 	}
 
 	/**
-	 * Loads Select2 for the grouped 'Toegestane informatieobjecttypen' select, only on this
-	 * plugin's own settings page.
+	 * Loads Select2 for the grouped 'Toegestane informatieobjecttypen' select and the zaaktype
+	 * selects of the 'Startdatum per zaaktype' rows, only on this plugin's own settings page.
 	 *
 	 * @since 0.17.0
+	 * @since NEXT Also loads the 'Startdatum per zaaktype' script.
 	 */
 	public function enqueue_scripts( string $hook_suffix ): void
 	{
@@ -88,6 +90,14 @@ class SettingsServiceProvider extends ServiceProvider
 		wp_enqueue_script(
 			'owc-mijn-services-informatieobjecttypen-select',
 			owc_mijn_services_url( 'resources/js/admin/informatieobjecttypen-select.js' ),
+			array( 'jquery', 'owc-mijn-services-select2' ),
+			\VERSION,
+			true
+		);
+
+		wp_enqueue_script(
+			'owc-mijn-services-zaaktype-start-dates',
+			owc_mijn_services_url( 'resources/js/admin/zaaktype-start-dates.js' ),
 			array( 'jquery', 'owc-mijn-services-select2' ),
 			\VERSION,
 			true

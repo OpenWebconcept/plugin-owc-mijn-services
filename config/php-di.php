@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use DI\Container;
 use OWC\My_Services\Settings\InformatieobjecttypeCatalog;
+use OWC\My_Services\Settings\OptionsPageRegistrar;
 use OWC\My_Services\Settings\Settings;
+use OWC\My_Services\Settings\ZaaktypeStartDates;
 
 return array(
 	/**
@@ -116,6 +118,15 @@ return array(
 		$value = $container->make( 'zgw.settings', array( 'owc-mijn-services-zaaktype-filtering-suppliers' ) );
 
 		return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
+	},
+	/**
+	 * Start date per zaaktype from which zaken are shown in a 'Mijn zaken' block that filters
+	 * on that zaaktype.
+	 *
+	 * @since NEXT
+	 */
+	'display.zaaktype-start-dates'           => function ( Container $container ) {
+		return ZaaktypeStartDates::from_setting( $container->make( 'zgw.settings', array( OptionsPageRegistrar::ZAAKTYPE_START_DATES_FIELD_ID ) ) );
 	},
 	/**
 	 * Suppliers excluded from restricting zaken to those where the authenticated user holds the

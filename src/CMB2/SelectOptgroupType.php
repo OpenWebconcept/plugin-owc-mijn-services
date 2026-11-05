@@ -35,17 +35,21 @@ class SelectOptgroupType extends CMB2_Type_Select
 {
 	public function render()
 	{
-		$attrs = $this->parse_args(
-			'select',
-			array(
-				'class'    => 'cmb2_select',
-				'name'     => $this->_name() . '[]',
-				'id'       => $this->_id(),
-				'desc'     => $this->_desc( true ),
-				'multiple' => 'multiple',
-				'options'  => $this->concat_grouped_items(),
-			)
+		$is_single = $this->is_single_select();
+		$defaults  = array(
+			'class'    => 'cmb2_select',
+			'name'     => $is_single ? $this->_name() : $this->_name() . '[]',
+			'id'       => $this->_id(),
+			'desc'     => $this->_desc( true ),
+			'multiple' => 'multiple',
+			'options'  => $this->concat_grouped_items( $is_single ),
 		);
+
+		if ($is_single) {
+			unset( $defaults['multiple'] );
+		}
+
+		$attrs = $this->parse_args( 'select', $defaults );
 
 		$merged_attrs = $this->concat_attrs( $attrs, array( 'desc', 'options' ) );
 
@@ -54,13 +58,28 @@ class SelectOptgroupType extends CMB2_Type_Select
 		);
 	}
 
-	private function concat_grouped_items(): string
+	/**
+	 * Fields can opt into a single-value select by setting the 'select_single' field arg,
+	 * e.g. for a per-row choice inside a repeatable group.
+	 *
+	 * @since NEXT
+	 */
+	private function is_single_select(): bool
+	{
+		return true === $this->field->args( 'select_single' );
+	}
+
+	private function concat_grouped_items( bool $is_single ): string
 	{
 		$field = $this->field;
 
 		$value = (array) ( null !== $field->escaped_value() ? $field->escaped_value() : $field->get_default() );
 
-		return $this->handle_options( (array) $field->options(), $value );
+		// A single select always submits a value, so start with an empty option to keep an
+		// untouched (e.g. newly added) row empty instead of defaulting to the first option.
+		$empty_option = $is_single ? '<option value=""></option>' : '';
+
+		return $empty_option . $this->handle_options( (array) $field->options(), $value );
 	}
 
 	/**
