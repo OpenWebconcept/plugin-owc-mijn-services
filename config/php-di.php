@@ -118,6 +118,17 @@ return array(
 		return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
 	},
 	/**
+	 * Suppliers whose Zaken API supports the 'einddatum__isnull' query filter (Zaken API 1.4+).
+	 * Disabled by default, since suppliers on older versions may reject unknown query parameters.
+	 *
+	 * @return string[]
+	 */
+	'display.einddatum-filtering-suppliers'  => function ( Container $container ) {
+		$value = $container->make( 'zgw.settings', array( 'owc-mijn-services-einddatum-filtering-suppliers' ) );
+
+		return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
+	},
+	/**
 	 * Suppliers excluded from restricting zaken to those where the authenticated user holds the
 	 * 'initiator' role. Initiator filtering is enabled by default, so a supplier only skips it once
 	 * explicitly selected here, e.g. one that doesn't fill 'omschrijvingGeneriek'.

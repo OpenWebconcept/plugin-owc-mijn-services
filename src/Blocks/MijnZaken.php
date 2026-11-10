@@ -33,11 +33,13 @@ class MijnZaken extends Block
 		$per_page           = (int) ( $attributes['perPage'] ?? 10 );
 		$only_current_zaken = ! $show_tabs && (bool) ( $attributes['onlyCurrentZaken'] ?? false );
 
-		// Filter while fetching, so completed zaken don't take up places of current zaken. Further
-		// result pages are only fetched while fewer than perPage current zaken have been found.
-		// Always (re)set, as the block instance is shared between renders.
-		$this->zaak_predicate = $only_current_zaken ? fn ( $zaak ) => false === $zaak->hasEndDate() : null;
-		$this->required_zaken = $only_current_zaken ? $per_page : 0;
+		// Filter while fetching, so completed zaken don't take up places of current zaken. For
+		// suppliers that support it, the API filters on 'einddatum__isnull'; the predicate is a
+		// safety net for the others. Further result pages are only fetched while fewer than perPage
+		// current zaken have been found. Always (re)set, as the block instance is shared between renders.
+		$this->only_current_zaken = $only_current_zaken;
+		$this->zaak_predicate     = $only_current_zaken ? fn ( $zaak ) => false === $zaak->hasEndDate() : null;
+		$this->required_zaken     = $only_current_zaken ? $per_page : 0;
 
 		try {
 			if ( 0 < count( $this->clients )) {

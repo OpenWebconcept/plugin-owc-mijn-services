@@ -151,6 +151,23 @@ class OptionsPageRegistrar
 
 		$options->add_field(
 			array(
+				'name'              => __( 'Einddatumfiltering ondersteunde leveranciers', 'owc-mijn-services' ),
+				'desc'              => __( 'Selecteer de leveranciers waarvan de Zaken API (vanaf versie 1.4) filteren op \'einddatum__isnull\' ondersteunt. Voor geselecteerde leveranciers worden bij \'Alleen lopende zaken tonen\' in het \'Mijn zaken\'-blok direct alleen lopende zaken opgehaald; voor niet geselecteerde leveranciers worden de afgeronde zaken na het ophalen weggefilterd.', 'owc-mijn-services' ),
+				'id'                => 'owc-mijn-services-einddatum-filtering-suppliers',
+				'type'              => 'multicheck',
+				'select_all_button' => false,
+				'options_cb'        => function () {
+					return $this->get_supplier_options();
+				},
+				'sanitization_cb'   => function ( $value ) {
+					return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
+				},
+				'show_on_cb'        => $allowed_settings_show_on_cb,
+			)
+		);
+
+		$options->add_field(
+			array(
 				'name'              => __( 'Initiatorrolfiltering uitschakelen', 'owc-mijn-services' ),
 				'desc'              => __( 'Standaard worden alleen zaken getoond waarbij de ingelogde gebruiker de rol \'initiator\' heeft. Selecteer de leveranciers die dit niet ondersteunen, bijvoorbeeld omdat \'omschrijvingGeneriek\' van de rol niet wordt gevuld; voor geselecteerde leveranciers wordt niet op de initiatorrol gefilterd.', 'owc-mijn-services' ),
 				'id'                => 'owc-mijn-services-initiator-filtering-excluded-suppliers',
@@ -233,7 +250,7 @@ class OptionsPageRegistrar
 
 	/**
 	 * Builds the list of configured suppliers as a name => name map, to use as options for the
-	 * 'Zaaktypefiltering ondersteunde leveranciers' multicheck field.
+	 * supplier multicheck fields, such as 'Zaaktypefiltering ondersteunde leveranciers'.
 	 *
 	 * @return array<string, string>
 	 * @since 0.17.0

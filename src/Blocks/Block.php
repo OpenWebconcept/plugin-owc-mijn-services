@@ -84,6 +84,16 @@ abstract class Block
 	 */
 	protected int $required_zaken = 0;
 
+	/**
+	 * Whether only current zaken (without einddatum) are requested. For suppliers that support it,
+	 * this is passed as the 'einddatum__isnull' query filter, so completed zaken are already
+	 * excluded by the API. The $zaak_predicate remains in place as a safety net.
+	 *
+	 * @since 0.21.0
+	 * @var bool
+	 */
+	protected bool $only_current_zaken = false;
+
 	public function __construct()
 	{
 		$this->zaken_filter = new ZakenFilter();
@@ -298,7 +308,8 @@ abstract class Block
 	 * same zaaktype would be missed. Since the zaaktype filtering then happens client side, all
 	 * result pages are fetched. The same applies when a $zaak_predicate is set, although fetching
 	 * stops early once $required_zaken zaken match. Without either, only the first result page
-	 * is used.
+	 * is used. When only current zaken are requested and the supplier supports it, the
+	 * 'einddatum__isnull' query filter is added as well.
 	 *
 	 * @since 0.17.0
 	 *
@@ -311,6 +322,11 @@ abstract class Block
 		// Make sure initiators are only allowed to see their own cases, and not those of other initiators.
 		if ($this->should_verify_initiator_role( $supplier_name )) {
 			$filter->add( 'rol__omschrijvingGeneriek', 'initiator' );
+		}
+
+		// Let the API exclude completed zaken, so fetching usually stops after the first page.
+		if ($this->only_current_zaken && $this->supports_einddatum_filtering( $supplier_name )) {
+			$filter->add( 'einddatum__isnull', 'true' );
 		}
 
 		if (array() === $zaaktype_identificaties && null === $this->zaak_predicate) {
