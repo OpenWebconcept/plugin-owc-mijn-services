@@ -9,73 +9,170 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-19T08:33:10+00:00\n"
+"POT-Creation-Date: 2026-11-23T10:28:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-mijn-services\n"
 
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:8
+msgid "Vereiste authenticatie"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:12
+msgid "Maak een keuze"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:13
+msgid "DigiD"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:14
+msgid "eHerkenning"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:15
+msgid "DigiD of eHerkenning"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:16
+msgid "Geen sessie toegestaan"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:20
+msgid "Voorwaarde om toegang te krijgen tot deze pagina"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:27
+msgid "Redirect naar pagina"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:31
+msgid "Selecteer een pagina"
+msgstr ""
+
+#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:42
+msgid "Pagina waarheen gebruikers worden gestuurd als ze niet de vereiste authenticatie hebben."
+msgstr ""
+
+#: src/Views/owc-error.blade.php:11
+msgid "Mijn zaken"
+msgstr ""
+
+#: src/Views/owc-error.blade.php:12
+msgid "Er is een onbekende fout opgetreden. Probeer het later opnieuw."
+msgstr ""
+
+#: src/Views/owc-overview-zaken.blade.php:16
+msgid "Lopende zaken"
+msgstr ""
+
+#: src/Views/owc-overview-zaken.blade.php:19
+#: src/Blocks/MijnZaken.php:74
+msgid "U heeft op dit moment geen lopende zaken."
+msgstr ""
+
+#: src/Views/owc-overview-zaken.blade.php:22
+msgid "Afgeronde zaken"
+msgstr ""
+
+#: src/Views/owc-overview-zaken.blade.php:24
+msgid "U heeft nog geen afgeronde zaken."
+msgstr ""
+
+#: src/Views/owc-single-zaak.blade.php:13
+#: src/Views/partials/nlds/denhaag/card.blade.php:12
+msgid "Zaakomschrijving ontbreekt"
+msgstr ""
+
+#: src/Views/owc-single-zaak.blade.php:39
+msgid "Zaak niet gevonden."
+msgstr ""
+
+#: src/Views/partials/components/file.blade.php:52
+msgid "Download"
+msgstr ""
+
+#: src/Views/partials/owc-single-zaak-details.blade.php:30
+msgid "Details"
+msgstr ""
+
+#: src/Views/partials/owc-single-zaak-documents.blade.php:13
+msgid "Documenten"
+msgstr ""
+
+#: src/Views/partials/owc-single-zaak-original-application.blade.php:26
+msgid "Originele aanvraag"
+msgstr ""
+
+#: src/Views/partials/owc-single-zaak-result.blade.php:16
+msgid "Zaak resultaat"
+msgstr ""
+
+#: src/Views/partials/owc-single-zaak-status.blade.php:69
+msgid "Status"
+msgstr ""
+
+#: src/Views/partials/owc-single-zaak-status.blade.php:72
+msgid "Er is (momenteel) geen status beschikbaar."
+msgstr ""
+
 #. Plugin Name of the plugin
-#: owc-mijn-services.php:12
 msgid "OWC | Mijn Services"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: owc-mijn-services.php:13
 msgid "https://github.com/OpenWebconcept/plugin-owc-mijn-services"
 msgstr ""
 
 #. Description of the plugin
-#: owc-mijn-services.php:14
 msgid "Toon mijn zaken"
 msgstr ""
 
 #. Author of the plugin
-#: owc-mijn-services.php:16
 msgid "Yard | Digital Agency"
 msgstr ""
 
 #. Author URI of the plugin
-#: owc-mijn-services.php:17
 msgid "https://www.yard.nl"
 msgstr ""
 
-#: src/Blocks/Block.php:95
+#: src/Blocks/Block.php:124
 msgid "Je moet ingelogd zijn om deze informatie te kunnen zien."
 msgstr ""
 
-#: src/Blocks/Block.php:102
+#: src/Blocks/Block.php:131
 msgid "Configureer minimaal één filteroptie: 'Filter op BSN' of 'Filter op KVK'."
 msgstr ""
 
-#: src/Blocks/Block.php:110
+#: src/Blocks/Block.php:139
 msgid "De filterinstellingen van dit blok zijn niet compatibel met uw inlogmethode. Neem contact op met de beheerder van deze website."
 msgstr ""
 
-#: src/Blocks/Block.php:119
+#: src/Blocks/Block.php:148
 msgid "Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of ondersteunt zaken."
 msgstr ""
 
-#: src/Blocks/Block.php:127
+#: src/Blocks/Block.php:156
 #: src/Blocks/Zaak.php:50
 msgid "De gekozen zaaksysteem leverancier client is niet geconfigureerd."
 msgstr ""
 
-#: src/Blocks/Block.php:131
+#: src/Blocks/Block.php:160
 msgid "De gekozen zaaksysteem leverancier ondersteunt geen zaken."
 msgstr ""
 
 #: src/Blocks/MijnZaken.php:31
-#: resources/blocks/mijn-zaken/edit.js:509
+#: resources/blocks/mijn-zaken/edit.js:534
 msgid "Het persoonlijke zakenoverzicht"
 msgstr ""
 
 #: src/Blocks/MijnZaken.php:32
-#: resources/blocks/mijn-zaken/edit.js:513
+#: resources/blocks/mijn-zaken/edit.js:538
 msgid "Toont een overzicht van de zaken voor de ingelogde gebruiker."
 msgstr ""
 
-#: src/Blocks/MijnZaken.php:54
-#: src/Blocks/MijnZaken.php:61
+#: src/Blocks/MijnZaken.php:66
+#: src/Blocks/MijnZaken.php:75
 msgid "Er zijn geen zaken gevonden."
 msgstr ""
 
@@ -176,8 +273,8 @@ msgid "De zaaktypen die gebruikt worden voor de zaaktypefilter in het 'Mijn zake
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:166
-#: resources/blocks/mijn-zaken/edit.js:246
-#: resources/blocks/mijn-zaken/edit.js:321
+#: resources/blocks/mijn-zaken/edit.js:247
+#: resources/blocks/mijn-zaken/edit.js:322
 msgid "Zaaktypen"
 msgstr ""
 
@@ -218,162 +315,67 @@ msgid "Zaken met een startdatum vóór deze datum worden niet getoond."
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:244
-msgid "Initiatorrolfiltering uitschakelen"
+msgid "Einddatumfiltering ondersteunde leveranciers"
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:245
-msgid "Standaard worden alleen zaken getoond waarbij de ingelogde gebruiker de rol 'initiator' heeft. Selecteer de leveranciers die dit niet ondersteunen, bijvoorbeeld omdat 'omschrijvingGeneriek' van de rol niet wordt gevuld; voor geselecteerde leveranciers wordt niet op de initiatorrol gefilterd."
+msgid "Selecteer de leveranciers waarvan de Zaken API (vanaf versie 1.4) filteren op 'einddatum__isnull' ondersteunt. Voor geselecteerde leveranciers worden bij 'Alleen lopende zaken tonen' in het 'Mijn zaken'-blok direct alleen lopende zaken opgehaald; voor niet geselecteerde leveranciers worden de afgeronde zaken na het ophalen weggefilterd."
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:261
-msgid "Productiecontroles uitschakelen"
+msgid "Initiatorrolfiltering uitschakelen"
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:262
+msgid "Standaard worden alleen zaken getoond waarbij de ingelogde gebruiker de rol 'initiator' heeft. Selecteer de leveranciers die dit niet ondersteunen, bijvoorbeeld omdat 'omschrijvingGeneriek' van de rol niet wordt gevuld; voor geselecteerde leveranciers wordt niet op de initiatorrol gefilterd."
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:278
+msgid "Productiecontroles uitschakelen"
+msgstr ""
+
+#: src/Settings/OptionsPageRegistrar.php:279
 msgid "Schakel deze optie in om de verplichting van het gebruik van de blokattributen 'Filter op BSN' of 'Filter op KVK' uit te zetten. Standaard zijn productiecontroles ingeschakeld en is minimaal één van beide filterattributen vereist."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:274
+#: src/Settings/OptionsPageRegistrar.php:291
 msgid "Filtering op KVK uitschakelen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:275
+#: src/Settings/OptionsPageRegistrar.php:292
 msgid "Schakel deze optie in als de leverancier het filteren op KVK (eHerkenning) niet ondersteunt. Gebruikers die via eHerkenning zijn ingelogd kunnen dan geen zaken ophalen."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:287
+#: src/Settings/OptionsPageRegistrar.php:304
 msgid "Statusstappen zonder datum verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:288
+#: src/Settings/OptionsPageRegistrar.php:305
 msgid "Schakel deze optie in om statusstappen zonder gezette datum te verbergen in het statusoverzicht van een zaak. Dit verbergt ook nog niet bereikte (toekomstige) stappen. Standaard worden alle statusstappen getoond."
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:300
+#: src/Settings/OptionsPageRegistrar.php:317
 msgid "Volgnummers verbergen"
 msgstr ""
 
-#: src/Settings/OptionsPageRegistrar.php:301
+#: src/Settings/OptionsPageRegistrar.php:318
 msgid "Schakel deze optie in om de volgnummers van statusstappen te verbergen in het statusoverzicht van een zaak. Standaard worden volgnummers getoond."
 msgstr ""
 
 #. translators: %d: number of removed rows.
-#: src/Settings/OptionsPageRegistrar.php:467
-#, php-format
+#: src/Settings/OptionsPageRegistrar.php:484
 msgid "Bij 'Startdatum per zaaktype' stond een zaaktype dubbel. Er is %d rij verwijderd; per zaaktype is de vroegste datum bewaard."
 msgid_plural "Bij 'Startdatum per zaaktype' stonden zaaktypen dubbel. Er zijn %d rijen verwijderd; per zaaktype is de vroegste datum bewaard."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Settings/OptionsPageRegistrar.php:492
+#: src/Settings/OptionsPageRegistrar.php:509
 msgid "Van de volgende zaaktypen bij 'Startdatum per zaaktype' kon de identificatie niet worden opgehaald. Zolang dat zo is, worden van leveranciers met zaaktypefiltering mogelijk minder zaken getoond. Er wordt dagelijks automatisch opnieuw geprobeerd; controleer anders de verbinding met de leverancier en haal de zaaktypen opnieuw op of sla de instellingen opnieuw op."
 msgstr ""
 
 #. translators: %s: zaaktype label.
-#: src/Settings/OptionsPageRegistrar.php:534
-#, php-format
+#: src/Settings/OptionsPageRegistrar.php:551
 msgid "%s (oudere versie)"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:8
-msgid "Vereiste authenticatie"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:12
-msgid "Maak een keuze"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:13
-msgid "DigiD"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:14
-msgid "eHerkenning"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:15
-msgid "DigiD of eHerkenning"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:16
-msgid "Geen sessie toegestaan"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:20
-msgid "Voorwaarde om toegang te krijgen tot deze pagina"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:27
-msgid "Redirect naar pagina"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:31
-msgid "Selecteer een pagina"
-msgstr ""
-
-#: src/Views/editor/metaboxes/gatekeeper-access-metabox.blade.php:42
-msgid "Pagina waarheen gebruikers worden gestuurd als ze niet de vereiste authenticatie hebben."
-msgstr ""
-
-#: src/Views/owc-error.blade.php:11
-msgid "Mijn zaken"
-msgstr ""
-
-#: src/Views/owc-error.blade.php:12
-msgid "Er is een onbekende fout opgetreden. Probeer het later opnieuw."
-msgstr ""
-
-#: src/Views/owc-overview-zaken.blade.php:16
-msgid "Lopende zaken"
-msgstr ""
-
-#: src/Views/owc-overview-zaken.blade.php:19
-msgid "U heeft op dit moment geen lopende zaken."
-msgstr ""
-
-#: src/Views/owc-overview-zaken.blade.php:22
-msgid "Afgeronde zaken"
-msgstr ""
-
-#: src/Views/owc-overview-zaken.blade.php:24
-msgid "U heeft nog geen afgeronde zaken."
-msgstr ""
-
-#: src/Views/owc-single-zaak.blade.php:13
-#: src/Views/partials/nlds/denhaag/card.blade.php:12
-msgid "Zaakomschrijving ontbreekt"
-msgstr ""
-
-#: src/Views/owc-single-zaak.blade.php:39
-msgid "Zaak niet gevonden."
-msgstr ""
-
-#: src/Views/partials/components/file.blade.php:52
-msgid "Download"
-msgstr ""
-
-#: src/Views/partials/owc-single-zaak-details.blade.php:30
-msgid "Details"
-msgstr ""
-
-#: src/Views/partials/owc-single-zaak-documents.blade.php:13
-msgid "Documenten"
-msgstr ""
-
-#: src/Views/partials/owc-single-zaak-original-application.blade.php:26
-msgid "Originele aanvraag"
-msgstr ""
-
-#: src/Views/partials/owc-single-zaak-result.blade.php:16
-msgid "Zaak resultaat"
-msgstr ""
-
-#: src/Views/partials/owc-single-zaak-status.blade.php:69
-msgid "Status"
-msgstr ""
-
-#: src/Views/partials/owc-single-zaak-status.blade.php:72
-msgid "Er is (momenteel) geen status beschikbaar."
 msgstr ""
 
 #: resources/blocks/mijn-zaken/edit.js:26
@@ -404,128 +406,136 @@ msgstr ""
 msgid "Zaaknummer"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:193
+#: resources/blocks/mijn-zaken/edit.js:194
 #: resources/blocks/zaak/edit.js:48
 msgid "Zaaksystemen"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:199
+#: resources/blocks/mijn-zaken/edit.js:200
 msgid "Er zijn nog geen zaaksystemen geconfigureerd in de ZGW API-instellingen."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:207
+#: resources/blocks/mijn-zaken/edit.js:208
 msgid "Uit welke zaaksystemen worden zaken opgehaald?"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:234
+#: resources/blocks/mijn-zaken/edit.js:235
 msgid "Selecteer minimaal één zaaksysteem. Zonder selectie worden er geen zaken getoond."
 msgstr ""
 
 #. translators: %s: comma separated list of zaaksystemen.
-#: resources/blocks/mijn-zaken/edit.js:254
-#, js-format
+#: resources/blocks/mijn-zaken/edit.js:255
 msgid "Voor %s zijn zaaktypen ingesteld bij Instellingen → OWC Mijn Services → 'Startdatum per zaaktype'. Van die zaaksystemen worden alleen zaken van die zaaktypen getoond, vanaf de daar ingestelde startdatum, en alleen die zaaktypen kunnen hier worden geselecteerd."
 msgstr ""
 
 #. translators: %s: comma separated list of zaaksystemen.
-#: resources/blocks/mijn-zaken/edit.js:267
-#, js-format
+#: resources/blocks/mijn-zaken/edit.js:268
 msgid "Voor %s zijn zaaktypen geselecteerd die niet (meer) zijn ingesteld bij 'Startdatum per zaaktype'. Zaken van die zaaktypen worden niet getoond. Zolang deze selecties bestaan, worden ook niet automatisch alle ingestelde zaaktypen getoond als hieronder niets is geselecteerd."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:278
+#: resources/blocks/mijn-zaken/edit.js:279
 msgid "Verwijder deze selecties"
 msgstr ""
 
 #. translators: %s: comma separated list of zaaksystemen.
-#: resources/blocks/mijn-zaken/edit.js:289
-#, js-format
+#: resources/blocks/mijn-zaken/edit.js:290
 msgid "De zaaktypen van %s konden niet worden geladen, daardoor kunnen hier geen zaaktypen worden geselecteerd. Haal de zaaktypen opnieuw op bij Instellingen → OWC Mijn Services."
 msgstr ""
 
 #. translators: %s: comma separated list of zaaksystemen.
-#: resources/blocks/mijn-zaken/edit.js:301
-#, js-format
+#: resources/blocks/mijn-zaken/edit.js:302
 msgid "Voor %s kon niet worden bepaald welke zaaktypen bij 'Startdatum per zaaktype' zijn ingesteld, daardoor worden van dit zaaksysteem geen zaken getoond. Controleer de instellingen bij Instellingen → OWC Mijn Services."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:312
+#: resources/blocks/mijn-zaken/edit.js:313
 msgid "Zaaktypefiltering is uitgeschakeld voor de geselecteerde zaaksystemen. Schakel dit in bij Instellingen → OWC Mijn Services → 'Zaaktypefiltering ondersteunde leveranciers' om hier zaaktypen te kunnen selecteren."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:324
+#: resources/blocks/mijn-zaken/edit.js:325
 msgid "Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen; voor zaaksystemen met zaaktypen bij 'Startdatum per zaaktype' zijn dat alle daar ingestelde zaaktypen."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:328
+#: resources/blocks/mijn-zaken/edit.js:329
 msgid "Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:370
+#: resources/blocks/mijn-zaken/edit.js:371
 msgid "Zichtbare zaken"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:375
+#: resources/blocks/mijn-zaken/edit.js:376
 msgid "Persoonlijke zaken (DigiD)"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:379
+#: resources/blocks/mijn-zaken/edit.js:380
 msgid "Zaken gekoppeld aan het BSN van de ingelogde gebruiker."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:391
+#: resources/blocks/mijn-zaken/edit.js:392
 msgid "Zet \"Persoonlijke zaken\" aan, anders worden er geen zaken getoond."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:395
+#: resources/blocks/mijn-zaken/edit.js:396
 msgid "Zet minimaal één van beide opties aan, anders worden er geen zaken getoond."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:403
+#: resources/blocks/mijn-zaken/edit.js:404
 msgid "Zakelijke zaken (eHerkenning) zijn uitgeschakeld in de plugin-instellingen."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:410
+#: resources/blocks/mijn-zaken/edit.js:411
 msgid "Zakelijke zaken (eHerkenning)"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:414
+#: resources/blocks/mijn-zaken/edit.js:415
 msgid "Zaken gekoppeld aan het KVK-nummer van de ingelogde gebruiker."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:428
+#: resources/blocks/mijn-zaken/edit.js:429
 msgid "Weergave"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:433
+#: resources/blocks/mijn-zaken/edit.js:434
 msgid "Tabbladen tonen"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:443
+#: resources/blocks/mijn-zaken/edit.js:444
 msgid "Zaaknummer tonen"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:447
+#: resources/blocks/mijn-zaken/edit.js:448
 msgid "Toon het zaaknummer (identificatie) onder de titel van de kaart."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:457
+#: resources/blocks/mijn-zaken/edit.js:459
+msgid "Alleen lopende zaken tonen"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:463
+msgid "Toon alleen zaken die nog niet zijn afgerond."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:474
 msgid "Aantal zaken"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:469
+#: resources/blocks/mijn-zaken/edit.js:480
+msgid "Het maximaal aantal lopende zaken dat getoond wordt, volgens de gekozen sortering."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:494
 msgid "Sorteren op"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:478
+#: resources/blocks/mijn-zaken/edit.js:503
 msgid "Volgorde"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:482
+#: resources/blocks/mijn-zaken/edit.js:507
 msgid "Nieuwste eerst"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:489
+#: resources/blocks/mijn-zaken/edit.js:514
 msgid "Oudste eerst"
 msgstr ""
 
