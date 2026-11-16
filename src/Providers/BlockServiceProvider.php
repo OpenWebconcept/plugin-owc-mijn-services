@@ -126,39 +126,43 @@ class BlockServiceProvider extends ServiceProvider
 				'render_callback' => array( new MijnZaken(), 'render' ),
 				'category'        => self::BLOCK_CATEGORY,
 				'attributes'      => array(
-					'zaakClient'       => array(
+					'zaakClient'         => array(
 						'type'    => 'string',
 						'default' => '',
 					),
-					'zaakClients'      => array(
+					'zaakClients'        => array(
 						'type'    => 'array',
 						'default' => array(),
 					),
-					'zaaktypen'        => array(
+					'zaaktypen'          => array(
 						'type'    => 'object',
 						'default' => array(),
 					),
-					'byBSN'            => array(
+					'byBSN'              => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'byKVK'            => array(
+					'byKVK'              => array(
 						'type'    => 'boolean',
 						'default' => false,
 					),
-					'showTabs'         => array(
+					'showTabs'           => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'perPage'          => array(
+					'showIdentification' => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
+					'perPage'            => array(
 						'type'    => 'number',
 						'default' => 10,
 					),
-					'orderBy'          => array(
+					'orderBy'            => array(
 						'type'    => 'string',
 						'default' => 'startdatum',
 					),
-					'orderByDirection' => array(
+					'orderByDirection'   => array(
 						'type'    => 'string',
 						'default' => '-',
 					),

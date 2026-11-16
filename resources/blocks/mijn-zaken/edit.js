@@ -54,6 +54,7 @@ const Edit = ( { attributes, setAttributes } ) => {
 		byBSN,
 		byKVK,
 		showTabs,
+		showIdentification,
 		perPage,
 		orderBy,
 		orderByDirection,
@@ -319,6 +320,20 @@ const Edit = ( { attributes, setAttributes } ) => {
 							checked={ showTabs }
 							onChange={ ( value ) =>
 								setAttributes( { showTabs: value } )
+							}
+						/>
+						<ToggleControl
+							label={ __(
+								'Zaaknummer tonen',
+								'owc-mijn-services'
+							) }
+							help={ __(
+								'Toon het zaaknummer (identificatie) onder de titel van de kaart.',
+								'owc-mijn-services'
+							) }
+							checked={ showIdentification }
+							onChange={ ( value ) =>
+								setAttributes( { showIdentification: value } )
 							}
 						/>
 						<RangeControl
