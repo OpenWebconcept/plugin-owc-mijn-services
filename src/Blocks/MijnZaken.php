@@ -13,6 +13,13 @@ use WP_Block;
 class MijnZaken extends Block
 {
 	/**
+	 * Whether the zaak identification is shown as the card subtitle.
+	 *
+	 * @since NEXT
+	 */
+	private bool $show_identification = false;
+
+	/**
 	 * @inheritDoc
 	 */
 	protected function render_block( array $attributes, string $block_content, WP_Block $block ): string
@@ -64,6 +71,8 @@ class MijnZaken extends Block
 		}
 
 		$zaken = $zaken->take( (int) ( $attributes['perPage'] ?? 10 ) );
+
+		$this->show_identification = (bool) ( $attributes['showIdentification'] ?? false );
 
 		return owc_mijn_services_render_view(
 			'owc-overview-zaken',
@@ -156,10 +165,14 @@ class MijnZaken extends Block
 	 */
 	private function map_zaak( $zaak ): array
 	{
+		$title          = $zaak->title();
+		$identification = (string) $zaak->getValue( 'identificatie', '' );
+
 		return array(
 			'appearance' => '',
-			'title'      => $zaak->title(),
-			'subTitle'   => '',
+			'title'      => $title,
+			// Skip the subtitle when the title already falls back to the identification.
+			'subTitle'   => $this->show_identification && $identification !== $title ? $identification : '',
 			'context'    => $zaak->startDate( 'j F Y' ),
 			'datetime'   => $zaak->startDate( 'Y-m-d' ),
 			'href'       => $zaak->permalink(),
