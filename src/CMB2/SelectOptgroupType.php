@@ -62,7 +62,7 @@ class SelectOptgroupType extends CMB2_Type_Select
 	 * Fields can opt into a single-value select by setting the 'select_single' field arg,
 	 * e.g. for a per-row choice inside a repeatable group.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 */
 	private function is_single_select(): bool
 	{

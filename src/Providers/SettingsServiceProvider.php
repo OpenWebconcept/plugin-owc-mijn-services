@@ -69,7 +69,7 @@ class SettingsServiceProvider extends ServiceProvider
 	 * selects of the 'Startdatum per zaaktype' rows, only on this plugin's own settings page.
 	 *
 	 * @since 0.17.0
-	 * @since NEXT Also loads the 'Startdatum per zaaktype' script.
+	 * @since 0.21.0 Also loads the 'Startdatum per zaaktype' script.
 	 */
 	public function enqueue_scripts( string $hook_suffix ): void
 	{

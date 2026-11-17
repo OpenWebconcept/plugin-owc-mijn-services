@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.21.0
  */
 
 namespace OWC\My_Services\Settings;
@@ -36,7 +36,7 @@ use function OWC\ZGW\apiClientManager;
  * live ZTC request and is safe to use while rendering the settings page. Only identify()
  * falls back to a live request, for a zaaktype that isn't cached.
  *
- * @since NEXT
+ * @since 0.21.0
  */
 class ZaaktypeCatalog
 {

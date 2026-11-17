@@ -7,7 +7,7 @@ declare(strict_types=1);
  *
  * @package OWC_Mijn_Services
  * @author  Yard | Digital Agency
- * @since   NEXT
+ * @since   0.21.0
  */
 
 namespace OWC\My_Services\Settings;
@@ -30,7 +30,7 @@ use OWC\My_Services\Settings\Adapters\ZaaktypeAdapter;
  * supplier. Zaken of that zaaktype with an earlier startdatum are not shown in the
  * 'Mijn zaken' overview.
  *
- * @since NEXT
+ * @since 0.21.0
  */
 class ZaaktypeStartDates
 {
@@ -94,7 +94,7 @@ class ZaaktypeStartDates
 	 * same zaaktype count as duplicates too. Of the duplicates, the row with the earliest valid
 	 * date is kept, at the position of the first one, so deduplicating never hides more zaken.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 *
 	 * @param mixed                 $rows       Raw setting value: a list of `zaaktype`/`startdatum` rows.
 	 * @param array<string, string> $keys       Zaaktype URL => key shared by all versions of that

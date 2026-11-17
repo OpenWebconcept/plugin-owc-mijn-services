@@ -287,7 +287,7 @@ abstract class Block
 	 * to fetch fewer pages. Without zaaktype identificaties no start dates apply.
 	 *
 	 * @since 0.17.0
-	 * @since NEXT Applies the configured start date per zaaktype.
+	 * @since 0.21.0 Applies the configured start date per zaaktype.
 	 *
 	 * @param string[] $zaaktype_identificaties
 	 */
@@ -343,7 +343,7 @@ abstract class Block
 	/**
 	 * Returns the configured start date of each of the given zaaktype identificaties that has one.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 *
 	 * @param string   $supplier_name
 	 * @param string[] $zaaktype_identificaties
@@ -373,7 +373,7 @@ abstract class Block
 	/**
 	 * Zaken without a startdatum are kept, as the date they started is unknown.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 */
 	private function zaak_started_on_or_after( Zaak $zaak, DateTimeImmutable $start_date ): bool
 	{

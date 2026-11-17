@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.21.0] - 2026-11-17
+
+-   Added: also exclude odt, ods and odp documents with doc/docx exclusion setting
+-   Added: option to show zaak identification as card subtitle
+-   Added: filter zaken by start date per zaaktype
+
 ## [v0.20.0] - 2026-11-03
 
 -   Added: filter zaken on zaaktype identifications

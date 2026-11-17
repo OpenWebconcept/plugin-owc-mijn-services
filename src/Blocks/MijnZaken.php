@@ -15,7 +15,7 @@ class MijnZaken extends Block
 	/**
 	 * Whether the zaak identification is shown as the card subtitle.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 */
 	private bool $show_identification = false;
 

@@ -37,7 +37,7 @@ class OptionsPageRegistrar
 	use Supplier;
 
 	/**
-	 * @since NEXT
+	 * @since 0.21.0
 	 */
 	public const ZAAKTYPE_START_DATES_FIELD_ID = 'owc-mijn-services-zaaktype-start-dates';
 
@@ -45,14 +45,14 @@ class OptionsPageRegistrar
 	 * Transient prefix (suffixed with the user ID) holding what the last save of the
 	 * 'Startdatum per zaaktype' rows has to report, to show it as notices after the redirect.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 */
 	private const START_DATES_NOTICE_TRANSIENT = 'owcms-zaaktype-start-dates-notice-';
 
 	/**
 	 * Zaaktypen per filtering supplier, cached for the 'Startdatum per zaaktype' rows.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 * @var array<string, array<string, string>>|null
 	 */
 	private ?array $zaaktype_catalog = null;
@@ -333,7 +333,7 @@ class OptionsPageRegistrar
 	 * Remembers removed duplicates and unresolvable zaaktypen, so a notice can explain them
 	 * after the settings page redirect.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 */
 	private function sanitize_zaaktype_start_dates( mixed $rows ): mixed
 	{
@@ -388,7 +388,7 @@ class OptionsPageRegistrar
 	/**
 	 * Returns the identificatie and supplier saved with each zaaktype URL on the previous save.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 *
 	 * @return array<string, array{supplier: string, identificatie: string}>
 	 */
@@ -416,7 +416,7 @@ class OptionsPageRegistrar
 	 * Shows notices on the settings page after saving the 'Startdatum per zaaktype' rows removed
 	 * duplicates, or found zaaktypen whose identificatie couldn't be resolved.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 */
 	public function render_zaaktype_start_dates_notices(): void
 	{
@@ -477,7 +477,7 @@ class OptionsPageRegistrar
 	 * by a newer version, it is added under its supplier so the row keeps showing (and saving)
 	 * its selection; the start date still applies to the latest version.
 	 *
-	 * @since NEXT
+	 * @since 0.21.0
 	 *
 	 * @return array<string, array<string, string>|string>
 	 */
