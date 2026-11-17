@@ -20,15 +20,22 @@ if ( ! defined( 'ABSPATH' )) {
 }
 
 use DateTimeImmutable;
+use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Settings\Adapters\ZaaktypeAdapter;
+use OWC\ZGW\Entities\Zaak;
 
 /**
  * Start dates per zaaktype from which zaken are shown.
  *
  * Built from the repeatable 'Startdatum per zaaktype' setting, where every row holds a
  * zaaktype URL, a 'Y-m-d' date and, resolved on save, the zaaktype's identificatie and
- * supplier. Zaken of that zaaktype with an earlier startdatum are not shown in the
- * 'Mijn zaken' overview.
+ * supplier.
+ *
+ * The setting acts as an allowlist per supplier selected under 'Zaaktypefiltering ondersteunde
+ * leveranciers': as soon as at least one row is configured for such a supplier, only zaken of its
+ * configured zaaktypen, started on or after the configured date, are shown, in every 'Mijn zaken'
+ * overview, on the zaak detail page and for downloads. All zaken of suppliers without rows, and
+ * of suppliers without zaaktype filtering, are shown.
  *
  * @since 0.21.0
  */
@@ -50,18 +57,54 @@ class ZaaktypeStartDates
 	private array $entries;
 
 	/**
-	 * @param array<int, array{url: string, identificatie: string, supplier: string, date: string}> $entries
+	 * Names of the suppliers the allowlist applies to.
+	 *
+	 * @var string[]
 	 */
-	public function __construct( array $entries )
+	private array $filtering_suppliers;
+
+	/**
+	 * Per supplier: the result of start_dates().
+	 *
+	 * @var array<string, array<string, DateTimeImmutable>>
+	 */
+	private array $start_dates_cache = array();
+
+	/**
+	 * Per supplier: the cached zaaktype URL => identificatie map.
+	 *
+	 * @var array<string, array<string, string>>
+	 */
+	private array $url_identificaties_cache = array();
+
+	/**
+	 * @param array<int, array{url: string, identificatie: string, supplier: string, date: string}> $entries
+	 * @param string[]                                                                              $filtering_suppliers Suppliers selected under 'Zaaktypefiltering ondersteunde leveranciers'.
+	 */
+	public function __construct( array $entries, array $filtering_suppliers = array() )
 	{
-		$this->entries = $entries;
+		$this->entries             = $entries;
+		$this->filtering_suppliers = array_values( array_map( 'strval', $filtering_suppliers ) );
+	}
+
+	/**
+	 * Returns the shared instance built from the settings.
+	 */
+	public static function resolve(): self
+	{
+		$start_dates = ContainerResolver::make()->get( 'display.zaaktype-start-dates' );
+
+		return $start_dates instanceof self ? $start_dates : new self( array() );
 	}
 
 	/**
 	 * Builds an instance from the raw setting value: a list of rows. Rows without a zaaktype or
 	 * with an invalid date are skipped.
+	 *
+	 * @param mixed    $rows                Raw setting value.
+	 * @param string[] $filtering_suppliers Suppliers selected under 'Zaaktypefiltering ondersteunde leveranciers'.
 	 */
-	public static function from_setting( mixed $rows ): self
+	public static function from_setting( mixed $rows, array $filtering_suppliers ): self
 	{
 		$entries = array();
 
@@ -85,7 +128,7 @@ class ZaaktypeStartDates
 			);
 		}
 
-		return new self( $entries );
+		return new self( $entries, $filtering_suppliers );
 	}
 
 	/**
@@ -143,21 +186,139 @@ class ZaaktypeStartDates
 	}
 
 	/**
-	 * Returns the start date for a zaaktype identificatie, or null when none is configured.
-	 * The identificatie is shared by all versions of a zaaktype, so a date saved for any version
-	 * applies to all of them, including versions created after the date was saved.
+	 * Whether the zaken of a supplier are restricted to the configured zaaktypen and start dates:
+	 * only when zaaktype filtering is enabled for the supplier and at least one row belongs to it.
+	 * Zaken of other suppliers are never filtered on zaaktype by this setting.
+	 *
+	 * A row of which the supplier is unknown, because its zaaktype couldn't be resolved, restricts
+	 * every filtering supplier, as it can't be ruled out it belongs to it: better to show too few
+	 * zaken than too many.
 	 */
-	public function for_identificatie( string $supplier_name, string $identificatie ): ?DateTimeImmutable
+	public function applies_to( string $supplier_name ): bool
 	{
-		$date = $this->dates_by_identificatie( $supplier_name )[ $identificatie ] ?? null;
+		if ( ! in_array( $supplier_name, $this->filtering_suppliers, true )) {
+			return false;
+		}
 
-		if (null === $date) {
+		foreach ($this->entries as $entry) {
+			$owner = $this->entry_supplier( $entry );
+
+			if (null === $owner || $supplier_name === $owner) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns the configured start date of every zaaktype of a supplier, keyed on the zaaktype
+	 * identificatie, which is shared by all versions of a zaaktype.
+	 *
+	 * Note that PHP turns numeric identificaties into integer keys; use identificaties() for a
+	 * list of strings.
+	 *
+	 * @return array<string, DateTimeImmutable> identificatie => start date.
+	 */
+	public function start_dates( string $supplier_name ): array
+	{
+		if (isset( $this->start_dates_cache[ $supplier_name ] )) {
+			return $this->start_dates_cache[ $supplier_name ];
+		}
+
+		$dates = array();
+
+		foreach ($this->dates_by_identificatie( $supplier_name ) as $identificatie => $date) {
+			$parsed = DateTimeImmutable::createFromFormat( '!' . self::DATE_FORMAT, $date );
+
+			if ($parsed instanceof DateTimeImmutable) {
+				$dates[ $identificatie ] = $parsed;
+			}
+		}
+
+		$this->start_dates_cache[ $supplier_name ] = $dates;
+
+		return $dates;
+	}
+
+	/**
+	 * Returns the identificaties of the zaaktypen of a supplier that zaken may be shown of.
+	 *
+	 * @return string[]
+	 */
+	public function identificaties( string $supplier_name ): array
+	{
+		return array_map( 'strval', array_keys( $this->start_dates( $supplier_name ) ) );
+	}
+
+	/**
+	 * Returns the URLs of every known version of the zaaktypen of a supplier that zaken may be
+	 * shown of, or null when they can't be determined because the zaaktypen cache is empty.
+	 *
+	 * @return string[]|null
+	 */
+	public function allowed_urls( string $supplier_name ): ?array
+	{
+		$url_identificaties = $this->url_identificaties( $supplier_name );
+
+		if (array() === $url_identificaties) {
 			return null;
 		}
 
-		$parsed = DateTimeImmutable::createFromFormat( '!' . self::DATE_FORMAT, $date );
+		$allowed = $this->identificaties( $supplier_name );
 
-		return $parsed instanceof DateTimeImmutable ? $parsed : null;
+		return array_keys(
+			array_filter(
+				$url_identificaties,
+				fn ( $identificatie ) => in_array( (string) $identificatie, $allowed, true )
+			)
+		);
+	}
+
+	/**
+	 * Returns the zaaktype URLs of the rows whose identificatie couldn't be resolved on save.
+	 *
+	 * @return string[]
+	 */
+	public function unresolved_urls(): array
+	{
+		$urls = array();
+
+		foreach ($this->entries as $entry) {
+			if ('' === $entry['identificatie']) {
+				$urls[] = $entry['url'];
+			}
+		}
+
+		return array_values( array_unique( $urls ) );
+	}
+
+	/**
+	 * Whether a zaak may be shown: always when the allowlist doesn't apply to the supplier (see
+	 * applies_to()), otherwise only when its zaaktype is configured for the supplier and it
+	 * started on or after the configured date.
+	 */
+	public function allows_zaak( Zaak $zaak, string $supplier_name ): bool
+	{
+		if ( ! $this->applies_to( $supplier_name )) {
+			return true;
+		}
+
+		$dates         = $this->start_dates( $supplier_name );
+		$identificatie = ZaaktypeAdapter::zaak_zaaktype_identificatie( $zaak, $this->url_identificaties( $supplier_name ) );
+
+		return isset( $dates[ $identificatie ] ) && self::zaak_started_on_or_after( $zaak, $dates[ $identificatie ] );
+	}
+
+	/**
+	 * Zaken without a startdatum are kept, as the date they started is unknown.
+	 */
+	public static function zaak_started_on_or_after( Zaak $zaak, DateTimeImmutable $start_date ): bool
+	{
+		$started = $zaak->startdatum;
+
+		// 'Y-m-d' strings compare chronologically, and ignore any time or timezone.
+		return ! $started instanceof DateTimeImmutable || $started->format( self::DATE_FORMAT ) >= $start_date->format( self::DATE_FORMAT );
 	}
 
 	/**
@@ -172,26 +333,56 @@ class ZaaktypeStartDates
 	 */
 	private function dates_by_identificatie( string $supplier_name ): array
 	{
-		$url_identificaties = null;
-		$dates              = array();
+		$dates = array();
 
 		foreach ($this->entries as $entry) {
-			if ('' !== $entry['identificatie']) {
-				if ('' === $entry['supplier'] || $supplier_name === $entry['supplier']) {
-					$dates = self::add_earliest( $dates, $entry['identificatie'], $entry['date'] );
-				}
+			$owner = $this->entry_supplier( $entry );
 
+			if (null !== $owner && $supplier_name !== $owner) {
 				continue;
 			}
 
-			$url_identificaties ??= ZaaktypeAdapter::url_identificaties( $supplier_name );
+			$identificatie = '' !== $entry['identificatie']
+				? $entry['identificatie']
+				: (string) ( $this->url_identificaties( $supplier_name )[ $entry['url'] ] ?? '' );
 
-			if (isset( $url_identificaties[ $entry['url'] ] )) {
-				$dates = self::add_earliest( $dates, $url_identificaties[ $entry['url'] ], $entry['date'] );
+			if ('' !== $identificatie) {
+				$dates = self::add_earliest( $dates, $identificatie, $entry['date'] );
 			}
 		}
 
 		return $dates;
+	}
+
+	/**
+	 * Returns the supplier a row belongs to: the one saved with it, otherwise the filtering
+	 * supplier whose cached zaaktypen contain its zaaktype URL, or null when it's unknown.
+	 *
+	 * @param array{url: string, identificatie: string, supplier: string, date: string} $entry
+	 */
+	private function entry_supplier( array $entry ): ?string
+	{
+		if ('' !== $entry['supplier']) {
+			return $entry['supplier'];
+		}
+
+		foreach ($this->filtering_suppliers as $filtering_supplier) {
+			if (isset( $this->url_identificaties( (string) $filtering_supplier )[ $entry['url'] ] )) {
+				return (string) $filtering_supplier;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * The cached zaaktype URL => identificatie map of a supplier, read once per instance.
+	 *
+	 * @return array<string, string>
+	 */
+	private function url_identificaties( string $supplier_name ): array
+	{
+		return $this->url_identificaties_cache[ $supplier_name ] ??= ZaaktypeAdapter::url_identificaties( $supplier_name );
 	}
 
 	/**

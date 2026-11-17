@@ -24,8 +24,10 @@ use Exception;
 use OWC\My_Services\Services\LoggerService;
 use OWC\ZGW\Contracts\Client;
 use OWC\ZGW\Endpoints\Filter\ZaaktypenFilter;
+use OWC\ZGW\Entities\Zaak;
 use OWC\ZGW\Entities\Zaaktype;
 use OWC\ZGW\Support\Collection;
+use Throwable;
 
 /**
  * Adapter for fetching zaaktypen to use as select options.
@@ -87,6 +89,32 @@ class ZaaktypeAdapter
 		$identificaties = get_transient( self::identificaties_transient_key( $supplier_name ) );
 
 		return is_array( $identificaties ) ? $identificaties : array();
+	}
+
+	/**
+	 * Returns the identificatie of the zaaktype of a zaak, preferring the cached URL =>
+	 * identificatie map over lazily fetching the zaaktype from the API.
+	 *
+	 * @since 0.20.0
+	 * @since NEXT Moved from Block.
+	 *
+	 * @param array<string, string> $url_identificaties
+	 */
+	public static function zaak_zaaktype_identificatie( Zaak $zaak, array $url_identificaties ): string
+	{
+		$zaaktype = $zaak->getAttributeValue( 'zaaktype' );
+
+		if (is_string( $zaaktype ) && isset( $url_identificaties[ $zaaktype ] )) {
+			return (string) $url_identificaties[ $zaaktype ];
+		}
+
+		try {
+			return (string) ( $zaak->zaaktype?->identificatie ?? '' );
+		} catch (Throwable $e) {
+			LoggerService::log_exception( $e, array( 'context' => 'Error resolving zaaktype of zaak.' ) );
+
+			return '';
+		}
 	}
 
 	/**

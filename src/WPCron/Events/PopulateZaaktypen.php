@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' )) {
 use Exception;
 use OWC\My_Services\Services\LoggerService;
 use OWC\My_Services\Settings\Adapters\ZaaktypeAdapter;
+use OWC\My_Services\Settings\ZaaktypeStartDateIdentities;
 use OWC\My_Services\Traits\Supplier;
 
 use function OWC\ZGW\apiClientManager;
@@ -31,6 +32,7 @@ use function OWC\ZGW\apiClientManager;
  * block editor, meaning nobody has to wait for the zaaktypen to be fetched from the API.
  *
  * @since 0.17.0
+ * @since NEXT Also resolves 'Startdatum per zaaktype' rows that couldn't be resolved on save.
  */
 class PopulateZaaktypen
 {
@@ -41,6 +43,9 @@ class PopulateZaaktypen
 		foreach ($this->get_configured_suppliers() as $supplier) {
 			$this->populate_for_supplier( $supplier );
 		}
+
+		// Now that the zaaktypen are fresh, resolve 'Startdatum per zaaktype' rows that couldn't be resolved on save.
+		( new ZaaktypeStartDateIdentities() )->backfill();
 	}
 
 	private function populate_for_supplier( array $supplier ): void
