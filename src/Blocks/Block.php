@@ -231,9 +231,7 @@ abstract class Block
 			return Collection::collect( array() );
 		}
 
-		$zaaktype_identificaties = $this->supports_zaaktype_filtering( $this->single_client_supplier_name )
-			? $this->resolve_zaaktype_identificaties( $this->client, $this->single_client_supplier_name, $this->zaaktypen_by_supplier[ $this->single_client_supplier_name ] ?? array() )
-			: array();
+		$zaaktype_identificaties = $this->get_zaaktype_identificaties_to_show( $this->client, $this->single_client_supplier_name );
 
 		if (null === $zaaktype_identificaties) {
 			return Collection::collect( array() );
@@ -254,9 +252,7 @@ abstract class Block
 
 		foreach ($this->clients as $supplier_name => $client) {
 			try {
-				$zaaktype_identificaties = $this->supports_zaaktype_filtering( $supplier_name )
-					? $this->resolve_zaaktype_identificaties( $client, $supplier_name, $this->zaaktypen_by_supplier[ $supplier_name ] ?? array() )
-					: array();
+				$zaaktype_identificaties = $this->get_zaaktype_identificaties_to_show( $client, $supplier_name );
 
 				if (null === $zaaktype_identificaties) {
 					continue;
@@ -275,6 +271,37 @@ abstract class Block
 	}
 
 	/**
+	 * Resolves the zaaktype identificaties to show the zaken of a supplier for: the zaaktypen
+	 * selected on the block, restricted to the zaaktypen configured for the supplier under
+	 * 'Startdatum per zaaktype' when any are configured there. Without a selection on the block,
+	 * all configured zaaktypen apply. Suppliers without zaaktype filtering are never filtered on zaaktype.
+	 * Returns an empty list when the zaken of all zaaktypen may be shown, and null when no zaken
+	 * may be shown at all.
+	 *
+	 * @since NEXT
+	 *
+	 * @return string[]|null
+	 */
+	private function get_zaaktype_identificaties_to_show( Client $client, string $supplier_name ): ?array
+	{
+		if ( ! $this->supports_zaaktype_filtering( $supplier_name )) {
+			return array();
+		}
+
+		$selected    = $this->resolve_zaaktype_identificaties( $client, $supplier_name, $this->zaaktypen_by_supplier[ $supplier_name ] ?? array() );
+		$start_dates = ZaaktypeStartDates::resolve();
+
+		if (null === $selected || ! $start_dates->applies_to( $supplier_name )) {
+			return $selected;
+		}
+
+		$allowed        = $start_dates->identificaties( $supplier_name );
+		$identificaties = array() === $selected ? $allowed : array_values( array_intersect( $selected, $allowed ) );
+
+		return array() === $identificaties ? null : $identificaties;
+	}
+
+	/**
 	 * Fetches zaken for a single client. When zaaktype identificaties are given, the zaken are
 	 * filtered on them after fetching instead of passing a 'zaaktype' query filter: that filter
 	 * only matches a single zaaktype version URL, so zaken created with an older version of the
@@ -282,9 +309,10 @@ abstract class Block
 	 * result pages are fetched. Without zaaktype identificaties, all zaaktypen are fetched.
 	 *
 	 * When a start date is configured for a zaaktype ('Startdatum per zaaktype' setting), its
-	 * zaken started before that date are dropped as well. When every selected zaaktype has a
-	 * start date, the request already asks for zaken started on or after the earliest of them,
-	 * to fetch fewer pages. Without zaaktype identificaties no start dates apply.
+	 * zaken started before that date are dropped as well. When every zaaktype has a start date,
+	 * the request already asks for zaken started on or after the earliest of them, to fetch fewer
+	 * pages. Without zaaktype identificaties no start dates apply, which only happens when the
+	 * start dates don't apply to the supplier (see get_zaaktype_identificaties_to_show()).
 	 *
 	 * @since 0.17.0
 	 * @since 0.21.0 Applies the configured start date per zaaktype.
@@ -327,13 +355,13 @@ abstract class Block
 		$zaken = array_filter(
 			$zaken,
 			function ( Zaak $zaak ) use ( $url_identificaties, $zaaktype_identificaties, $start_dates ) {
-				$identificatie = $this->get_zaak_zaaktype_identificatie( $zaak, $url_identificaties );
+				$identificatie = ZaaktypeAdapter::zaak_zaaktype_identificatie( $zaak, $url_identificaties );
 
 				if ( ! in_array( $identificatie, $zaaktype_identificaties, true )) {
 					return false;
 				}
 
-				return ! isset( $start_dates[ $identificatie ] ) || $this->zaak_started_on_or_after( $zaak, $start_dates[ $identificatie ] );
+				return ! isset( $start_dates[ $identificatie ] ) || ZaaktypeStartDates::zaak_started_on_or_after( $zaak, $start_dates[ $identificatie ] );
 			}
 		);
 
@@ -351,61 +379,10 @@ abstract class Block
 	 */
 	private function get_start_dates_by_identificatie( string $supplier_name, array $zaaktype_identificaties ): array
 	{
-		$start_dates = ContainerResolver::make()->get( 'display.zaaktype-start-dates' );
-
-		if ( ! $start_dates instanceof ZaaktypeStartDates) {
-			return array();
-		}
-
-		$dates = array();
-
-		foreach ($zaaktype_identificaties as $identificatie) {
-			$date = $start_dates->for_identificatie( $supplier_name, $identificatie );
-
-			if (null !== $date) {
-				$dates[ $identificatie ] = $date;
-			}
-		}
-
-		return $dates;
-	}
-
-	/**
-	 * Zaken without a startdatum are kept, as the date they started is unknown.
-	 *
-	 * @since 0.21.0
-	 */
-	private function zaak_started_on_or_after( Zaak $zaak, DateTimeImmutable $start_date ): bool
-	{
-		$started = $zaak->startdatum;
-
-		// 'Y-m-d' strings compare chronologically, and ignore any time or timezone.
-		return ! $started instanceof DateTimeImmutable || $started->format( ZaaktypeStartDates::DATE_FORMAT ) >= $start_date->format( ZaaktypeStartDates::DATE_FORMAT );
-	}
-
-	/**
-	 * Returns the identificatie of the zaaktype of a zaak, preferring the expanded zaaktype and
-	 * the cached URL => identificatie map over lazily fetching the zaaktype from the API.
-	 *
-	 * @since 0.20.0
-	 *
-	 * @param array<string, string> $url_identificaties
-	 */
-	private function get_zaak_zaaktype_identificatie( Zaak $zaak, array $url_identificaties ): string
-	{
-		$zaaktype = $zaak->getAttributeValue( 'zaaktype' );
-
-		if (is_string( $zaaktype ) && isset( $url_identificaties[ $zaaktype ] )) {
-			return $url_identificaties[ $zaaktype ];
-		}
-
-		try {
-			return (string) ( $zaak->zaaktype?->identificatie ?? '' );
-		} catch (Throwable $e) {
-			LoggerService::log_exception( $e, array( 'context' => 'Error resolving zaaktype of zaak.' ) );
-
-			return '';
-		}
+		return array_intersect_key(
+			ZaaktypeStartDates::resolve()->start_dates( $supplier_name ),
+			array_flip( $zaaktype_identificaties )
+		);
 	}
 
 	/**

@@ -9,6 +9,7 @@ use Exception;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Services\LoggerService;
+use OWC\My_Services\Settings\ZaaktypeStartDates;
 use OWC\ZGW\Entities\Zaak as ZaakEntity;
 use OWC\ZGW\Support\ZaakIdEncoderDecoder;
 use WP_Block;
@@ -60,6 +61,11 @@ class Zaak extends Block
 			// When multiple clients are configured, retrieve_zaak() already tagged the
 			// zaak with the supplier it was actually found under.
 			$zaak->setValue( 'supplier', $supplier );
+		}
+
+		// Zaken excluded by the 'Startdatum per zaaktype' setting are hidden everywhere, also here.
+		if ( ! ZaaktypeStartDates::resolve()->allows_zaak( $zaak, (string) $zaak->getValue( 'supplier', $supplier ) )) {
+			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De opgevraagde zaak is niet gevonden.', 'owc-mijn-services' ) ) );
 		}
 
 		$information_objects = $this->get_zaak_informatie_objects( $zaak );

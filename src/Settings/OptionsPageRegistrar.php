@@ -175,7 +175,7 @@ class OptionsPageRegistrar
 		$start_dates_group = $options->add_field(
 			array(
 				'name'            => __( 'Startdatum per zaaktype', 'owc-mijn-services' ),
-				'desc'            => __( 'Voeg een zaaktype toe en kies vanaf welke startdatum zaken van dat zaaktype getoond worden. Dit geldt alleen voor \'Mijn zaken\'-blokken waarin dat zaaktype is geselecteerd; blokken zonder zaaktypeselectie tonen altijd alle zaken. Alleen zaaktypen van leveranciers met zaaktypefiltering zijn beschikbaar. Elk zaaktype kan maar één keer worden toegevoegd.', 'owc-mijn-services' ),
+				'desc'            => __( 'Voeg een zaaktype toe en kies vanaf welke startdatum zaken van dat zaaktype getoond worden. Zodra voor een leverancier met zaaktypefiltering minimaal één zaaktype is ingesteld, worden van die leverancier op de hele website alleen nog zaken van de hier ingestelde zaaktypen getoond, vanaf de ingestelde startdatum. Dat geldt voor alle \'Mijn zaken\'-blokken (ook zonder zaaktypeselectie), voor de detailpagina van een zaak en voor downloads; in \'Mijn zaken\'-blokken kunnen dan alleen deze zaaktypen worden geselecteerd. Van leveranciers waarvoor hier niets is ingesteld, en van leveranciers zonder zaaktypefiltering, worden alle zaken getoond. Alleen zaaktypen van leveranciers met zaaktypefiltering zijn beschikbaar. Elk zaaktype kan maar één keer worden toegevoegd.', 'owc-mijn-services' ),
 				'id'              => self::ZAAKTYPE_START_DATES_FIELD_ID,
 				'type'            => 'group',
 				'repeatable'      => true,
@@ -328,10 +328,13 @@ class OptionsPageRegistrar
 	 *    the row, overwriting whatever was submitted. The identificatie is shared by all versions
 	 *    of a zaaktype, so the start date keeps applying after the zaaktype is re-versioned, even
 	 *    when the saved version disappears from the ZTC or the zaaktypen cache is empty.
-	 * 2. Keeps a single row per zaaktype.
+	 * 2. Removes rows without a zaaktype and date, e.g. removed rows.
+	 * 3. Keeps a single row per zaaktype.
 	 *
-	 * Remembers removed duplicates and unresolvable zaaktypen, so a notice can explain them
-	 * after the settings page redirect.
+	 * Remembers removed duplicates, so a notice can explain them after the settings page redirect.
+	 * Rows whose zaaktype can't be resolved are kept without identificatie and supplier; they're
+	 * reported on the settings page as long as they exist, and resolved later by the daily
+	 * zaaktypen cron (see ZaaktypeStartDateIdentities).
 	 *
 	 * @since 0.21.0
 	 */
@@ -341,15 +344,26 @@ class OptionsPageRegistrar
 			return $rows;
 		}
 
-		$catalog    = new ZaaktypeCatalog();
-		$previous   = $this->get_saved_zaaktype_identities();
-		$unresolved = array();
-		$keys       = array();
+		$catalog  = new ZaaktypeCatalog();
+		$previous = $this->get_saved_zaaktype_identities();
+		$keys     = array();
 
 		foreach ($rows as $index => $row) {
 			$url = is_array( $row ) ? trim( (string) ( $row[ ZaaktypeStartDates::KEY_ZAAKTYPE ] ?? '' ) ) : '';
 
 			if ('' === $url) {
+				// CMB2 doesn't clear the hidden fields of a removed row, and only drops empty rows
+				// when they're the last one. So drop rows without any value entered here, and clear
+				// the derived fields of the others, as without a zaaktype they don't apply.
+				if ( ! is_array( $row ) || '' === trim( (string) ( $row[ ZaaktypeStartDates::KEY_START_DATE ] ?? '' ) )) {
+					unset( $rows[ $index ] );
+
+					continue;
+				}
+
+				$rows[ $index ][ ZaaktypeStartDates::KEY_IDENTIFICATIE ] = '';
+				$rows[ $index ][ ZaaktypeStartDates::KEY_SUPPLIER ]      = '';
+
 				continue;
 			}
 
@@ -361,23 +375,18 @@ class OptionsPageRegistrar
 			$rows[ $index ][ ZaaktypeStartDates::KEY_SUPPLIER ]      = $identity['supplier'] ?? '';
 
 			if (null === $identity) {
-				$unresolved[] = $url;
-
 				continue;
 			}
 
 			$keys[ $url ] = $identity['supplier'] . '|' . $identity['identificatie'];
 		}
 
-		$result = ZaaktypeStartDates::deduplicate_rows( $rows, $keys );
+		$result = ZaaktypeStartDates::deduplicate_rows( array_values( $rows ), $keys );
 
-		if (0 < $result['removed'] || array() !== $unresolved) {
+		if (0 < $result['removed']) {
 			set_transient(
 				self::START_DATES_NOTICE_TRANSIENT . get_current_user_id(),
-				array(
-					'removed'    => $result['removed'],
-					'unresolved' => array_values( array_unique( $unresolved ) ),
-				),
+				array( 'removed' => $result['removed'] ),
 				MINUTE_IN_SECONDS
 			);
 		}
@@ -413,8 +422,8 @@ class OptionsPageRegistrar
 	}
 
 	/**
-	 * Shows notices on the settings page after saving the 'Startdatum per zaaktype' rows removed
-	 * duplicates, or found zaaktypen whose identificatie couldn't be resolved.
+	 * Shows notices on the settings page about the 'Startdatum per zaaktype' rows: after a save
+	 * that removed duplicates, and as long as there are rows whose zaaktype couldn't be resolved.
 	 *
 	 * @since 0.21.0
 	 */
@@ -426,6 +435,15 @@ class OptionsPageRegistrar
 			return;
 		}
 
+		$this->render_removed_duplicates_notice();
+		$this->render_unresolved_zaaktypen_notice();
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function render_removed_duplicates_notice(): void
+	{
 		$transient = self::START_DATES_NOTICE_TRANSIENT . get_current_user_id();
 		$notice    = get_transient( $transient );
 
@@ -435,39 +453,50 @@ class OptionsPageRegistrar
 
 		delete_transient( $transient );
 
-		$removed    = (int) ( $notice['removed'] ?? 0 );
-		$unresolved = array_filter( (array) ( $notice['unresolved'] ?? array() ), 'is_string' );
+		$removed = (int) ( $notice['removed'] ?? 0 );
 
-		if (0 < $removed) {
-			printf(
-				'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
-				esc_html(
-					sprintf(
-						/* translators: %d: number of removed rows. */
-						_n(
-							'Bij \'Startdatum per zaaktype\' stond een zaaktype dubbel. Er is %d rij verwijderd; per zaaktype is de vroegste datum bewaard.',
-							'Bij \'Startdatum per zaaktype\' stonden zaaktypen dubbel. Er zijn %d rijen verwijderd; per zaaktype is de vroegste datum bewaard.',
-							$removed,
-							'owc-mijn-services'
-						),
-						$removed
-					)
+		if (0 === $removed) {
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
+			esc_html(
+				sprintf(
+					/* translators: %d: number of removed rows. */
+					_n(
+						'Bij \'Startdatum per zaaktype\' stond een zaaktype dubbel. Er is %d rij verwijderd; per zaaktype is de vroegste datum bewaard.',
+						'Bij \'Startdatum per zaaktype\' stonden zaaktypen dubbel. Er zijn %d rijen verwijderd; per zaaktype is de vroegste datum bewaard.',
+						$removed,
+						'owc-mijn-services'
+					),
+					$removed
 				)
-			);
+			)
+		);
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	private function render_unresolved_zaaktypen_notice(): void
+	{
+		$unresolved = ZaaktypeStartDates::resolve()->unresolved_urls();
+
+		if (array() === $unresolved) {
+			return;
 		}
 
-		if (array() !== $unresolved) {
-			printf(
-				'<div class="notice notice-error is-dismissible"><p>%s</p><ul style="list-style: disc; padding-left: 1.5em;">',
-				esc_html__( 'Van de volgende zaaktypen bij \'Startdatum per zaaktype\' kon de identificatie niet worden opgehaald. De startdatum wordt daardoor mogelijk niet toegepast. Controleer de verbinding met de leverancier en sla de instellingen opnieuw op.', 'owc-mijn-services' )
-			);
+		printf(
+			'<div class="notice notice-error"><p>%s</p><ul style="list-style: disc; padding-left: 1.5em;">',
+			esc_html__( 'Van de volgende zaaktypen bij \'Startdatum per zaaktype\' kon de identificatie niet worden opgehaald. Zolang dat zo is, worden van leveranciers met zaaktypefiltering mogelijk minder zaken getoond. Er wordt dagelijks automatisch opnieuw geprobeerd; controleer anders de verbinding met de leverancier en haal de zaaktypen opnieuw op of sla de instellingen opnieuw op.', 'owc-mijn-services' )
+		);
 
-			foreach ($unresolved as $url) {
-				printf( '<li><code>%s</code></li>', esc_html( $url ) );
-			}
-
-			echo '</ul></div>';
+		foreach ($unresolved as $url) {
+			printf( '<li><code>%s</code></li>', esc_html( $url ) );
 		}
+
+		echo '</ul></div>';
 	}
 
 	/**

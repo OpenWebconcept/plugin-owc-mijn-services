@@ -24,6 +24,7 @@ use OWC\My_Services\Blocks\MijnZaken;
 use OWC\My_Services\Blocks\Zaak;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Settings\Adapters\ZaaktypeAdapter;
+use OWC\My_Services\Settings\ZaaktypeStartDates;
 use WP_Block_Editor_Context;
 use WP_Block_Type;
 use OWC\My_Services\Traits\Supplier;
@@ -259,11 +260,17 @@ class BlockServiceProvider extends ServiceProvider
 	 * and localizes nothing at all when no supplier is selected there, so the block editor never
 	 * receives zaaktype options for a supplier it can't actually filter on.
 	 *
+	 * When zaaktypen are configured for a supplier under 'Startdatum per zaaktype', only those
+	 * zaaktypen are offered for it, as zaken of other zaaktypen are never shown. Those
+	 * restrictions are localized as well, so the block editor can explain them and point out
+	 * selected zaaktypen that are no longer allowed.
+	 *
 	 * Only runs in wp-admin: the result is only ever read by the block editor, and the
 	 * underlying zaaktypen are already cached in a transient (kept warm by a daily cron),
 	 * so this stays cheap even though it runs on every editor screen load.
 	 *
 	 * @since 0.17.0
+	 * @since NEXT Only offers the zaaktypen configured for a supplier under 'Startdatum per zaaktype', if any.
 	 */
 	private function add_zaaktype_options( WP_Block_Type $block_type ): void
 	{
@@ -277,12 +284,25 @@ class BlockServiceProvider extends ServiceProvider
 			return;
 		}
 
-		$grouped    = array();
-		$migrations = array();
+		$start_dates  = ZaaktypeStartDates::resolve();
+		$grouped      = array();
+		$migrations   = array();
+		$restrictions = array();
 
 		foreach ($this->get_configured_suppliers() as $supplier) {
 			if ( ! in_array( $supplier['name'], $filtering_suppliers, true )) {
 				continue;
+			}
+
+			$allowed_urls = null;
+
+			if ($start_dates->applies_to( $supplier['name'] )) {
+				$allowed_urls = $start_dates->allowed_urls( $supplier['name'] );
+
+				$restrictions[ $supplier['name'] ] = array(
+					'configured'  => array() !== $start_dates->identificaties( $supplier['name'] ),
+					'allowedUrls' => $allowed_urls,
+				);
 			}
 
 			try {
@@ -296,6 +316,11 @@ class BlockServiceProvider extends ServiceProvider
 			}
 
 			$types = ( new ZaaktypeAdapter( $client, $supplier['name'] ) )->handle();
+
+			if (isset( $restrictions[ $supplier['name'] ] )) {
+				// Without the allowed URLs it's unknown which zaaktypen may be offered, so offer none.
+				$types = array_intersect_key( $types, array_flip( $allowed_urls ?? array() ) );
+			}
 
 			if (array() === $types) {
 				continue;
@@ -321,7 +346,7 @@ class BlockServiceProvider extends ServiceProvider
 
 		wp_add_inline_script(
 			$block_type->editor_script,
-			'window.owcMyServices = window.owcMyServices || {}; window.owcMyServices.zaaktypeOptions = ' . wp_json_encode( $grouped ) . '; window.owcMyServices.zaaktypeUrlMigrations = ' . wp_json_encode( $migrations ) . ';',
+			'window.owcMyServices = window.owcMyServices || {}; window.owcMyServices.zaaktypeOptions = ' . wp_json_encode( $grouped ) . '; window.owcMyServices.zaaktypeUrlMigrations = ' . wp_json_encode( $migrations ) . '; window.owcMyServices.zaaktypeRestrictions = ' . wp_json_encode( (object) $restrictions ) . ';',
 			'before'
 		);
 	}

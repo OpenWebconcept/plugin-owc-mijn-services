@@ -24,6 +24,7 @@ use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\Auth\eHerkenning;
 use OWC\My_Services\Providers\BlockServiceProvider;
+use OWC\My_Services\Settings\ZaaktypeStartDates;
 use OWC\My_Services\Traits\AuthenticationFilter;
 use OWC\My_Services\Traits\Supplier;
 use OWC\ZGW\Contracts\Client;
@@ -89,6 +90,19 @@ class InformatieObjectDownloadService
 		$zaak           = $this->validate_zaak( $identification, $supplier_name );
 
 		if ( ! $zaak instanceof Zaak) {
+			return '';
+		}
+
+		if ( ! ZaaktypeStartDates::resolve()->allows_zaak( $zaak, $supplier_name )) {
+			LoggerService::log(
+				'notice',
+				sprintf(
+					"OWC\My_Services: Download of informatieobject with identification '%s' blocked, zaak '%s' is excluded by the 'Startdatum per zaaktype' setting.",
+					$download_identification,
+					$identification
+				)
+			);
+
 			return '';
 		}
 

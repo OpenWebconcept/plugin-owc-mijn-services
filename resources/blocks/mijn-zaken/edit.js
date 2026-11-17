@@ -6,6 +6,7 @@ import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	BaseControl,
+	Button,
 	CheckboxControl,
 	Notice,
 	Placeholder,
@@ -14,7 +15,7 @@ import {
 	ToggleControl,
 	__experimentalVStack as VStack,
 } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
@@ -74,6 +75,54 @@ const Edit = ( { attributes, setAttributes } ) => {
 		! ( byKVK && ! disableKVKFiltering );
 
 	const zaaktypeOptionsBySupplier = window?.owcMyServices?.zaaktypeOptions ?? {};
+	// Suppliers whose zaken are restricted by 'Startdatum per zaaktype' => { configured: whether
+	// any of their zaaktypen is known to be configured there, allowedUrls: the URLs of every
+	// version of those zaaktypen, or null when unknown because the zaaktypen cache is empty }.
+	const zaaktypeRestrictions =
+		window?.owcMyServices?.zaaktypeRestrictions ?? {};
+	const restrictedSuppliers = zaakClients.filter(
+		( supplier ) => supplier in zaaktypeRestrictions
+	);
+	const suppliersWithoutAllowedZaaktypen = restrictedSuppliers.filter(
+		( supplier ) => ! zaaktypeRestrictions[ supplier ].configured
+	);
+	const suppliersWithUnknownZaaktypen = restrictedSuppliers.filter(
+		( supplier ) =>
+			zaaktypeRestrictions[ supplier ].configured &&
+			! Array.isArray( zaaktypeRestrictions[ supplier ].allowedUrls )
+	);
+	const zaaktypeStartDatesActive = restrictedSuppliers.length > 0;
+	// Selected zaaktypen that are no longer allowed: they can't be shown or unchecked below, and
+	// since they keep the selection from being empty, they keep the block from falling back to
+	// all allowed zaaktypen.
+	const disallowedSelections = Object.fromEntries(
+		restrictedSuppliers
+			.filter( ( supplier ) =>
+				Array.isArray( zaaktypeRestrictions[ supplier ].allowedUrls )
+			)
+			.map( ( supplier ) => [
+				supplier,
+				( zaaktypen[ supplier ] ?? [] ).filter(
+					( url ) =>
+						! zaaktypeRestrictions[ supplier ].allowedUrls.includes( url )
+				),
+			] )
+			.filter( ( [ , urls ] ) => urls.length > 0 )
+	);
+	const suppliersWithDisallowedSelections = Object.keys( disallowedSelections );
+
+	const removeDisallowedSelections = () => {
+		const next = { ...zaaktypen };
+
+		suppliersWithDisallowedSelections.forEach( ( supplier ) => {
+			next[ supplier ] = ( zaaktypen[ supplier ] ?? [] ).filter(
+				( url ) => ! disallowedSelections[ supplier ].includes( url )
+			);
+		} );
+
+		setAttributes( { zaaktypen: next } );
+	};
+
 	const suppliersWithZaaktypeOptions = zaakClients.filter(
 		( supplier ) => ( zaaktypeOptionsBySupplier[ supplier ] ?? [] ).length > 0
 	);
@@ -198,21 +247,89 @@ const Edit = ( { attributes, setAttributes } ) => {
 						initialOpen={ false }
 					>
 						<VStack >
-							{ suppliersWithZaaktypeOptions.length === 0 ? (
+							{ zaaktypeStartDatesActive && (
 								<Notice status="info" isDismissible={ false }>
-									{ __(
-										'Zaaktypefiltering is uitgeschakeld voor de geselecteerde zaaksystemen. Schakel dit in bij Instellingen → OWC Mijn Services → \'Zaaktypefiltering ondersteunde leveranciers\' om hier zaaktypen te kunnen selecteren.',
-										'owc-mijn-services'
+									{ sprintf(
+										/* translators: %s: comma separated list of zaaksystemen. */
+										__(
+											'Voor %s zijn zaaktypen ingesteld bij Instellingen → OWC Mijn Services → \'Startdatum per zaaktype\'. Van die zaaksystemen worden alleen zaken van die zaaktypen getoond, vanaf de daar ingestelde startdatum, en alleen die zaaktypen kunnen hier worden geselecteerd.',
+											'owc-mijn-services'
+										),
+										restrictedSuppliers.join( ', ' )
 									) }
 								</Notice>
+							) }
+							{ suppliersWithDisallowedSelections.length > 0 && (
+								<Notice status="warning" isDismissible={ false }>
+									<p>
+										{ sprintf(
+											/* translators: %s: comma separated list of zaaksystemen. */
+											__(
+												'Voor %s zijn zaaktypen geselecteerd die niet (meer) zijn ingesteld bij \'Startdatum per zaaktype\'. Zaken van die zaaktypen worden niet getoond. Zolang deze selecties bestaan, worden ook niet automatisch alle ingestelde zaaktypen getoond als hieronder niets is geselecteerd.',
+												'owc-mijn-services'
+											),
+											suppliersWithDisallowedSelections.join( ', ' )
+										) }
+									</p>
+									<Button
+										variant="secondary"
+										onClick={ removeDisallowedSelections }
+									>
+										{ __(
+											'Verwijder deze selecties',
+											'owc-mijn-services'
+										) }
+									</Button>
+								</Notice>
+							) }
+							{ suppliersWithUnknownZaaktypen.length > 0 && (
+								<Notice status="warning" isDismissible={ false }>
+									{ sprintf(
+										/* translators: %s: comma separated list of zaaksystemen. */
+										__(
+											'De zaaktypen van %s konden niet worden geladen, daardoor kunnen hier geen zaaktypen worden geselecteerd. Haal de zaaktypen opnieuw op bij Instellingen → OWC Mijn Services.',
+											'owc-mijn-services'
+										),
+										suppliersWithUnknownZaaktypen.join( ', ' )
+									) }
+								</Notice>
+							) }
+							{ suppliersWithoutAllowedZaaktypen.length > 0 && (
+								<Notice status="warning" isDismissible={ false }>
+									{ sprintf(
+										/* translators: %s: comma separated list of zaaksystemen. */
+										__(
+											'Voor %s kon niet worden bepaald welke zaaktypen bij \'Startdatum per zaaktype\' zijn ingesteld, daardoor worden van dit zaaksysteem geen zaken getoond. Controleer de instellingen bij Instellingen → OWC Mijn Services.',
+											'owc-mijn-services'
+										),
+										suppliersWithoutAllowedZaaktypen.join( ', ' )
+									) }
+								</Notice>
+							) }
+							{ suppliersWithZaaktypeOptions.length === 0 ? (
+								restrictedSuppliers.length === 0 && (
+									<Notice status="info" isDismissible={ false }>
+										{ __(
+											'Zaaktypefiltering is uitgeschakeld voor de geselecteerde zaaksystemen. Schakel dit in bij Instellingen → OWC Mijn Services → \'Zaaktypefiltering ondersteunde leveranciers\' om hier zaaktypen te kunnen selecteren.',
+											'owc-mijn-services'
+										) }
+									</Notice>
+								)
 							) : (
 								<BaseControl
 									id="owc-my-services-zaaktypen-selection"
 									label={ __( 'Zaaktypen', 'owc-mijn-services' ) }
-									help={ __(
-										'Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen.',
-										'owc-mijn-services'
-									) }
+									help={
+										zaaktypeStartDatesActive
+											? __(
+													'Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen; voor zaaksystemen met zaaktypen bij \'Startdatum per zaaktype\' zijn dat alle daar ingestelde zaaktypen.',
+													'owc-mijn-services'
+											  )
+											: __(
+													'Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen.',
+													'owc-mijn-services'
+											  )
+									}
 								>
 									{ suppliersWithZaaktypeOptions.map( ( supplier ) => {
 										const options =

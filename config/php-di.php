@@ -120,13 +120,16 @@ return array(
 		return is_array( $value ) ? array_values( array_filter( $value, 'is_string' ) ) : array();
 	},
 	/**
-	 * Start date per zaaktype from which zaken are shown in a 'Mijn zaken' block that filters
-	 * on that zaaktype.
+	 * Start date per zaaktype from which zaken are shown. For a supplier with zaaktype filtering
+	 * that has any configured, only zaken of its configured zaaktypen are shown.
 	 *
 	 * @since NEXT
 	 */
 	'display.zaaktype-start-dates'           => function ( Container $container ) {
-		return ZaaktypeStartDates::from_setting( $container->make( 'zgw.settings', array( OptionsPageRegistrar::ZAAKTYPE_START_DATES_FIELD_ID ) ) );
+		return ZaaktypeStartDates::from_setting(
+			$container->make( 'zgw.settings', array( OptionsPageRegistrar::ZAAKTYPE_START_DATES_FIELD_ID ) ),
+			(array) $container->get( 'display.zaaktype-filtering-suppliers' )
+		);
 	},
 	/**
 	 * Suppliers excluded from restricting zaken to those where the authenticated user holds the
