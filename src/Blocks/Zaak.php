@@ -64,7 +64,7 @@ class Zaak extends Block
 		}
 
 		// Zaken excluded by the 'Startdatum per zaaktype' setting are hidden everywhere, also here.
-		if ( ! ZaaktypeStartDates::resolve()->allows_zaak( $zaak, (string) $zaak->getValue( 'supplier', $supplier ) )) {
+		if ( ! ZaaktypeStartDates::resolve()->allows_zaak( $zaak, $this->supplier_key_to_name( (string) $zaak->getValue( 'supplier', $supplier ) ) )) {
 			return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'De opgevraagde zaak is niet gevonden.', 'owc-mijn-services' ) ) );
 		}
 
