@@ -105,8 +105,8 @@ class OptionsPageRegistrar
 
 		$options->add_field(
 			array(
-				'name'            => __( 'DOC- en DOCX-documenten uitsluiten', 'owc-mijn-services' ),
-				'desc'            => __( 'Schakel deze optie in om DOC- en DOCX-documenten niet op te halen bij het tonen van een zaak.', 'owc-mijn-services' ),
+				'name'            => __( 'DOC-, DOCX-, ODT-, ODS- en ODP-documenten uitsluiten', 'owc-mijn-services' ),
+				'desc'            => __( 'Schakel deze optie in om DOC-, DOCX-, ODT-, ODS- en ODP-documenten niet op te halen bij het tonen van een zaak.', 'owc-mijn-services' ),
 				'id'              => 'owc-mijn-services-exclude-doc-docx',
 				'type'            => 'checkbox',
 				'sanitization_cb' => function ( $value ) {

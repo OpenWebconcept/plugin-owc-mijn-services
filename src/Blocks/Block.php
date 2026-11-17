@@ -534,7 +534,7 @@ abstract class Block
 
 				$informatieobject = $zaakinformatie_object->informatieobject;
 
-				if ($exclude_doc_docx && in_array( $informatieobject->formatType(), array( 'doc', 'docx' ), true )) {
+				if ($exclude_doc_docx && in_array( $informatieobject->formatType(), array( 'doc', 'docx', 'odt', 'ods', 'odp' ), true )) {
 					return false;
 				}
 
