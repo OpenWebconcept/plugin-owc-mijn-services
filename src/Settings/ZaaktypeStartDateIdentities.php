@@ -181,12 +181,12 @@ class ZaaktypeStartDateIdentities
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- update_option() can't make the write conditional.
-		$updated = $wpdb->update(
-			$wpdb->options,
-			array( 'option_value' => maybe_serialize( $options ) ),
-			array(
-				'option_name'  => self::OPTION_NAME,
-				'option_value' => $expected_raw,
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->options} SET option_value = %s WHERE option_name = %s AND CAST(option_value AS BINARY) = CAST(%s AS BINARY)",
+				maybe_serialize( $options ),
+				self::OPTION_NAME,
+				$expected_raw
 			)
 		);
 
