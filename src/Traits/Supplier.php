@@ -76,4 +76,19 @@ trait Supplier
 
 		return in_array( $supplier_name, $supported, true );
 	}
+
+	/**
+	 * Whether the given supplier's Zaken API supports the 'einddatum__isnull' query filter, which
+	 * was added in Zaken API 1.4. Governed by the 'Einddatumfiltering ondersteunde leveranciers'
+	 * setting, since suppliers on older versions may reject unknown query parameters. Disabled by
+	 * default.
+	 *
+	 * @since 0.21.0
+	 */
+	public function supports_einddatum_filtering( string $supplier_name ): bool
+	{
+		$supported = (array) ContainerResolver::make()->get( 'display.einddatum-filtering-suppliers' );
+
+		return in_array( $supplier_name, $supported, true );
+	}
 }
