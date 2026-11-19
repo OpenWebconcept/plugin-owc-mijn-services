@@ -270,7 +270,7 @@ class BlockServiceProvider extends ServiceProvider
 	 * so this stays cheap even though it runs on every editor screen load.
 	 *
 	 * @since 0.17.0
-	 * @since NEXT Only offers the zaaktypen configured for a supplier under 'Startdatum per zaaktype', if any.
+	 * @since 0.22.0 Only offers the zaaktypen configured for a supplier under 'Startdatum per zaaktype', if any.
 	 */
 	private function add_zaaktype_options( WP_Block_Type $block_type ): void
 	{

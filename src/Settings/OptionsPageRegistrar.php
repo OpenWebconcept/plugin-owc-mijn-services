@@ -440,7 +440,7 @@ class OptionsPageRegistrar
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.22.0
 	 */
 	private function render_removed_duplicates_notice(): void
 	{
@@ -477,7 +477,7 @@ class OptionsPageRegistrar
 	}
 
 	/**
-	 * @since NEXT
+	 * @since 0.22.0
 	 */
 	private function render_unresolved_zaaktypen_notice(): void
 	{

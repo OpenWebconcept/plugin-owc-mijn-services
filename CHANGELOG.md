@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.22.0] - 2026-11-19
+
+- Added: restrict zaken per supplier to zaaktypen configured with a start date
+
 ## [v0.21.0] - 2026-11-17
 
 -   Added: also exclude odt, ods and odp documents with doc/docx exclusion setting

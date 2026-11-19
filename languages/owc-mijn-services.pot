@@ -2,40 +2,40 @@
 # This file is distributed under the EUPL.
 msgid ""
 msgstr ""
-"Project-Id-Version: OWC | Mijn Services 0.21.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/owc-mijn-services\n"
+"Project-Id-Version: OWC | Mijn Services 0.22.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/plugin-owc-mijn-services\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-17T09:08:11+00:00\n"
+"POT-Creation-Date: 2026-11-19T08:33:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: owc-mijn-services\n"
 
 #. Plugin Name of the plugin
-#: owc-mijn-services.php
+#: owc-mijn-services.php:12
 msgid "OWC | Mijn Services"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: owc-mijn-services.php
+#: owc-mijn-services.php:13
 msgid "https://github.com/OpenWebconcept/plugin-owc-mijn-services"
 msgstr ""
 
 #. Description of the plugin
-#: owc-mijn-services.php
+#: owc-mijn-services.php:14
 msgid "Toon mijn zaken"
 msgstr ""
 
 #. Author of the plugin
-#: owc-mijn-services.php
+#: owc-mijn-services.php:16
 msgid "Yard | Digital Agency"
 msgstr ""
 
 #. Author URI of the plugin
-#: owc-mijn-services.php
+#: owc-mijn-services.php:17
 msgid "https://www.yard.nl"
 msgstr ""
 
@@ -56,7 +56,7 @@ msgid "Geen van de gekozen zaaksysteem leveranciers is geconfigureerd of onderst
 msgstr ""
 
 #: src/Blocks/Block.php:127
-#: src/Blocks/Zaak.php:49
+#: src/Blocks/Zaak.php:50
 msgid "De gekozen zaaksysteem leverancier client is niet geconfigureerd."
 msgstr ""
 
@@ -65,12 +65,12 @@ msgid "De gekozen zaaksysteem leverancier ondersteunt geen zaken."
 msgstr ""
 
 #: src/Blocks/MijnZaken.php:31
-#: resources/blocks/mijn-zaken/edit.js:392
+#: resources/blocks/mijn-zaken/edit.js:509
 msgid "Het persoonlijke zakenoverzicht"
 msgstr ""
 
 #: src/Blocks/MijnZaken.php:32
-#: resources/blocks/mijn-zaken/edit.js:396
+#: resources/blocks/mijn-zaken/edit.js:513
 msgid "Toont een overzicht van de zaken voor de ingelogde gebruiker."
 msgstr ""
 
@@ -79,21 +79,22 @@ msgstr ""
 msgid "Er zijn geen zaken gevonden."
 msgstr ""
 
-#: src/Blocks/Zaak.php:32
+#: src/Blocks/Zaak.php:33
 #: resources/blocks/zaak/edit.js:123
 msgid "Detailpagina van een zaak"
 msgstr ""
 
-#: src/Blocks/Zaak.php:33
+#: src/Blocks/Zaak.php:34
 #: resources/blocks/zaak/edit.js:127
 msgid "Toont de details van een specifieke zaak."
 msgstr ""
 
-#: src/Blocks/Zaak.php:42
+#: src/Blocks/Zaak.php:43
 msgid "Er is geen zaaknummer of leverancier opgegeven om de zaak te kunnen tonen."
 msgstr ""
 
-#: src/Blocks/Zaak.php:55
+#: src/Blocks/Zaak.php:56
+#: src/Blocks/Zaak.php:68
 msgid "De opgevraagde zaak is niet gevonden."
 msgstr ""
 
@@ -175,8 +176,8 @@ msgid "De zaaktypen die gebruikt worden voor de zaaktypefilter in het 'Mijn zake
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:166
-#: resources/blocks/mijn-zaken/edit.js:197
-#: resources/blocks/mijn-zaken/edit.js:211
+#: resources/blocks/mijn-zaken/edit.js:246
+#: resources/blocks/mijn-zaken/edit.js:321
 msgid "Zaaktypen"
 msgstr ""
 
@@ -185,7 +186,7 @@ msgid "Startdatum per zaaktype"
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:178
-msgid "Voeg een zaaktype toe en kies vanaf welke startdatum zaken van dat zaaktype getoond worden. Dit geldt alleen voor 'Mijn zaken'-blokken waarin dat zaaktype is geselecteerd; blokken zonder zaaktypeselectie tonen altijd alle zaken. Alleen zaaktypen van leveranciers met zaaktypefiltering zijn beschikbaar. Elk zaaktype kan maar één keer worden toegevoegd."
+msgid "Voeg een zaaktype toe en kies vanaf welke startdatum zaken van dat zaaktype getoond worden. Zodra voor een leverancier met zaaktypefiltering minimaal één zaaktype is ingesteld, worden van die leverancier op de hele website alleen nog zaken van de hier ingestelde zaaktypen getoond, vanaf de ingestelde startdatum. Dat geldt voor alle 'Mijn zaken'-blokken (ook zonder zaaktypeselectie), voor de detailpagina van een zaak en voor downloads; in 'Mijn zaken'-blokken kunnen dan alleen deze zaaktypen worden geselecteerd. Van leveranciers waarvoor hier niets is ingesteld, en van leveranciers zonder zaaktypefiltering, worden alle zaken getoond. Alleen zaaktypen van leveranciers met zaaktypefiltering zijn beschikbaar. Elk zaaktype kan maar één keer worden toegevoegd."
 msgstr ""
 
 #: src/Settings/OptionsPageRegistrar.php:186
@@ -257,19 +258,19 @@ msgid "Schakel deze optie in om de volgnummers van statusstappen te verbergen in
 msgstr ""
 
 #. translators: %d: number of removed rows.
-#: src/Settings/OptionsPageRegistrar.php:447
+#: src/Settings/OptionsPageRegistrar.php:467
 #, php-format
 msgid "Bij 'Startdatum per zaaktype' stond een zaaktype dubbel. Er is %d rij verwijderd; per zaaktype is de vroegste datum bewaard."
 msgid_plural "Bij 'Startdatum per zaaktype' stonden zaaktypen dubbel. Er zijn %d rijen verwijderd; per zaaktype is de vroegste datum bewaard."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Settings/OptionsPageRegistrar.php:462
-msgid "Van de volgende zaaktypen bij 'Startdatum per zaaktype' kon de identificatie niet worden opgehaald. De startdatum wordt daardoor mogelijk niet toegepast. Controleer de verbinding met de leverancier en sla de instellingen opnieuw op."
+#: src/Settings/OptionsPageRegistrar.php:492
+msgid "Van de volgende zaaktypen bij 'Startdatum per zaaktype' kon de identificatie niet worden opgehaald. Zolang dat zo is, worden van leveranciers met zaaktypefiltering mogelijk minder zaken getoond. Er wordt dagelijks automatisch opnieuw geprobeerd; controleer anders de verbinding met de leverancier en haal de zaaktypen opnieuw op of sla de instellingen opnieuw op."
 msgstr ""
 
 #. translators: %s: zaaktype label.
-#: src/Settings/OptionsPageRegistrar.php:505
+#: src/Settings/OptionsPageRegistrar.php:534
 #, php-format
 msgid "%s (oudere versie)"
 msgstr ""
@@ -375,124 +376,156 @@ msgstr ""
 msgid "Er is (momenteel) geen status beschikbaar."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:25
+#: resources/blocks/mijn-zaken/edit.js:26
 msgid "Standaard volgorde"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:26
+#: resources/blocks/mijn-zaken/edit.js:27
 msgid "Startdatum"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:27
+#: resources/blocks/mijn-zaken/edit.js:28
 msgid "Einddatum"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:29
+#: resources/blocks/mijn-zaken/edit.js:30
 msgid "Publicatiedatum"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:33
+#: resources/blocks/mijn-zaken/edit.js:34
 msgid "Archiefactiedatum"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:37
+#: resources/blocks/mijn-zaken/edit.js:38
 msgid "Registratiedatum"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:41
+#: resources/blocks/mijn-zaken/edit.js:42
 msgid "Zaaknummer"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:144
+#: resources/blocks/mijn-zaken/edit.js:193
 #: resources/blocks/zaak/edit.js:48
 msgid "Zaaksystemen"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:150
+#: resources/blocks/mijn-zaken/edit.js:199
 msgid "Er zijn nog geen zaaksystemen geconfigureerd in de ZGW API-instellingen."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:158
+#: resources/blocks/mijn-zaken/edit.js:207
 msgid "Uit welke zaaksystemen worden zaken opgehaald?"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:185
+#: resources/blocks/mijn-zaken/edit.js:234
 msgid "Selecteer minimaal één zaaksysteem. Zonder selectie worden er geen zaken getoond."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:203
-msgid "Zaaktypefiltering is uitgeschakeld voor de geselecteerde zaaksystemen. Schakel dit in bij Instellingen → OWC Mijn Services → 'Zaaktypefiltering ondersteunde leveranciers' om hier zaaktypen te kunnen selecteren."
+#. translators: %s: comma separated list of zaaksystemen.
+#: resources/blocks/mijn-zaken/edit.js:254
+#, js-format
+msgid "Voor %s zijn zaaktypen ingesteld bij Instellingen → OWC Mijn Services → 'Startdatum per zaaktype'. Van die zaaksystemen worden alleen zaken van die zaaktypen getoond, vanaf de daar ingestelde startdatum, en alleen die zaaktypen kunnen hier worden geselecteerd."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:212
-msgid "Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen."
-msgstr ""
-
-#: resources/blocks/mijn-zaken/edit.js:253
-msgid "Zichtbare zaken"
-msgstr ""
-
-#: resources/blocks/mijn-zaken/edit.js:258
-msgid "Persoonlijke zaken (DigiD)"
-msgstr ""
-
-#: resources/blocks/mijn-zaken/edit.js:262
-msgid "Zaken gekoppeld aan het BSN van de ingelogde gebruiker."
-msgstr ""
-
-#: resources/blocks/mijn-zaken/edit.js:274
-msgid "Zet \"Persoonlijke zaken\" aan, anders worden er geen zaken getoond."
+#. translators: %s: comma separated list of zaaksystemen.
+#: resources/blocks/mijn-zaken/edit.js:267
+#, js-format
+msgid "Voor %s zijn zaaktypen geselecteerd die niet (meer) zijn ingesteld bij 'Startdatum per zaaktype'. Zaken van die zaaktypen worden niet getoond. Zolang deze selecties bestaan, worden ook niet automatisch alle ingestelde zaaktypen getoond als hieronder niets is geselecteerd."
 msgstr ""
 
 #: resources/blocks/mijn-zaken/edit.js:278
+msgid "Verwijder deze selecties"
+msgstr ""
+
+#. translators: %s: comma separated list of zaaksystemen.
+#: resources/blocks/mijn-zaken/edit.js:289
+#, js-format
+msgid "De zaaktypen van %s konden niet worden geladen, daardoor kunnen hier geen zaaktypen worden geselecteerd. Haal de zaaktypen opnieuw op bij Instellingen → OWC Mijn Services."
+msgstr ""
+
+#. translators: %s: comma separated list of zaaksystemen.
+#: resources/blocks/mijn-zaken/edit.js:301
+#, js-format
+msgid "Voor %s kon niet worden bepaald welke zaaktypen bij 'Startdatum per zaaktype' zijn ingesteld, daardoor worden van dit zaaksysteem geen zaken getoond. Controleer de instellingen bij Instellingen → OWC Mijn Services."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:312
+msgid "Zaaktypefiltering is uitgeschakeld voor de geselecteerde zaaksystemen. Schakel dit in bij Instellingen → OWC Mijn Services → 'Zaaktypefiltering ondersteunde leveranciers' om hier zaaktypen te kunnen selecteren."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:324
+msgid "Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen; voor zaaksystemen met zaaktypen bij 'Startdatum per zaaktype' zijn dat alle daar ingestelde zaaktypen."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:328
+msgid "Selecteer per zaaksysteem de zaaktypen waarop gefilterd moet worden. Selecteer geen zaaktypen om alle zaaktypen te tonen."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:370
+msgid "Zichtbare zaken"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:375
+msgid "Persoonlijke zaken (DigiD)"
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:379
+msgid "Zaken gekoppeld aan het BSN van de ingelogde gebruiker."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:391
+msgid "Zet \"Persoonlijke zaken\" aan, anders worden er geen zaken getoond."
+msgstr ""
+
+#: resources/blocks/mijn-zaken/edit.js:395
 msgid "Zet minimaal één van beide opties aan, anders worden er geen zaken getoond."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:286
+#: resources/blocks/mijn-zaken/edit.js:403
 msgid "Zakelijke zaken (eHerkenning) zijn uitgeschakeld in de plugin-instellingen."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:293
+#: resources/blocks/mijn-zaken/edit.js:410
 msgid "Zakelijke zaken (eHerkenning)"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:297
+#: resources/blocks/mijn-zaken/edit.js:414
 msgid "Zaken gekoppeld aan het KVK-nummer van de ingelogde gebruiker."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:311
+#: resources/blocks/mijn-zaken/edit.js:428
 msgid "Weergave"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:316
+#: resources/blocks/mijn-zaken/edit.js:433
 msgid "Tabbladen tonen"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:326
+#: resources/blocks/mijn-zaken/edit.js:443
 msgid "Zaaknummer tonen"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:330
+#: resources/blocks/mijn-zaken/edit.js:447
 msgid "Toon het zaaknummer (identificatie) onder de titel van de kaart."
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:340
+#: resources/blocks/mijn-zaken/edit.js:457
 msgid "Aantal zaken"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:352
+#: resources/blocks/mijn-zaken/edit.js:469
 msgid "Sorteren op"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:361
+#: resources/blocks/mijn-zaken/edit.js:478
 msgid "Volgorde"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:365
+#: resources/blocks/mijn-zaken/edit.js:482
 msgid "Nieuwste eerst"
 msgstr ""
 
-#: resources/blocks/mijn-zaken/edit.js:372
+#: resources/blocks/mijn-zaken/edit.js:489
 msgid "Oudste eerst"
 msgstr ""
 
