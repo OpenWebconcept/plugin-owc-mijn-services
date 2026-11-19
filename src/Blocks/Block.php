@@ -9,6 +9,7 @@ use DI\NotFoundException;
 use Exception;
 use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\Auth\eHerkenning;
+use OWC\My_Services\Auth\eIDAS;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Services\LoggerService;
@@ -82,11 +83,18 @@ abstract class Block
 
 		try {
 			$e_herkenning = eHerkenning::make();
+			$e_idas       = eIDAS::make();
 
 			$this->bsn               = DigiD::make()->bsn();
+			$this->bsn               = '' !== $this->bsn ? $this->bsn : $e_idas->bsn();
 			$this->kvk               = $e_herkenning->kvk();
 			$this->vestigings_nummer = $e_herkenning->vestigingsNummer();
 			$this->rsin              = $e_herkenning->rsin();
+
+			// Users logged in with eIDAS from other EU countries often have no BSN, zaken can't be retrieved for them.
+			if ('' === $this->bsn && '' === $this->kvk && $e_idas->is_logged_in()) {
+				return owc_mijn_services_render_view( 'owc-error', array( 'message' => __( 'Je bent ingelogd met eIDAS, maar er is geen burgerservicenummer (BSN) van je bekend. Daarom kunnen we deze informatie niet tonen.', 'owc-mijn-services' ) ) );
+			}
 
 			if ('' === $this->bsn && '' === $this->kvk) {
 				throw new Exception( 'No BSN or KVK found.' );
