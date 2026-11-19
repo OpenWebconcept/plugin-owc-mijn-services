@@ -278,7 +278,7 @@ abstract class Block
 	 * Returns an empty list when the zaken of all zaaktypen may be shown, and null when no zaken
 	 * may be shown at all.
 	 *
-	 * @since NEXT
+	 * @since 0.22.0
 	 *
 	 * @return string[]|null
 	 */

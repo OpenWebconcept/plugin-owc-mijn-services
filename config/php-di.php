@@ -123,7 +123,7 @@ return array(
 	 * Start date per zaaktype from which zaken are shown. For a supplier with zaaktype filtering
 	 * that has any configured, only zaken of its configured zaaktypen are shown.
 	 *
-	 * @since NEXT
+	 * @since 0.22.0
 	 */
 	'display.zaaktype-start-dates'           => function ( Container $container ) {
 		return ZaaktypeStartDates::from_setting(

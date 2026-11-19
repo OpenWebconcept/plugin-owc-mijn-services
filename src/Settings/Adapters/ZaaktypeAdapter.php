@@ -96,7 +96,7 @@ class ZaaktypeAdapter
 	 * identificatie map over lazily fetching the zaaktype from the API.
 	 *
 	 * @since 0.20.0
-	 * @since NEXT Moved from Block.
+	 * @since 0.22.0 Moved from Block.
 	 *
 	 * @param array<string, string> $url_identificaties
 	 */
