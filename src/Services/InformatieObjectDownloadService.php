@@ -23,6 +23,7 @@ use Exception;
 use OWC\My_Services\ContainerResolver;
 use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\Auth\eHerkenning;
+use OWC\My_Services\Auth\eIDAS;
 use OWC\My_Services\Providers\BlockServiceProvider;
 use OWC\My_Services\Traits\AuthenticationFilter;
 use OWC\My_Services\Traits\Supplier;
@@ -69,6 +70,7 @@ class InformatieObjectDownloadService
 			$e_herkenning = eHerkenning::make();
 
 			$this->bsn               = DigiD::make()->bsn();
+			$this->bsn               = '' !== $this->bsn ? $this->bsn : eIDAS::make()->bsn();
 			$this->kvk               = $e_herkenning->kvk();
 			$this->vestigings_nummer = $e_herkenning->vestigingsNummer();
 			$this->rsin              = $e_herkenning->rsin();

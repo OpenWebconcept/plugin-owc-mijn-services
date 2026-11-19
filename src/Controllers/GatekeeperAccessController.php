@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' )) {
 
 use OWC\My_Services\Auth\DigiD;
 use OWC\My_Services\Auth\eHerkenning;
+use OWC\My_Services\Auth\eIDAS;
 use WP_Post;
 
 /**
@@ -59,12 +60,40 @@ class GatekeeperAccessController
 		$session_type = (string) ( get_post_meta( $post->ID, 'owcms_protected_page_session_type', true ) ?: '' );
 
 		return match ($session_type) {
-			'digid' => '' !== DigiD::make()->bsn(), // User has DigiD session.
-			'eherkenning' => '' !== eHerkenning::make()->kvk(), // User has eHerkenning session.
-			'both' => '' !== DigiD::make()->bsn() || '' !== eHerkenning::make()->kvk(), // User has either DigiD or eHerkenning session.
-			'none' => '' === DigiD::make()->bsn() && '' === eHerkenning::make()->kvk(), // User has neither DigiD nor eHerkenning session.
+			'digid' => $this->has_digid_session(),
+			'eherkenning' => $this->has_eherkenning_session(),
+			'eidas' => $this->has_eidas_session(),
+			'both' => $this->has_digid_session() || $this->has_eherkenning_session(), // User has either DigiD or eHerkenning session.
+			'any' => $this->has_digid_session() || $this->has_eherkenning_session() || $this->has_eidas_session(), // User has a DigiD, eHerkenning or eIDAS session.
+			'none' => ! $this->has_digid_session() && ! $this->has_eherkenning_session() && ! $this->has_eidas_session(), // User has no session at all.
 			default => true, // No condition met means access is allowed.
 		};
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function has_digid_session(): bool
+	{
+		return '' !== DigiD::make()->bsn();
+	}
+
+	/**
+	 * @since NEXT
+	 */
+	protected function has_eherkenning_session(): bool
+	{
+		return '' !== eHerkenning::make()->kvk();
+	}
+
+	/**
+	 * An eIDAS session does not necessarily provide a BSN, the session itself grants access.
+	 *
+	 * @since NEXT
+	 */
+	protected function has_eidas_session(): bool
+	{
+		return eIDAS::make()->is_logged_in();
 	}
 
 	protected function redirect_to_post( int $post_id ): void

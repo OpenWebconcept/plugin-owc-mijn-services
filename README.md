@@ -133,7 +133,7 @@ The `$exception` parameter contains the caught exception object
 
 ### Restricting page access based on authentication requirements
 
-Pages can be protected by enforcing specific authentication methods, such as **DigiD** and/or **eHerkenning**.
+Pages can be protected by enforcing specific authentication methods, such as **DigiD**, **eHerkenning** and/or **eIDAS**. An eIDAS session grants access regardless of whether it provides a BSN; zaken are only shown to eIDAS users when the broker resolved a BSN.
 These access rules are configured through the **Security** metabox in the page editor.
 
 By default, only the `page` post type supports access restrictions.
