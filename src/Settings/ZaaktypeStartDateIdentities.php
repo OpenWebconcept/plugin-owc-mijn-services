@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' )) {
  * unreachable, such a row restricts the zaken of every filtering supplier. This resolves them
  * afterwards, once the zaaktypen are available again, so it heals without a manual save.
  *
- * @since NEXT
+ * @since 0.23.0
  */
 class ZaaktypeStartDateIdentities
 {

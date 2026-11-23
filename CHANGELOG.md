@@ -1,8 +1,12 @@
 # Changelog
 
+## [v0.23.0]  - 2026-11-23
+
+-   Added: option to only show current zaken in mijn zaken block
+
 ## [v0.22.0] - 2026-11-19
 
-- Added: restrict zaken per supplier to zaaktypen configured with a start date
+-   Added: restrict zaken per supplier to zaaktypen configured with a start date
 
 ## [v0.21.0] - 2026-11-17
 

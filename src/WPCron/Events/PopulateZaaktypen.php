@@ -32,7 +32,7 @@ use function OWC\ZGW\apiClientManager;
  * block editor, meaning nobody has to wait for the zaaktypen to be fetched from the API.
  *
  * @since 0.17.0
- * @since NEXT Also resolves 'Startdatum per zaaktype' rows that couldn't be resolved on save.
+ * @since 0.23.0 Also resolves 'Startdatum per zaaktype' rows that couldn't be resolved on save.
  */
 class PopulateZaaktypen
 {
